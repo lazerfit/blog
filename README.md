@@ -5,7 +5,6 @@
 
 
 ## *Development Environment*   
-***
 
 - IntelliJ IDEA
 - Postman
@@ -14,9 +13,8 @@
 - MySQL
 
 ## *Tech Stack*   
-***
 
-### Backend   
+### Backend  
 
 #### Framework/Library   
 
@@ -34,6 +32,7 @@
 #### Database   
 
 - MySQL
+***
 
 
 ## Blog 개발 목적   
