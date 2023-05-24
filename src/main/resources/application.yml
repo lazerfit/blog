@@ -5,7 +5,14 @@ spring:
       hibernate:
         show_sql: ture
         format_sql: true
-        ddl-auto: create
+        ddl-auto: create-drop
+  datasource:
+    url: jdbc:mysql://localhost:3306/blog
+    username: root
+    password: 1111
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  profiles:
+    active: local
 
   logging:
     level:

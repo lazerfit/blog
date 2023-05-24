@@ -14,7 +14,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Entity
-public class Posts {
+public class Posts extends BasetimeEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,13 +26,13 @@ public class Posts {
     @Column(length = 10000, nullable = false)
     private String content;
 
-    private String member;
+    private String author;
 
     @Builder
-    public Posts(String title, String content, String member) {
+    public Posts(String title, String content, String author) {
         this.title = title;
         this.content = content;
-        this.member = member;
+        this.author = author;
     }
 
     public PostsEditor.PostsEditorBuilder toEditor() {

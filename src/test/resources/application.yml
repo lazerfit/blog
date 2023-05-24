@@ -1,0 +1,16 @@
+spring:
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        ddl-auto: create-drop
+  datasource:
+    initialization-mode: always
+
+  profiles:
+    active: test
+
+  logging.level:
+    org.hibernate.sql: debug
