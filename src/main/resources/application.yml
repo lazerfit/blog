@@ -1,0 +1,12 @@
+spring:
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate:
+        show_sql: ture
+        format_sql: true
+        ddl-auto: create
+
+  logging:
+    level:
+      org.hibernate.sql: debug

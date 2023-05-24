@@ -18,7 +18,7 @@
 #### Framework/Library   
 
 - Java 17
-- SpringBoot 3.0.2
+- SpringBoot 3.1.0
 - SpringBoot Security
 - Spring Data JPA
 - Querydsl
