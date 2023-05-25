@@ -43,7 +43,7 @@ public class PostsService {
     }
 
     public List<PostsResponseDto> getPostsList(PostsSearchRequestDto request) {
-        return postsRepository.getList(request).stream()
+        return postsRepository.getPostsList(request).stream()
             .map(PostsResponseDto::new)
             .toList();
     }

@@ -13,7 +13,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<Posts> getList(PostsSearchRequestDto request) {
+    public List<Posts> getPostsList(PostsSearchRequestDto request) {
         return jpaQueryFactory.selectFrom(posts)
             .limit(request.getSize())
             .offset(request.getOffset())

@@ -4,5 +4,5 @@ import com.blog.web.dto.PostsSearchRequestDto;
 import java.util.List;
 
 public interface PostsRepositoryCustom {
-    List<Posts> getList(PostsSearchRequestDto request);
+    List<Posts> getPostsList(PostsSearchRequestDto request);
 }
