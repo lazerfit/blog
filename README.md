@@ -44,4 +44,4 @@ lazerfit 의 개인 blog 프로젝트입니다.
 
 - [230525] 기본적인 CRUD 기능 생성
   - Service 단에서 CRUD test 완료
-  - (빠르고 사용하기 쉬우며 고립된 환경에서 Controller test를 할 수 있는) MockMVC 활용하여 Controller test 완료
+  - MockMVC 활용하여 Controller test 완료
