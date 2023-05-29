@@ -1,7 +1,7 @@
 # sg's blog   
 
-나만의 공간을 만드는 웹 개발 프로젝트
-
+lazerfit 의 개인 blog 프로젝트입니다.
+개발/블록체인/음식점 리뷰 등의 Post 를 열람하실 수 있습니다.
 
 ## *Development Environment*   
 
