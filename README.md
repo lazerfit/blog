@@ -42,8 +42,8 @@ lazerfit 의 개인 blog 프로젝트입니다.
 
 ## *개발 일지*
 - [230530] 페이징 기능 추가
-- Page 는 1부터 시작
-- Default size 는 10
+  - Page 는 1부터 시작
+  - Default size 는 10
 
 - [230525] 기본적인 CRUD 기능 생성
   - Service 단에서 CRUD test 완료
