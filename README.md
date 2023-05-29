@@ -42,6 +42,9 @@ lazerfit 의 개인 blog 프로젝트입니다.
 
 ## *개발 일지*
 - [230530] Thymeleaf 활용한 SSR 진행중~
+  - Natural Template
+    - 순수 HTML 지원 + View template 활용
+  - Spring 통합 지원
 
 - [230530] 페이징 기능 추가
   - Page 는 1부터 시작
