@@ -1,7 +1,7 @@
-# sg's blog   
+# lazerfit's blog   
 
-나만의 공간을 만드는 웹 개발 프로젝트
-
+lazerfit 의 개인 blog 프로젝트입니다.   
+개발/블록체인/음식점 리뷰 등을 Post 합니다.
 
 ## *Development Environment*   
 
@@ -41,7 +41,15 @@
 - 나만의 공간을 개발함으로써 보다 높은 내적 동기 생성
 
 ## *개발 일지*
+- [230530] Thymeleaf 활용한 SSR 진행중~
+  - Natural Template
+    - 순수 HTML 지원 + View template 활용
+  - Spring 통합 지원
+
+- [230530] 페이징 기능 추가
+  - Page 는 1부터 시작
+  - Default size 는 10
 
 - [230525] 기본적인 CRUD 기능 생성
   - Service 단에서 CRUD test 완료
-  - (빠르고 사용하기 쉬우며 고립된 환경에서 Controller test를 할 수 있는) MockMVC 활용하여 Controller test 완료
+  - MockMVC 활용하여 Controller test 완료
