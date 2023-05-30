@@ -49,7 +49,8 @@ lazerfit 의 개인 blog 프로젝트입니다.
   - Spring 통합 지원   
  ***
  - Bootstrap   
-   - Template 제공으로 빠르고 쉽게 웹페이지 생성 가능
+   - Template 제공으로 빠르고 쉽게 웹페이지 생성 가능   
+
 
 - [230530] 페이징 기능 추가
   - Page 는 1부터 시작
