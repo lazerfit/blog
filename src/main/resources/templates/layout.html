@@ -1,80 +1,113 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.tymeleaf.org"
-    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">lazerfit's blog</title>
+  <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">GRAN AVENTURA</title>
 
-  <!--Bootstrap CSS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/fontawesome.min.css" integrity="sha384-QYIZto+st3yW+o8+5OHfT6S482Zsvz2WfOzpFSXMF9zqeLcFV0/wlZpMtyFcZALm" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.2.3/dist/journal/bootstrap.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/journal/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+
 </head>
 <body>
-  <!-- Main Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-      <a class="navbar-brand" th:href="@{/}">lazerfit</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarColor03">
-        <ul class="navbar-nav me-auto">
-          <li class="nav-item">
-            <a class="nav-link active" th:href="@{/}">Home
-              <span class="visually-hidden">(current)</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Tag</a>
-          </li>
-<!--          <li class="nav-item">-->
-<!--            <a class="nav-link" href="#">Pricing</a>-->
-<!--          </li>-->
-<!--          <li class="nav-item">-->
-<!--            <a class="nav-link" href="#">About</a>-->
-<!--          </li>-->
-<!--          <li class="nav-item dropdown">-->
-<!--            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Category</a>-->
-<!--            <div class="dropdown-menu">-->
-<!--              <a class="dropdown-item" href="#">Java</a>-->
-<!--              <a class="dropdown-item" href="#">BlockChain</a>-->
-<!--              <a class="dropdown-item" href="#">Food</a>-->
-<!--              <div class="dropdown-divider"></div>-->
-<!--              <a class="dropdown-item" href="#">Separated link</a>-->
+<!--<div class="header">-->
+<!--  <h2>Blog Name</h2>-->
+<!--</div>-->
+<nav class="navbar navbar-expand-lg bg-light" data-bs-theme="light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Gran Adentura</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarColor03">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link active" href="#">Home
+            <span class="visually-hidden">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Features</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Pricing</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">About</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" href="#">Something else here</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Separated link</a>
+          </div>
+        </li>
+      </ul>
+<!--      <form class="d-flex">-->
+<!--        <input class="form-control me-sm-2" type="search" placeholder="Search">-->
+<!--        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>-->
+<!--      </form>-->
+      <form action="" class="search-bar">
+        <input type="search" name="search" pattern=".*\S.*" required>
+        <button class="search-btn" type="submit">
+          <span>Search</span>
+        </button>
+      </form>
+    </div>
+  </div>
+</nav>
 
-          </li>
-        </ul>
-        <form class="d-flex">
-          <input class="form-control me-sm-2" type="search" placeholder="Search" style="right: auto">
-          <button class="btn btn-secondary my-2 my-sm-0" type="submit" style="right: auto">Search</button>
-        </form>
+<div class="row">
+  <div class="leftcolumn" layout:fragment="leftcolumn">
+
+
+
+  </div>
+  <div class="rightcolumn">
+    <div class="card">
+      <div class="d-grid gap-2">
+        <button class="btn btn-lg btn-primary" type="button">글쓰기</button>
       </div>
     </div>
-  </nav>
 
-  <!-- Content Section -->
-  <section layout:fragment="content">
-    <p>This is filled by the content template.</p>
-  </section>
-
-  <!-- Footer -->
-  <footer class="container py-5">
-    <div class="row">
-      <div class="col-md-12">
-        <p class="text-muted">&copy; 2023 lazerfit. All rights reserved.</p>
-      </div>
+    <div class="card">
+      <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Cras justo odio
+          <span class="badge bg-primary rounded-pill">14</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Dapibus ac facilisis in
+          <span class="badge bg-primary rounded-pill">2</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Morbi leo risus
+          <span class="badge bg-primary rounded-pill">1</span>
+        </li>
+      </ul>
     </div>
-  </footer>
+    <div class="card">
+      <h3>Popular Post</h3>
+      <div class="fakeimg">Image</div><br>
+      <div class="fakeimg">Image</div><br>
+      <div class="fakeimg">Image</div>
+    </div>
+    <div class="card">
+      <h3>Follow Me</h3>
+      <p>Some text..</p>
+    </div>
+  </div>
+</div>
 
-  <!-- Optional Section -->
-  <th:block layout:fragment="optional" />
-
+<div class="footer">
+  <h2>Footer</h2>
+</div>
 
 </body>
 </html>
-
-
