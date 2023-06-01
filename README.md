@@ -48,7 +48,7 @@ lazerfit 의 개인 blog 프로젝트입니다.
     - 새로운 html 생성 시 leftcolumn(메인) 만 구현           
   - TODO:   
     - 기능 개발 : 글쓰기 / 로그인 / Card 페이징 / Tag / Search    
-  ***
+***
 - [230530] Thymeleaf 활용한 SSR 설계 시작
 - Thymeleaf   
   - Natural Template   
