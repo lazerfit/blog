@@ -41,6 +41,8 @@ lazerfit 의 개인 blog 프로젝트입니다.
 - 나만의 공간을 개발함으로써 보다 높은 내적 동기 생성
 
 ## *개발 일지*   
+- [230605] Integrate Summernote(WYSIWYG)   
+***
 - [230602] 기본적인 layout 생성   
   - navbar, leftcolumn, rightcolumn, footer 로 layout 나눔   
   - Thymeleaf layout dialect 사용
