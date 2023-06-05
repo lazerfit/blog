@@ -40,10 +40,18 @@ lazerfit 의 개인 blog 프로젝트입니다.
 - 웹 애플리케이션의 동작 과정들을 숙지
 - 나만의 공간을 개발함으로써 보다 높은 내적 동기 생성
 
-## *개발 일지*
-- [230530] Thymeleaf 활용한 SSR 진행중~
+## *개발 일지*   
+- [230602] 기본적인 layout 생성   
+  - navbar, leftcolumn, rightcolumn, footer 로 layout 나눔   
+  - Thymeleaf layout dialect 사용
+    - layout.html 생성 (navbar, rightcolumn, footer 는 여기서 구현)   
+    - 새로운 html 생성 시 leftcolumn(메인) 만 구현           
+  - TODO:   
+    - 기능 개발 : 글쓰기 / 로그인 / Card 페이징 / Tag / Search    
+***
+- [230530] Thymeleaf 활용한 SSR 설계 시작
 - Thymeleaf   
-  - Natural Template
+  - Natural Template   
     - 순수 HTML 지원 + View template 활용
   - Spring 통합 지원   
  - Bootstrap   
