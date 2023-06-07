@@ -41,7 +41,12 @@ lazerfit 의 개인 blog 프로젝트입니다.
 - 나만의 공간을 개발함으로써 보다 높은 내적 동기 생성
 
 ## *개발 일지*   
+- [230607] 게시글 DB 저장 구현   
+***
 - [230605] Integrate Summernote(WYSIWYG)   
+  - Toolbar 커스터마이징 편리   
+  - 간단한 설정만으로 사용 가능   
+  - 부트스트랩 사용   
 ***
 - [230602] 기본적인 layout 생성   
   - navbar, leftcolumn, rightcolumn, footer 로 layout 나눔   
