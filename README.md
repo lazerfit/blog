@@ -41,6 +41,11 @@ lazerfit 의 개인 blog 프로젝트입니다.
 - 나만의 공간을 개발함으로써 보다 높은 내적 동기 생성
 
 ## *개발 일지*   
+- [230608] Home 화면에 최근 게시글 게시    
+  - "/" 로 진입시 "/posts" 로 redirect 하면서 page 와 size parameter 넘김   
+  - 첫 화면의 url 은 깔끔하게 유지하고 싶었으나 parameter 정보가 붙음   
+  - 개선의 여지가 있어보임   
+***
 - [230607] 게시글 DB 저장 구현   
 ***
 - [230605] Integrate Summernote(WYSIWYG)   

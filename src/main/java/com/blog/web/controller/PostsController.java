@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,8 +41,10 @@ public class PostsController {
     }
 
     @GetMapping("/posts")
-    public List<PostsResponseDto> getPostsList(PostsSearchRequestDto request) {
-        return postsService.getPostsList(request);
+    public String getPostsList(@ModelAttribute PostsSearchRequestDto request,Model model) {
+        List<PostsResponseDto> postsList = postsService.getPostsList(request);
+        model.addAttribute("postsLists",postsList);
+        return "index";
     }
 
     @PatchMapping("/posts/{postId}")

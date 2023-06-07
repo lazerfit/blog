@@ -8,47 +8,42 @@
 <body>
 
 <div layout:fragment="leftcolumn">
-  <div class="card bg-light mb-3">
-    <div class="card-body">
-      <h4 class="card-title">Light card title</h4>
-      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+  <div class="container">
+    <!--  TODO : 전체글(10) 이런식으로 나오게 -->
+  <th:block th:each="list:${postsLists}">
+    <div class="card bg-light mb-3">
+      <div class="card-body">
+        <h4 class="card-title" th:text="${list.title}">Light card title</h4>
+        <p class="card-text" th:text="${list.content}">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      </div>
     </div>
-  </div>
-
-  <div class="card bg-light mb-3">
-    <div class="card-body">
-      <h4 class="card-title">Light card title</h4>
-      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    </div>
-  </div>
-
-  <div class="card bg-light mb-3">
-    <div class="card-body">
-      <h4 class="card-title">Light card title</h4>
-      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    </div>
-  </div>
-
-  <div class="card bg-light mb-3">
-    <div class="card-body">
-      <h4 class="card-title">Light card title</h4>
-      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    </div>
-  </div>
-
-  <div class="card bg-light mb-3">
-    <div class="card-body">
-      <h4 class="card-title">Light card title</h4>
-      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    </div>
-  </div>
-
-  <div class="card bg-light mb-3">
-    <div class="card-body">
-      <h4 class="card-title">Light card title</h4>
-      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    </div>
-  </div>
+  </th:block>
+    <div> <!-- pagination -->
+      <ul class="pagination justify-content-center">
+        <li class="page-item disabled">
+          <a class="page-link" href="#">&laquo;</a>
+        </li>
+        <li class="page-item active">
+          <a class="page-link" href="#">1</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="#">2</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="#">3</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="#">4</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="#">5</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="#">&raquo;</a>
+        </li>
+      </ul>
+    </div> <!-- /pagination -->
+  </div> <!-- /container -->
 </div>
 </body>
 </html>
