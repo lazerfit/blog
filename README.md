@@ -45,6 +45,7 @@ lazerfit 의 개인 blog 프로젝트입니다.
   - "/" 로 진입시 "/posts" 로 redirect 하면서 page 와 size parameter 넘김   
   - 첫 화면의 url 은 깔끔하게 유지하고 싶었으나 parameter 정보가 붙음   
   - 개선의 여지가 있어보임   
+  - *게시글 본문 HTML 파싱 필요*
 ***
 - [230607] 게시글 DB 저장 구현   
 ***
