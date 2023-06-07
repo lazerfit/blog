@@ -8,13 +8,19 @@
 <body>
 <div layout:fragment="leftcolumn">
 <div class="container">
+  <form th:action="@{/posts/new}" th:object="${createPostsForm}" method="post">
   <div class="card">
-  <textarea class="summernote"></textarea>
+    <div class="form-group" style="padding: 1px">
+      <input type="text" th:field="*{title}" class="form-control"  placeholder="제목을 입력하세요" id="inputDefault">
+    </div>
+  </div>
+  <div class="card">
+  <textarea class="summernote" th:field="*{content}"></textarea>
 </div>
 <script>
   $('.summernote').summernote({
     // 에디터 높이
-    height: 150,
+    height: 500,
     // 에디터 한글 설정
     lang: "ko-KR",
     // 에디터에 커서 이동 (input창의 autofocus라고 생각하시면 됩니다.)
@@ -34,10 +40,10 @@
       ['para', ['ul', 'ol', 'paragraph']],
       // 줄간격
       ['height', ['height']],
-      // 그림첨부, 링크만들기, 동영상첨부
-      ['insert',['picture','link','video']],
-      // 코드보기, 확대해서보기, 도움말
-      ['view', ['codeview','fullscreen', 'help']]
+      // 그림첨부, 링크만들기
+      ['insert',['picture','link']],
+      // 코드보기
+      ['view', ['codeview']]
     ],
     // 추가한 글꼴
     fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New','맑은 고딕','궁서','굴림체','굴림','돋음체','바탕체'],
@@ -46,6 +52,8 @@
 
   });
 </script>
+  <button type="submit" class="btn btn-primary" data-bitwarden-clicked="1" style="float: right;margin-top: 10px">Submit</button>
+  </form>
 </div>
 </div>
 

@@ -5,28 +5,38 @@ import com.blog.web.dto.PostsResponseDto;
 import com.blog.web.dto.PostsSaveRequestDto;
 import com.blog.web.dto.PostsSearchRequestDto;
 import com.blog.web.dto.PostsUpdateRequestDto;
+import com.blog.web.form.CreatePostsForm;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RequiredArgsConstructor
-@RestController
+@Controller
 public class PostsController {
 
     private final PostsService postsService;
 
-    @PostMapping("/posts")
-    public Long save(@Valid @RequestBody PostsSaveRequestDto request) {
-        return postsService.save(request);
+    @GetMapping("/posts/new")
+    public String createPostsForm(Model model) {
+        model.addAttribute("createPostsForm", new CreatePostsForm());
+        return "form/createPostsForm";
+    }
+
+    @PostMapping("/posts/new")
+    public String save(@Valid CreatePostsForm form) {
+        PostsSaveRequestDto request = new PostsSaveRequestDto(form.getTitle(), form.getContent());
+        postsService.save(request);
+        return "redirect:/";
     }
 
     @GetMapping("/posts")
