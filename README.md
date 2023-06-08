@@ -43,11 +43,11 @@ lazerfit 의 개인 blog 프로젝트입니다.
 ## *개발 일지*   
 - [230609] 페이징 기능 개선   
   - Pageable 활용
-  - @QueryProjection 활용하여 Page<Entity> 가 아닌 Page<Dto> 로 데이터 전송   
+  - @QueryProjection 활용하여 Page&lt;Entity&gt; 가 아닌 Page&lt;Dto&gt; 로 데이터 전송   
 ***
 - [230608] Home 화면에 최근 게시글 게시    
   - ~~"/" 로 진입시 "/posts" 로 redirect 하면서 page 와 size parameter 넘김~~   
-    - Pageable 글로벌 세팅통해 첫 화면 url query parameter 넘기지 않아도 페이징 가능   
+    - Pageable 글로벌 세팅 통해 첫 화면 url query parameter 넘기지 않아도 페이징 가능   
   - ~~첫 화면의 url 은 깔끔하게 유지하고 싶었으나 parameter 정보가 붙음~~      
   - ~~개선의 여지가 있어보임~~      
   - *게시글 본문 HTML 파싱 필요*
