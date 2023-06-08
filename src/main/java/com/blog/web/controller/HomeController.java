@@ -1,15 +1,29 @@
 package com.blog.web.controller;
 
+import com.blog.service.PostsService;
+import com.blog.web.dto.PostsResponseDto;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+@RequiredArgsConstructor
+@Slf4j
 @Controller
 public class HomeController {
+
+    private final PostsService postsService;
+
     @GetMapping("/")
-    public String index(RedirectAttributes re) {
-        re.addAttribute("page", 1);
-        re.addAttribute("size", 6);
-        return "redirect:/posts";
+    public String index(Pageable pageable, Model model) {
+        Page<PostsResponseDto> postsList = postsService.getPostsList(pageable);
+        log.info("size={}",postsList.getSize());
+        log.info("pageNum={}",postsList.getNumber());
+        model.addAttribute("postsList",postsList);
+        return "index";
     }
 }
+

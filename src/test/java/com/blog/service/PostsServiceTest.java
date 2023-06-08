@@ -73,8 +73,7 @@ class PostsServiceTest {
 
         PageRequest request = PageRequest.of(0, 6);
 
-        List<PostsResponseDto> postsList = postsRepository.getPostsList(request).stream()
-            .map(PostsResponseDto::new).toList();
+        List<PostsResponseDto> postsList = postsRepository.getPostsList(request).stream().toList();
 
         assertThat(postsList.get(0).getTitle()).isEqualTo("제목10");
         assertThat(postsList.get(0).getContent()).isEqualTo("내용10");

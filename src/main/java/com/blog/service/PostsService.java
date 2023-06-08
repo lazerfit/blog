@@ -7,8 +7,8 @@ import com.blog.exception.PostsNotFound;
 import com.blog.web.dto.PostsResponseDto;
 import com.blog.web.dto.PostsSaveRequestDto;
 import com.blog.web.dto.PostsUpdateRequestDto;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,10 +42,8 @@ public class PostsService {
         return new PostsResponseDto(posts);
     }
 
-    public List<PostsResponseDto> getPostsList(Pageable pageable) {
-        return postsRepository.getPostsList(pageable).stream()
-            .map(PostsResponseDto::new)
-            .toList();
+    public Page<PostsResponseDto> getPostsList(Pageable pageable) {
+        return postsRepository.getPostsList(pageable);
     }
 
     public void delete(Long id) {
@@ -53,3 +51,5 @@ public class PostsService {
         postsRepository.delete(posts);
     }
 }
+
+

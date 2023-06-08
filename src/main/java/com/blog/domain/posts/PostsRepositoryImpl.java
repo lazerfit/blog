@@ -2,21 +2,26 @@ package com.blog.domain.posts;
 
 import static com.blog.domain.posts.QPosts.posts;
 
+import com.blog.web.dto.PostsResponseDto;
+import com.blog.web.dto.QPostsResponseDto;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-
+@Slf4j
 @RequiredArgsConstructor
 public class PostsRepositoryImpl implements PostsRepositoryCustom{
 
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<Posts> getPostsList(Pageable pageable) {
-        List<Posts> postsList = jpaQueryFactory.selectFrom(posts)
+    public Page<PostsResponseDto> getPostsList(Pageable pageable) {
+        List<PostsResponseDto> postsList = jpaQueryFactory
+            .select(new QPostsResponseDto(posts.id, posts.title, posts.content, posts.modifiedDate))
+            .from(posts)
             .limit(pageable.getPageSize())
             .offset(pageable.getOffset())
             .orderBy(posts.id.desc())
@@ -24,10 +29,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
 
         long totalCount = jpaQueryFactory.selectFrom(posts)
             .fetch().size();
-
         return new PageImpl<>(postsList,pageable,totalCount);
 
     }
-
-
 }

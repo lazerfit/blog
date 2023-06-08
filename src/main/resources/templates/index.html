@@ -8,39 +8,39 @@
 <body>
 
 <div layout:fragment="leftcolumn">
+
   <div class="container">
     <!--  TODO : 전체글(10) 이런식으로 나오게 -->
-  <th:block th:each="list:${postsLists}">
+    <p class="mb-0">전체 글<span class="badge rounded-pill bg-primary" th:text="${postsList.getTotalElements()}">100</span></p>
+
+
+  <th:block th:each="post:${postsList}">
     <div class="card bg-light mb-3">
       <div class="card-body">
-        <h4 class="card-title" th:text="${list.title}">Light card title</h4>
-        <p class="card-text" th:text="${list.content}">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <h4 class="card-title" th:text="${post.getTitle()}">Light card title</h4>
+        <p class="card-text" th:text="${post.getContent()}">content.</p>
       </div>
     </div>
   </th:block>
     <div> <!-- pagination -->
-      <ul class="pagination justify-content-center">
-        <li class="page-item">
-          <a class="page-link" href="#">&laquo;</a>
+      <ul class="pagination justify-content-center"
+          th:with="
+          pageNumber=${postsList.getNumber()},
+          pageSize=${postsList.getSize()},
+          startPage=${T(java.lang.Math).floor(pageNumber/pageSize)*pageSize+1},
+          totalPage=${postsList.getTotalPages()},
+          endPage=(${startPage + pageSize - 1 < totalPage ? startPage + pageSize - 1 : totalPage})">
+        <li class="page-item" th:classappend="${postsList.hasPrevious()} ? '#':'disabled'">
+          <a class="page-link" th:href="@{/(page=${pageNumber})}">&laquo;</a>
         </li>
-        <li class="page-item">
-          <a class="page-link" th:href="@{/}">1</a>
+        <li class="page-item"
+        th:each="page:${#numbers.sequence(startPage,endPage)}"
+        th:classappend="${page==pageNumber+1} ? 'active'">
+          <a th:text="${page}" class="page-link" th:href="@{/(page=${page})}">1</a>
         </li>
-        <li class="page-item">
-          <a class="page-link" th:href="@{/posts(page=${page+1},size=${size})}">2</a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" th:href="@{/posts(page=${page+2},size=${size})}">3</a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" href="#">4</a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" href="#">5</a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" href="#">&raquo;</a>
-        </li>
+        <li class="page-item" th:classappend="${postsList.hasNext()} ? '#':'disabled'">
+          <a class="page-link" th:href="@{/(page=${pageNumber+2})}">&raquo;</a>
+        </li> <!-- ${postsList.hasNext()} ? -->
       </ul>
     </div> <!-- /pagination -->
   </div> <!-- /container -->
