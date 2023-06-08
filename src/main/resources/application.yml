@@ -26,8 +26,6 @@ spring:
         default-page-size: 6
         max-page-size: 2000
         one-indexed-parameters: true
-      sort:
-        sort-parameter: id,DESC
   logging:
     level:
       org.hibernate.sql: debug
