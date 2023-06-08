@@ -44,6 +44,8 @@ lazerfit 의 개인 blog 프로젝트입니다.
 - [230609] 페이징 기능 개선   
   - Pageable 활용
   - @QueryProjection 활용하여 Page&lt;Entity&gt; 가 아닌 Page&lt;Dto&gt; 로 데이터 전송   
+  - Pagination 구현   
+  - Home 화면 좌상단에 전체 게시글 개수 표시   
 ***
 - [230608] Home 화면에 최근 게시글 게시    
   - ~~"/" 로 진입시 "/posts" 로 redirect 하면서 page 와 size parameter 넘김~~   
