@@ -1,8 +1,8 @@
 package com.blog.domain.posts;
 
-import com.blog.web.dto.PostsSearchRequestDto;
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface PostsRepositoryCustom {
-    List<Posts> getPostsList(PostsSearchRequestDto request);
+    Page<Posts> getPostsList(Pageable pageable);
 }

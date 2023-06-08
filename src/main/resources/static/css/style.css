@@ -1,9 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Diphylleia&display=swap');
 * {
   box-sizing: border-box;
 }
 
 body {
-  font-family: Arial;
+  font-family: Georgia,'Diphylleia', serif;
   padding: 20px;
   background: #f1f1f1;
 }
@@ -77,6 +78,10 @@ body {
   height: 40px;
   margin: auto;
   float: right;
+}
+
+.card-text{
+  font-family: 'Diphylleia', serif;
 }
 
 

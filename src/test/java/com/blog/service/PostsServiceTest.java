@@ -7,7 +7,6 @@ import com.blog.domain.posts.PostsEditor;
 import com.blog.domain.posts.PostsRepository;
 import com.blog.exception.PostsNotFound;
 import com.blog.web.dto.PostsResponseDto;
-import com.blog.web.dto.PostsSearchRequestDto;
 import com.blog.web.dto.PostsUpdateRequestDto;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -16,6 +15,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 
 @SpringBootTest
 class PostsServiceTest {
@@ -71,7 +71,7 @@ class PostsServiceTest {
                 .build())
         );
 
-        PostsSearchRequestDto request = PostsSearchRequestDto.builder().page(1).size(10).build();
+        PageRequest request = PageRequest.of(0, 6);
 
         List<PostsResponseDto> postsList = postsRepository.getPostsList(request).stream()
             .map(PostsResponseDto::new).toList();

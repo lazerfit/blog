@@ -20,17 +20,17 @@
   </th:block>
     <div> <!-- pagination -->
       <ul class="pagination justify-content-center">
-        <li class="page-item disabled">
+        <li class="page-item">
           <a class="page-link" href="#">&laquo;</a>
         </li>
-        <li class="page-item active">
-          <a class="page-link" href="#">1</a>
+        <li class="page-item">
+          <a class="page-link" th:href="@{/}">1</a>
         </li>
         <li class="page-item">
-          <a class="page-link" href="#">2</a>
+          <a class="page-link" th:href="@{/posts(page=${page+1},size=${size})}">2</a>
         </li>
         <li class="page-item">
-          <a class="page-link" href="#">3</a>
+          <a class="page-link" th:href="@{/posts(page=${page+2},size=${size})}">3</a>
         </li>
         <li class="page-item">
           <a class="page-link" href="#">4</a>

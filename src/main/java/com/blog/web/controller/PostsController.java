@@ -3,18 +3,15 @@ package com.blog.web.controller;
 import com.blog.service.PostsService;
 import com.blog.web.dto.PostsResponseDto;
 import com.blog.web.dto.PostsSaveRequestDto;
-import com.blog.web.dto.PostsSearchRequestDto;
 import com.blog.web.dto.PostsUpdateRequestDto;
 import com.blog.web.form.CreatePostsForm;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,12 +37,16 @@ public class PostsController {
         return "redirect:/";
     }
 
-    @GetMapping("/posts")
-    public String getPostsList(@ModelAttribute PostsSearchRequestDto request,Model model) {
-        List<PostsResponseDto> postsList = postsService.getPostsList(request);
-        model.addAttribute("postsLists",postsList);
-        return "index";
-    }
+//    @GetMapping("/posts")
+//    public String getPostsList(@ModelAttribute PostsSearchRequestDto request,Model model,
+//        @RequestParam("page") int page,
+//        @RequestParam("size") int size) {
+//        List<PostsResponseDto> postsList = postsService.getPostsList(request);
+//        model.addAttribute("page",page);
+//        model.addAttribute("size",size);
+//        model.addAttribute("postsLists",postsList);
+//        return "index";
+//    }
 
     @PatchMapping("/posts/{postId}")
     public void edit(@PathVariable Long postId, @RequestBody PostsUpdateRequestDto request) {
