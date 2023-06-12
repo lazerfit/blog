@@ -85,9 +85,31 @@ body {
   margin-left: 8px;
   margin-top: 18px;
   margin-bottom: 3px;
-
+  width: fit-content;
 }
 
+a:hover{
+  text-decoration-color: indianred;
+}
+
+/*.text-truncate{*/
+/*  overflow: hidden;*/
+/*  text-overflow: ellipsis;*/
+/*  white-space: nowrap;*/
+/*  -webkit-line-clamp: 3;*/
+/*  display: -webkit-box;*/
+/*  -webkit-box-orient: vertical;*/
+/*  width: 100%;*/
+/*}*/
+
+.card > .card-body-index{
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  display: -webkit-box;
+  overflow: hidden;
+  white-space: normal;
+  text-overflow: ellipsis;
+}
 
 
 
