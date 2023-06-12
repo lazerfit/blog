@@ -41,18 +41,19 @@ lazerfit 의 개인 blog 프로젝트입니다.
 - 나만의 공간을 개발함으로써 보다 높은 내적 동기 생성
 
 ## *개발 일지*   
+- [230613] Home 화면 최근 게시글 표시 개선
+  - Home 화면 좌상단에 전체 게시글 개수 표시   
+  - 제목 클릭 시 상세 페이지로 이동   
+***
 - [230609] 페이징 기능 개선   
   - Pageable 활용
   - @QueryProjection 활용하여 Page&lt;Entity&gt; 가 아닌 Page&lt;Dto&gt; 로 데이터 전송   
-  - Pagination 구현   
-  - Home 화면 좌상단에 전체 게시글 개수 표시   
+  - Pagination 구현
 ***
 - [230608] Home 화면에 최근 게시글 게시    
   - ~~"/" 로 진입시 "/posts" 로 redirect 하면서 page 와 size parameter 넘김~~   
     - Pageable 글로벌 세팅 통해 첫 화면 url query parameter 넘기지 않아도 페이징 가능   
-  - ~~첫 화면의 url 은 깔끔하게 유지하고 싶었으나 parameter 정보가 붙음~~      
-  - ~~개선의 여지가 있어보임~~      
-  - *게시글 본문 HTML 파싱 필요*
+  - ~~첫 화면의 url 은 깔끔하게 유지하고 싶었으나 parameter 정보가 붙음~~
 ***
 - [230607] 게시글 DB 저장 구현   
 ***
