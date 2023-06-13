@@ -9,7 +9,10 @@
 <div layout:fragment="leftcolumn">
   <div class="container">
     <div class="card bg-light mb-3">
-      <div class="card-header"><h4 th:text="${postFindById.title}">Header</h4></div>
+      <div class="card-header">
+        <h4 th:text="${postFindById.title}">Header</h4>
+        <a th:href="@{/posts/edit/{postId}(postId=${postId})}" style="color: #aaa">수정</a>
+      </div>
       <div class="card-body">
         <p class="card-text" th:utext="${postFindById.content}">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
       </div>
