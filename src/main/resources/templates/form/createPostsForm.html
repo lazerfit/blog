@@ -8,7 +8,7 @@
 <body>
 <div layout:fragment="leftcolumn">
 <div class="container">
-  <form th:action="@{/posts/new}" th:object="${createPostsForm}" method="post">
+  <form th:object="${createPostsForm}" method="post">
   <div class="card">
     <div class="form-group" style="padding: 1px">
       <input type="text" th:field="*{title}" class="form-control"  placeholder="제목을 입력하세요" id="inputDefault">
