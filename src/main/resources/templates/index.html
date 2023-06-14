@@ -10,8 +10,7 @@
 <div layout:fragment="leftcolumn">
 
   <div class="container">
-    <p class="mb-0">전체 글<span class="badge rounded-pill bg-primary" th:text="${postsList.getTotalElements()}">100</span></p>
-
+    <span class="mb-0" style="padding-left: 10px;margin-bottom: 5px">전체 글<span class="badge rounded-pill bg-primary" th:text="${postsList.getTotalElements()}">100</span></span>
   <th:block th:each="post:${postsList}">
     <div class="card bg-light mb-3">
       <div class="card-body-index">
@@ -19,6 +18,9 @@
         th:href="@{/posts/{id}(id=${post.getId()})}" style="
         color: black;text-decoration-line: none">Light card title</a></h4>
         <p class="card-text text-truncate" th:utext="${post.getContent()}">content.</p>
+      </div>
+      <div class="card-footer">
+        <p style="color: #aaa" th:text="${#temporals.format(post.getCreatedDate(),'yyyy-MM-dd')}">Date</p>
       </div>
     </div>
   </th:block>

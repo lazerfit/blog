@@ -20,8 +20,6 @@ public class HomeController {
     @GetMapping("/")
     public String index(Pageable pageable, Model model) {
         Page<PostsResponseDto> postsList = postsService.getPostsList(pageable);
-        log.info("size={}",postsList.getSize());
-        log.info("pageNum={}",postsList.getNumber());
         model.addAttribute("postsList",postsList);
         return "index";
     }

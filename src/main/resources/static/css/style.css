@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
 * {
   box-sizing: border-box;
-
 }
 
 body {
@@ -49,8 +48,16 @@ body {
 .card {
   background-color: white;
   padding: 7px;
-  margin-top: 15px;
+  margin-top: 12px;
   border-color: white;
+}
+
+.card-footer{
+  background: white;
+  border: none;
+  float: left;
+  padding-top: 5px;
+  padding-left: 0;
 }
 
 /* Clear floats after the columns */
@@ -80,7 +87,6 @@ body {
   border-radius: 70%;
   width: 40px;
   height: 40px;
-  margin: auto;
   float: right;
 }
 
@@ -112,6 +118,7 @@ a:hover{
   overflow: hidden;
   white-space: normal;
   text-overflow: ellipsis;
+  font-family: Georgia,'Noto Sans KR', sans-serif;
 }
 
 .navbar{
