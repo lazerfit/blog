@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,29 +36,22 @@ public class PostsController {
         return "redirect:/";
     }
 
-//    @GetMapping("/posts")
-//    public String getPostsList(@ModelAttribute PostsSearchRequestDto request,Model model,
-//        @RequestParam("page") int page,
-//        @RequestParam("size") int size) {
-//        List<PostsResponseDto> postsList = postsService.getPostsList(request);
-//        model.addAttribute("page",page);
-//        model.addAttribute("size",size);
-//        model.addAttribute("postsLists",postsList);
-//        return "index";
-//    }
-
     @PatchMapping("/posts/{postId}")
     public void edit(@PathVariable Long postId, @RequestBody PostsUpdateRequestDto request) {
         postsService.edit(postId, request);
     }
 
     @GetMapping("/posts/{postId}")
-    public PostsResponseDto findById(@PathVariable Long postId) {
-        return postsService.findById(postId);
+    public String findById(@PathVariable Long postId,Model model) {
+
+        PostsResponseDto postFindById = postsService.findById(postId);
+        model.addAttribute("postFindById",postFindById);
+        return "posts";
     }
 
-    @DeleteMapping("/posts/{postId}")
-    public void delete(@PathVariable Long postId) {
+    @PostMapping("/posts/delete/{postId}")
+    public String delete(@PathVariable Long postId) {
         postsService.delete(postId);
+        return "redirect:/";
     }
 }

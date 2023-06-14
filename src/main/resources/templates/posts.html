@@ -16,9 +16,18 @@
         <span style="color: #aaa">·</span>
         <a th:href="@{/posts/edit/{postId}(postId=${postId})}" style="color: #aaa;text-decoration-line: none">수정</a>
         <span style="color: #aaa">·</span>
-        <button id="del-button" style="color: #aaa;text-decoration-line: none">삭제</button>
+        <button id="del-button" class="del-button" style="color: #aaa;text-decoration-line: none">삭제</button>
         </form>
-
+        <script>
+          $('#del-button').click(function () {
+            if (confirm("정말 삭제하시겠습니까?")) {
+              document.deletePost.submit()
+            }
+            else{
+              location.reload()
+            }
+          })
+        </script>
 <!--        <script src="/js/postDelete.js"></script>-->
       </div>
       <div class="card-body">
