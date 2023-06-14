@@ -20,7 +20,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     @Override
     public Page<PostsResponseDto> getPostsList(Pageable pageable) {
         List<PostsResponseDto> postsList = jpaQueryFactory
-            .select(new QPostsResponseDto(posts.id, posts.title, posts.content, posts.modifiedDate))
+            .select(new QPostsResponseDto(posts.id, posts.title, posts.content, posts.modifiedDate, posts.createDate))
             .from(posts)
             .limit(pageable.getPageSize())
             .offset(pageable.getOffset())
