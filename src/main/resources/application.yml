@@ -5,7 +5,8 @@ spring:
       hibernate:
         show_sql: ture
         format_sql: true
-        ddl-auto: create-drop
+        ddl-auto: update
+
   datasource:
     url: jdbc:mysql://localhost:3306/blog
     username: root
@@ -29,3 +30,4 @@ spring:
   logging:
     level:
       org.hibernate.sql: debug
+

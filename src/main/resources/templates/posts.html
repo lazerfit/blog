@@ -18,17 +18,7 @@
         <span style="color: #aaa">·</span>
         <button id="del-button" class="del-button" style="color: #aaa;text-decoration-line: none">삭제</button>
         </form>
-        <script>
-          $('#del-button').click(function () {
-            if (confirm("정말 삭제하시겠습니까?")) {
-              document.deletePost.submit()
-            }
-            else{
-              return false;
-            }
-          })
-        </script>
-<!--        <script src="/js/postDelete.js"></script>-->
+        <script src="/js/deletePost.js"></script>
       </div>
       <div class="card-body">
         <p class="card-text" th:utext="${postFindById.content}">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
