@@ -5,16 +5,15 @@ import com.blog.web.dto.PostsResponseDto;
 import com.blog.web.dto.PostsSaveRequestDto;
 import com.blog.web.dto.PostsUpdateRequestDto;
 import com.blog.web.form.CreatePostsForm;
+import com.blog.web.form.EditPostsForm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -36,9 +35,22 @@ public class PostsController {
         return "redirect:/";
     }
 
-    @PatchMapping("/posts/{postId}")
-    public void edit(@PathVariable Long postId, @RequestBody PostsUpdateRequestDto request) {
+    @GetMapping("/posts/edit/{postId}")
+    public String editForm(@PathVariable Long postId,Model model) {
+        PostsResponseDto originalPosts = postsService.findById(postId);
+        EditPostsForm editPostsForm = new EditPostsForm(originalPosts.getTitle(),
+            originalPosts.getContent());
+        model.addAttribute("editPostsForm", editPostsForm);
+        return "form/editPostsForm";
+    }
+
+
+    @PostMapping("/posts/edit/{postId}")
+    public String edit(@PathVariable Long postId, @Valid EditPostsForm form) {
+        PostsUpdateRequestDto request = new PostsUpdateRequestDto(form.getTitle(),
+            form.getContent());
         postsService.edit(postId, request);
+        return "redirect:/posts/{postId}";
     }
 
     @GetMapping("/posts/{postId}")
@@ -50,8 +62,8 @@ public class PostsController {
     }
 
     @PostMapping("/posts/delete/{postId}")
-    public String delete(@PathVariable Long postId) {
+    public void delete(@PathVariable Long postId) {
         postsService.delete(postId);
-        return "redirect:/";
+//        return "redirect:/";
     }
 }

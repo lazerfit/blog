@@ -10,15 +10,16 @@
   <div class="container">
     <div class="card bg-light mb-3">
       <div class="card-header">
-        <form name="deletePost" id="deletePosts" th:action="@{/posts/delete/{postId}(postId=${postId})}" method="post">
+<!--        <form name="deletePost" id="deletePosts" th:action="@{/posts/delete/{postId}(postId=${postId})}" method="post">-->
         <h4 th:text="${postFindById.title}">Header</h4>
         <span style="color: #aaa" th:text="${#temporals.format(postFindById.getCreatedDate(),'yyyy-MM-dd')}">Date</span>
         <span style="color: #aaa">·</span>
         <a th:href="@{/posts/edit/{postId}(postId=${postId})}" style="color: #aaa;text-decoration-line: none">수정</a>
         <span style="color: #aaa">·</span>
         <button id="del-button" class="del-button" style="color: #aaa;text-decoration-line: none">삭제</button>
-        </form>
-        <script src="/js/deletePost.js"></script>
+          <input type="hidden" class="del-postId" th:value="postId">
+<!--        </form>-->
+        <script src="/js/test.js"></script>
       </div>
       <div class="card-body">
         <p class="card-text" th:utext="${postFindById.content}">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
