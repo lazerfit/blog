@@ -1,11 +1,16 @@
 spring:
   jpa:
     open-in-view: false
+    hibernate:
+      ddl-auto: update
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
     properties:
       hibernate:
         show_sql: ture
         format_sql: true
-        ddl-auto: create
+  session:
+    timeout: 86400
 
   datasource:
     url: jdbc:mysql://localhost:3306/blog
@@ -30,4 +35,5 @@ spring:
   logging:
     level:
       org.hibernate.sql: debug
+
 

@@ -1,5 +1,6 @@
 package com.blog.domain.user;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,14 +15,23 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SiteUser {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "SITE_USER_ID")
     private Long id;
 
+    @Column(nullable = false)
     private String name;
-    private String email;
+
+    @Column(nullable = false, unique = true)
+    private String email; // 아이디
+
+    @Column(nullable = false)
     private String password;
+
     private LocalDateTime createdDate;
+
 
     @Builder
     public SiteUser(String name, String email, String password, LocalDateTime createdDate) {
@@ -30,4 +40,5 @@ public class SiteUser {
         this.password = password;
         this.createdDate = createdDate;
     }
+
 }
