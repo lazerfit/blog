@@ -49,7 +49,15 @@ lazerfit 의 개인 blog 프로젝트입니다.
 ***
 
 ## *개발 일지*
-- ### [230615] &lt;Spring Security&gt; 로그인 기능 구현   
+- ### [230619] 로그인 기능 구현
+  - Spring security 6 
+  - 로그인 시 ROLE_ADMIN 부여
+  - TODO : 
+    1. ADMIN 계정에만 게시글 수정 / 삭제 보이도록 하기
+    2. 로그아웃 구현
+    3. DB 에 아이디는 한 개만 저장 -> SignUp 막기
+    4. 시큐리티 핸들러 처리
+- ### [230615] &lt;Spring Security&gt; 로그인 기능 구현 시작   
 - ### [230614] &lt;TroubleShooting&gt; 게시글 삭제 후 홈 화면 리다이렉션 시 기존 글이 남아있는 문제 발생
   - 기존 Javascript location.replace or location.href 통해 Home 화면 진입 시 기존 게시글이 남아 있음
   - form submit 이용하여 Controller 에서 redirect 하여 문제 해결
