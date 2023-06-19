@@ -49,6 +49,9 @@ lazerfit 의 개인 blog 프로젝트입니다.
 ***
 
 ## *개발 일지*
+- ### [230620] 시큐리티 핸들러 처리
+  - AccessDinedException 오류 Page 추가
+  - authenticationEntryPoint 오류 Page 추가
 - ### [230619] 로그인 기능 구현
   - Spring security 6 
   - 로그인 시 ROLE_ADMIN 부여
