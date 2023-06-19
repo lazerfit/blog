@@ -1,5 +1,7 @@
 package com.blog.config;
 
+import com.blog.config.handler.Http401Handler;
+import com.blog.config.handler.Http403Handler;
 import com.blog.domain.user.UserRepository;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -45,6 +47,10 @@ public class WebSecurityConfig {
             )
             .logout(LogoutConfigurer::permitAll)
             .csrf(AbstractHttpConfigurer::disable)
+            .exceptionHandling(e->
+                e.accessDeniedHandler(new Http403Handler()))
+            .exceptionHandling(e->
+                e.authenticationEntryPoint(new Http401Handler()))
             .rememberMe(rm -> rm.rememberMeParameter("remember")
                 .alwaysRemember(false)
                 .tokenValiditySeconds(2592000));

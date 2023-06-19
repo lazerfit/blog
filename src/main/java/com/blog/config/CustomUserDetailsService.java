@@ -19,7 +19,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         SiteUser siteUser = userRepository.findByEmail(email).orElseThrow(
             () -> new UsernameNotFoundException("존재하지않는 아이디 입니다."));
 
-        return new SiteUserPrincipal(siteUser);
+        if (email.equals("unpadded7479@duck.com")) {
+            return new SiteUserPrincipal(siteUser);
+        } else {
+            return new SiteUserSecondary(siteUser);
+        }
     }
-
 }
