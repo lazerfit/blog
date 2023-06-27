@@ -4,11 +4,11 @@ import com.blog.domain.user.UserRepository;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -29,6 +29,10 @@ public class WebSecurityConfig {
         http
             .authorizeHttpRequests(requests -> requests
                 .requestMatchers("/").permitAll()
+                .requestMatchers(HttpMethod.GET,"/posts/*").permitAll()
+                .requestMatchers("/posts/new").hasRole("ADMIN")
+                .requestMatchers("/posts/delete/*").hasRole("ADMIN")
+                .requestMatchers("/posts/edit/*").hasRole("ADMIN")
                 .requestMatchers("/auth/signup").permitAll()
                 .requestMatchers("/auth/login").permitAll()
                 .anyRequest().authenticated()
@@ -41,7 +45,7 @@ public class WebSecurityConfig {
                 .defaultSuccessUrl("/")
                 .permitAll()
             )
-            .logout(LogoutConfigurer::permitAll)
+//            .logout(LogoutConfigurer::permitAll)
             .csrf(AbstractHttpConfigurer::disable)
             .rememberMe(rm -> rm.rememberMeParameter("remember")
                 .alwaysRemember(false)
