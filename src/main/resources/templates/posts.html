@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
       layout:decorate="~{layout}">
 <head>
   <title>Post</title>
@@ -13,10 +14,8 @@
         <form name="deletePost" id="deletePosts" th:action="@{/posts/delete/{postId}(postId=${postId})}" method="post">
         <h4 th:text="${postFindById.title}">Header</h4>
         <span style="color: #aaa" th:text="${#temporals.format(postFindById.getCreatedDate(),'yyyy-MM-dd')}">Date</span>
-        <span style="color: #aaa">·</span>
-        <a th:href="@{/posts/edit/{postId}(postId=${postId})}" style="color: #aaa;text-decoration-line: none">수정</a>
-        <span style="color: #aaa">·</span>
-        <button id="del-button" class="del-button" style="color: #aaa;text-decoration-line: none">삭제</button>
+        <a th:href="@{/posts/edit/{postId}(postId=${postId})}" sec:authorize="hasRole('ROLE_ADMIN')" style="color: #aaa;text-decoration-line: none">· 수정 ·</a>
+        <button id="del-button" class="del-button" sec:authorize="hasRole('ROLE_ADMIN')" style="color: #aaa;text-decoration-line: none">삭제</button>
         </form>
         <script src="/js/deletePost.js"></script>
       </div>
