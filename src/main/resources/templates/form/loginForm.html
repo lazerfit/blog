@@ -4,13 +4,13 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8">
-  <title>Login Form Design | CodeLab</title>
+  <title>Login</title>
   <link rel="stylesheet" href="/css/loginForm.css">
 </head>
 <body>
 <div class="wrapper">
   <div class="title">
-    Login Form
+    Login
   </div>
   <form th:action="@{/login}" method="post">
     <div class="field">
@@ -23,8 +23,8 @@
     </div>
     <div class="content">
       <div class="checkbox">
-        <input type="checkbox" name="remember" id="remember-me">
-        <label for="remember-me">Remember me</label>
+        <input type="checkbox" name="remember" id="remember">
+        <label for="remember">Remember me</label>
       </div>
       <div class="pass-link">
         <a href="#">Forgot password?</a>

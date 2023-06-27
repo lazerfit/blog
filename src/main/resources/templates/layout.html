@@ -1,6 +1,8 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -21,11 +23,45 @@
 <body>
 <div class="header" style="text-align: left;padding-left: 20px">
 <h4><a class="navbar-brand" th:href="@{/}">Gran Adentura</a></h4>
+  <div th:if="${#authorization.expression('isAuthenticated()')}">
+    <div class="dropdown" data-bs-target="dropdownContent">
+      <img src="/img/klayrabbit.jpeg" alt="Profile Picture" class="profile" onclick="toggleDropdown()">
+      <div id="dropdownContent" class="dropdown-content">
+        <a href="#">관리</a>
+        <a th:href="@{/posts/new}">글쓰기</a>
+        <a href="#">로그아웃</a>
+      </div>
+    <script>
+      function toggleDropdown() {
+        var dropdownContent = document.getElementById("dropdownContent");
+        dropdownContent.classList.toggle("show");
+      }
+
+      window.addEventListener("click", function (event) {
+        if (!event.target.matches(".profile")) {
+          var dropdowns = document.getElementsByClassName("dropdown-content");
+          for (var i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains("show")) {
+              openDropdown.classList.remove("show");
+            }
+          }
+        }
+      });
+    </script>
+    </div>
+  </div>
+  <div th:unless="${#authorization.expression('isAuthenticated()')}">
+    <button class="loginId" th:href="@{auth/login}" onclick="login()" style="float: right;font-size: 20px">Login</button>
+  <script>
+    function login() {
+      location.href="/auth/login"
+    }
+  </script>
+  </div>
 </div>
-<img class="profile" src="/img/klayrabbit.jpeg" alt="login" loading="lazy">
 <nav class="navbar navbar-expand-lg bg-light" data-bs-theme="light">
   <div class="container-fluid">
-<!--    <a class="navbar-brand" th:href="@{/}">Gran Adentura</a>-->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -42,19 +78,6 @@
         <li class="nav-item">
           <a class="nav-link" href="#">Visitor's book</a>
         </li>
-<!--        <li class="nav-item">-->
-<!--          <a class="nav-link" href="#">About</a>-->
-<!--        </li>-->
-<!--        <li class="nav-item dropdown">-->
-<!--          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>-->
-<!--          <div class="dropdown-menu">-->
-<!--            <a class="dropdown-item" href="#">Action</a>-->
-<!--            <a class="dropdown-item" href="#">Another action</a>-->
-<!--            <a class="dropdown-item" href="#">Something else here</a>-->
-<!--            <div class="dropdown-divider"></div>-->
-<!--            <a class="dropdown-item" href="#">Separated link</a>-->
-<!--          </div>-->
-<!--        </li>-->
       </ul>
     </div>
   </div>
@@ -74,11 +97,11 @@
       </form>
     </div>
 
-    <div class="card">
-      <div class="d-grid gap-2">
-        <button class="btn btn-lg btn-primary" type="button" onclick=location.href="/posts/new">Post</button>
-      </div>
-    </div>
+<!--    <div class="card">-->
+<!--      <div class="d-grid gap-2">-->
+<!--        <button class="btn btn-lg btn-primary" type="button" onclick=location.href="/posts/new">Post</button>-->
+<!--      </div>-->
+<!--    </div>-->
 
     <div class="card">
       <ul class="list-group">
