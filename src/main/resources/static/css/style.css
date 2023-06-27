@@ -84,7 +84,7 @@ body {
 }
 
 .profile{
-  border-radius: 70%;
+  /*border-radius: 90%;*/
   width: 40px;
   height: 40px;
   float: right;
@@ -100,16 +100,6 @@ body {
 a:hover{
   text-decoration-color: indianred;
 }
-
-/*.text-truncate{*/
-/*  overflow: hidden;*/
-/*  text-overflow: ellipsis;*/
-/*  white-space: nowrap;*/
-/*  -webkit-line-clamp: 3;*/
-/*  display: -webkit-box;*/
-/*  -webkit-box-orient: vertical;*/
-/*  width: 100%;*/
-/*}*/
 
 .card > .card-body-index{
   -webkit-box-orient: vertical;
@@ -167,4 +157,18 @@ a:hover{
 
 .show{
   display: block;
+}
+
+.isDisabled {
+  display: block;
+  padding: 8px 12px;
+  text-decoration: none;
+  color: #000;
+  text-align: center;
+  font-size: 13px;
+}
+
+.social-media-icon {
+  width: 50px;
+  height: 50px;
 }
