@@ -47,10 +47,9 @@ class PostsRepositoryImplTest {
             .content("내용입니다.")
             .build());
         PageRequest pageRequest = PageRequest.of(0, 6);
-        Page<PostsResponseDto> searchedPosts = postsRepository.getPostsByKeywordList(pageRequest, "테스트");
+        Page<PostsResponseDto> searchedPosts = postsRepository.getPostsListByKeyword(pageRequest, "테스트");
 
         assertThat(searchedPosts.stream().toList()).hasSize(1);
         assertThat(searchedPosts.stream().toList().get(0).getTitle()).isEqualTo("테스트용 제목입니다.");
     }
-
 }

@@ -26,14 +26,13 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
             .offset(pageable.getOffset())
             .orderBy(posts.id.desc())
             .fetch();
-
         long totalCount = jpaQueryFactory.selectFrom(posts)
             .fetch().size();
         return new PageImpl<>(postsList,pageable,totalCount);
     }
 
     @Override
-    public Page<PostsResponseDto> getPostsByKeywordList(Pageable pageable, String keyword) {
+    public Page<PostsResponseDto> getPostsListByKeyword(Pageable pageable, String keyword) {
         List<PostsResponseDto> postsList = jpaQueryFactory.select(
                 new QPostsResponseDto(posts.id, posts.title, posts.content,
                     posts.modifiedDate, posts.createDate))
@@ -43,7 +42,6 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
             .offset(pageable.getOffset())
             .orderBy(posts.id.desc())
             .fetch();
-
         long totalCount=jpaQueryFactory.selectFrom(posts)
             .where(posts.title.contains(keyword)).fetch().size();
 
