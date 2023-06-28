@@ -6,4 +6,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface PostsRepositoryCustom {
     Page<PostsResponseDto> getPostsList(Pageable pageable);
+    Page<PostsResponseDto> getPostsByKeywordList(Pageable pageable,String keyword);
 }
