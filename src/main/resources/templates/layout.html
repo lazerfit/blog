@@ -103,9 +103,9 @@
   </div>
   <div class="rightcolumn" layout:fragment="rightcolumn">
     <div class="card">
-      <form class="d-flex">
-        <input class="form-control me-sm-2" type="search" placeholder="Search">
-        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+      <form class="d-flex" id="searchPostsForm" name="searchPostsForm" th:action="@{/posts/search}" th:method="GET">
+        <input class="form-control me-sm-2" id="searchKeyword" type="search" placeholder="Search" name="q" required>
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit" onclick="document.searchPostsForm.submit()">Search</button>
       </form>
     </div>
 
@@ -137,10 +137,6 @@
       <div class="fakeimg">Image</div><br>
       <div class="fakeimg">Image</div>
     </div>
-    <div class="card">
-      <h3>Follow Me</h3>
-      <p>Some text..</p>
-    </div>
   </div>
 </div>
 
@@ -148,15 +144,22 @@
     <a href=""><img src="/img/github.png" class="social-media-icon" alt="github" onclick="github()"></a>
     <a href=""><img src="/img/linkedin.png" class="social-media-icon" alt="linkedin" onclick="linkedin()"
     style="margin-left: 10px"></a>
+    <a href=""><img src="/img/angle.png" class="social-media-icon" alt="topScroll" onclick="topScroll()"
+    style="float: right;width: 20px;height: 20px;margin-top: 20px"></a>
 
 
-<script>
+
+  <script>
   function github() {
     window.open('https://github.com/lazerfit')
   }
 
   function linkedin() {
     window.open('https://www.linkedin.com/in/ddoddi14/')
+  }
+
+  function topScroll() {
+    window.scrollTo({top:0,behavior:'smooth'});
   }
 </script>
 </div>
