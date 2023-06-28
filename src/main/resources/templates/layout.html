@@ -30,37 +30,8 @@
         <a th:href="@{/posts/new}" sec:authorize="hasRole('ROLE_ADMIN')">글쓰기</a>
         <a href="#" onclick="logout()" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_USER')">로그아웃</a>
       </div>
-    <script>
-      function logout() {
-        $.ajax({
-          url:"/logout",
-          type:"POST",
-          success: function (response){
-            window.location.href='/'
-          },
-          error:function (error) {
-            console.error('Logout error:',error)
-          }
-      })}
-    </script>
-    <script>
-      function toggleDropdown() {
-        var dropdownContent = document.getElementById("dropdownContent");
-        dropdownContent.classList.toggle("show");
-      }
-
-      window.addEventListener("click", function (event) {
-        if (!event.target.matches(".profile")) {
-          var dropdowns = document.getElementsByClassName("dropdown-content");
-          for (var i = 0; i < dropdowns.length; i++) {
-            var openDropdown = dropdowns[i];
-            if (openDropdown.classList.contains("show")) {
-              openDropdown.classList.remove("show");
-            }
-          }
-        }
-      });
-    </script>
+    <script type="text/javascript" src="/js/logout.js"></script>
+    <script type="text/javascript" src="/js/toggleDropdown.js"></script>
     </div>
   </div>
   <div th:unless="${#authorization.expression('isAuthenticated()')}">
@@ -141,8 +112,8 @@
 </div>
 
 <div class="footer">
-    <a href=""><img src="/img/github.png" class="social-media-icon" alt="github" onclick="github()"></a>
-    <a href=""><img src="/img/linkedin.png" class="social-media-icon" alt="linkedin" onclick="linkedin()"
+    <a href="" title="My github"><img src="/img/github.png" class="social-media-icon" alt="github" onclick="github()"></a>
+    <a href="" title="My Linkedin"><img src="/img/linkedin.png" class="social-media-icon" alt="linkedin" onclick="linkedin()"
     style="margin-left: 10px"></a>
     <a href=""><img src="/img/angle.png" class="social-media-icon" alt="topScroll" onclick="topScroll()"
     style="float: right;width: 20px;height: 20px;margin-top: 20px"></a>
