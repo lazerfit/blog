@@ -49,9 +49,13 @@ lazerfit 의 개인 blog 프로젝트입니다.
 ***
 
 ## *개발 일지*
+- ### [230628] Add sns sharing
+  - add copy url
+  - [230629] add Twitter sharing
+  - local 에서 facebook 공유 불가
 - ### [230628] Add Searching Posts by title keyword with Querydsl
   - 검색 결과 반환 시 페이징도 같이 처리
-  - Pagination 에서 다음페이지 클릭 시 검색 결과 반환 풀림(전체 Posts 데이터 관한 Pagination 작동)
+  - Pagination 에서 다음페이지 클릭 시 검색 결과 반환 Paging 풀림(전체 Posts 데이터 관한 Pagination 작동)
     - Controller 에서 Model 로 Keyword 넘김
     - thymeleaf if 로 만약 keyword 가 넘어왔을시 검색된 Posts Pagination 작동
 - ### [230627] Add social-media-icon on Footer
