@@ -49,6 +49,8 @@ lazerfit 의 개인 blog 프로젝트입니다.
 ***
 
 ## *개발 일지*
+- ### [230630] Add Category
+  - Category 저장 및 Category 별 게시글 조회
 - ### [230628] Add sns sharing
   - add copy url
   - [230629] add Twitter sharing
