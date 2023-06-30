@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <title>Setting</title>
+<!--  <link rel="stylesheet" href="/css/adminPage.css">-->
+</head>
+<body>
+<div layout:fragment="leftcolumn">
+<h4 style="margin-top: 10px">카테고리 관리</h4>
+  <form th:object="${categoryForm}" method="post">
+  <div class="form-group"> <!-- form-group -->
+    <label class="form-label mt-4">카테고리 추가</label>
+    <div class="form-floating mb-3">
+      <input type="text" th:field="*{title}" class="form-control" id="floatingInput" name="title" placeholder="카테고리 명">
+      <label for="floatingInput">카테고리 명</label>
+    </div>
+    <div class="form-floating">
+      <input type="text" th:field="*{listOrder}" class="form-control" id="floatingNumber" name="listOrder" placeholder="목록 순서">
+      <label for="floatingInput">목록 순서</label>
+    </div>
+  </div> <!-- /form-group -->
+  <button type="reset" class="btn btn-secondary" style="margin-top: 10px">취소</button>
+  <button type="submit" class="btn btn-primary" style="margin-top: 10px">확인</button>
+  </form>
+</div>
+<div layout:fragment="rightcolumn">
+
+  <div class="list-group" style="margin-top: 10px">
+    <a href="#" class="list-group-item list-group-item-action active" data-bs-toggle="list">카테고리 관리</a>
+    <a href="#" class="list-group-item list-group-item-action" data-bs-toggle="list">계정 관리</a>
+  </div>
+</div>
+</body>
+</html>
