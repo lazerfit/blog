@@ -49,8 +49,12 @@ lazerfit 의 개인 blog 프로젝트입니다.
 ***
 
 ## *개발 일지*
+- ### [230704] Add category on Posts
+  - Category 별 게시글 조회
 - ### [230630] Add Category
-  - Category 저장 및 Category 별 게시글 조회
+  - Category 저장
+  - list-group 에서 지정한 listOrder 순서대로 정렬되도록 쿼리 수정 필요 / 현재는 findAll() 사용
+    - findAll(Sort) 로 해결
 - ### [230628] Add sns sharing
   - add copy url
   - [230629] add Twitter sharing
