@@ -3,7 +3,7 @@ package com.blog.domain.posts;
 import static com.blog.domain.posts.QPosts.posts;
 
 import com.blog.web.dto.PostsResponseDto;
-import com.blog.web.dto.QPostsResponseDto;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     @Override
     public Page<PostsResponseDto> getPostsList(Pageable pageable) {
         List<PostsResponseDto> postsList = jpaQueryFactory
-            .select(new QPostsResponseDto(posts.id, posts.title, posts.content, posts.modifiedDate, posts.createDate))
+            .select( Projections.constructor(PostsResponseDto.class,posts.id,posts.title,posts.content,posts.createDate))
             .from(posts)
             .limit(pageable.getPageSize())
             .offset(pageable.getOffset())
@@ -34,8 +34,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     @Override
     public Page<PostsResponseDto> getPostsListByKeyword(Pageable pageable, String keyword) {
         List<PostsResponseDto> postsList = jpaQueryFactory.select(
-                new QPostsResponseDto(posts.id, posts.title, posts.content,
-                    posts.modifiedDate, posts.createDate))
+                Projections.constructor(PostsResponseDto.class,posts.id,posts.title,posts.content,posts.createDate))
             .from(posts)
             .where(posts.title.contains(keyword))
             .limit(pageable.getPageSize())

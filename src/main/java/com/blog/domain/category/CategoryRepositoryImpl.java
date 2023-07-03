@@ -4,7 +4,7 @@ import static com.blog.domain.category.QCategory.category;
 import static com.blog.domain.posts.QPosts.posts;
 
 import com.blog.web.dto.PostsResponseDto;
-import com.blog.web.dto.QPostsResponseDto;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +20,7 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom{
     @Override
     public Page<PostsResponseDto> getCategorizedPostsList(Pageable pageable,String q) {
         List<PostsResponseDto> categorizedPostsList = jpaQueryFactory.select(
-                new QPostsResponseDto(posts.id, posts.title, posts.content, posts.createDate,
-                    posts.modifiedDate))
+                Projections.constructor(PostsResponseDto.class,posts.id,posts.title,posts.content,posts.createDate))
             .from(posts)
             .where(category.title.eq(q))
             .limit(pageable.getPageSize())
@@ -34,5 +33,4 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom{
 
         return new PageImpl<>(categorizedPostsList, pageable, totalCount);
     }
-
 }

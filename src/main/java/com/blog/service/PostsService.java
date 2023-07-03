@@ -8,11 +8,13 @@ import com.blog.web.dto.PostsResponseDto;
 import com.blog.web.dto.PostsSaveRequestDto;
 import com.blog.web.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class PostsService {
@@ -20,8 +22,8 @@ public class PostsService {
     private final PostsRepository postsRepository;
 
     @Transactional
-    public Long save(PostsSaveRequestDto request) {
-        return postsRepository.save(request.toEntity()).getId();
+    public void save(PostsSaveRequestDto request) {
+        postsRepository.save(request.toEntity());
     }
 
     @Transactional
@@ -49,6 +51,10 @@ public class PostsService {
     public void delete(Long id) {
         Posts posts = postsRepository.findById(id).orElseThrow(PostsNotFound::new);
         postsRepository.delete(posts);
+    }
+
+    public Page<PostsResponseDto> getSearchedPostsListByKeyword(Pageable pageable,String q) {
+        return postsRepository.getPostsListByKeyword(pageable, q);
     }
 }
 

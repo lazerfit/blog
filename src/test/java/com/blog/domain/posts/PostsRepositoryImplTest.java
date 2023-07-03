@@ -2,7 +2,7 @@ package com.blog.domain.posts;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.blog.config.QuerydslConfig;
+import com.blog.config.QdslConfig;
 import com.blog.web.dto.PostsResponseDto;
 import jakarta.persistence.EntityManager;
 import java.util.stream.IntStream;
@@ -16,7 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 @DataJpaTest
-@Import(QuerydslConfig.class)
+@Import(QdslConfig.class)
 class PostsRepositoryImplTest {
 
     @Autowired

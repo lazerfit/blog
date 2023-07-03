@@ -10,19 +10,21 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class ControllerAdvice {
+public class ErrorController {
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+
     public ErrorResponseDto handleValidationExceptions(
         MethodArgumentNotValidException ex) {
 
         int code = HttpStatus.BAD_REQUEST.value();
-        String message="잘못된 요청입니다.";
+        String message = "잘못된 요청입니다.";
 
-        ErrorResponseDto responseDto=new ErrorResponseDto(String.valueOf(code),message);
+        ErrorResponseDto responseDto = new ErrorResponseDto(String.valueOf(code), message);
 
         ex.getBindingResult().getFieldErrors().forEach(
-            c->responseDto.addValidation(c.getField(),c.getDefaultMessage())
+            c -> responseDto.addValidation(c.getField(), c.getDefaultMessage())
         );
 
         return responseDto;
@@ -32,7 +34,7 @@ public class ControllerAdvice {
     public ResponseEntity<ErrorResponseDto> handlePostNotFoundExceptions(TopException ex) {
 
         int code = ex.getStatusCode();
-        String message=ex.getMessage();
+        String message = ex.getMessage();
 
         ErrorResponseDto response = new ErrorResponseDto(String.valueOf(code), message);
 

@@ -26,7 +26,7 @@
     <div class="dropdown" data-bs-target="dropdownContent">
       <img src="/img/pikachu.png" alt="Profile Picture" class="profile" onclick="toggleDropdown()">
       <div id="dropdownContent" class="dropdown-content">
-        <a href="" sec:authorize="hasRole('ROLE_ADMIN')">관리</a>
+        <a th:href="@{/admin/setting}" sec:authorize="hasRole('ROLE_ADMIN')">관리</a>
         <a th:href="@{/posts/new}" sec:authorize="hasRole('ROLE_ADMIN')">글쓰기</a>
         <a href="#" onclick="logout()" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_USER')">로그아웃</a>
       </div>
@@ -85,22 +85,18 @@
 <!--        <button class="btn btn-lg btn-primary" type="button" onclick=location.href="/posts/new">Post</button>-->
 <!--      </div>-->
 <!--    </div>-->
-
     <div class="card">
-      <ul class="list-group">
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          Cras justo odio
-          <span class="badge bg-primary rounded-pill">14</span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          Dapibus ac facilisis in
-          <span class="badge bg-primary rounded-pill">2</span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          Morbi leo risus
-          <span class="badge bg-primary rounded-pill">1</span>
-        </li>
+      <ul class="list-group list-group-light">
+        <li class="list-group-item d-flex justify-content-between align-items-center border-0 categoryList" onclick="getAllPosts()"><a href="">전체 글</a></li>
+    <th:block th:each="category:${allCategorizedPosts}">
+          <li class="list-group-item d-flex justify-content-between align-items-center border-0" style="padding-top: 0" th:text="${category.getTitle()}">
+            Category
+          </li>
+    </th:block>
       </ul>
+      <script>function getAllPosts() {
+        window.location.href="/"
+      }</script>
     </div>
     <div class="card">
       <h3>Popular Post</h3>

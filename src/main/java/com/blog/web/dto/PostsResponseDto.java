@@ -13,23 +13,21 @@ public class PostsResponseDto {
     private final Long id;
     private final String title;
     private final String content;
-    private final LocalDateTime modifiedDate;
     private final LocalDateTime createdDate;
+
 
     public PostsResponseDto(Posts posts) {
         this.id=posts.getId();
         this.title=posts.getTitle();
         this.content=posts.getContent();
-        this.modifiedDate=posts.getModifiedDate();
         this.createdDate=posts.getCreateDate();
     }
 
     @QueryProjection
-    public PostsResponseDto(Long id, String title, String content, LocalDateTime modifiedDate, LocalDateTime createdDate) {
+    public PostsResponseDto(Long id, String title, String content, LocalDateTime createdDate) {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.modifiedDate = modifiedDate;
         this.createdDate=createdDate;
     }
 }

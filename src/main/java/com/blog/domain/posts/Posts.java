@@ -1,18 +1,20 @@
 package com.blog.domain.posts;
 
+import com.blog.domain.category.Category;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Getter
 @NoArgsConstructor
-@ToString
 @Entity
 public class Posts extends BasetimeEntity{
 
@@ -28,11 +30,16 @@ public class Posts extends BasetimeEntity{
 
     private String author;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id",referencedColumnName = "id")
+    private Category category;
+
     @Builder
-    public Posts(String title, String content, String author) {
+    public Posts(String title, String content, String author,Category category) {
         this.title = title;
         this.content = content;
         this.author = author;
+        this.category=category;
     }
 
     public PostsEditor.PostsEditorBuilder toEditor() {

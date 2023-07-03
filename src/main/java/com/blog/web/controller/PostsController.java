@@ -1,5 +1,7 @@
 package com.blog.web.controller;
 
+import com.blog.domain.category.Category;
+import com.blog.service.CategoryService;
 import com.blog.service.PostsService;
 import com.blog.web.dto.PostsResponseDto;
 import com.blog.web.dto.PostsSaveRequestDto;
@@ -7,13 +9,17 @@ import com.blog.web.dto.PostsUpdateRequestDto;
 import com.blog.web.form.CreatePostsForm;
 import com.blog.web.form.EditPostsForm;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -22,21 +28,25 @@ public class PostsController {
 
     private final PostsService postsService;
 
+    private final CategoryService categoryService;
     @GetMapping("/posts/new")
     public String createPostsForm(Model model) {
+        List<Category> allCategories = categoryService.findAllCategory();
         model.addAttribute("createPostsForm", new CreatePostsForm());
+        model.addAttribute("allCategories", allCategories);
         return "form/createPostsForm";
     }
 
     @PostMapping("/posts/new")
     public String save(@Valid CreatePostsForm form) {
-        PostsSaveRequestDto request = new PostsSaveRequestDto(form.getTitle(), form.getContent());
+        Category getCategoryByTitle = categoryService.getCategoryByTitle(form.getCategoryTitle());
+        PostsSaveRequestDto request = new PostsSaveRequestDto(form.getTitle(), form.getContent(),getCategoryByTitle);
         postsService.save(request);
         return "redirect:/";
     }
 
     @GetMapping("/posts/edit/{postId}")
-    public String editForm(@PathVariable Long postId,Model model) {
+    public String editForm(@PathVariable Long postId, Model model) {
         PostsResponseDto originalPosts = postsService.findById(postId);
         EditPostsForm editPostsForm = new EditPostsForm(originalPosts.getTitle(),
             originalPosts.getContent());
@@ -54,10 +64,9 @@ public class PostsController {
     }
 
     @GetMapping("/posts/{postId}")
-    public String findById(@PathVariable Long postId,Model model) {
-
+    public String findById(@PathVariable Long postId, Model model) {
         PostsResponseDto postFindById = postsService.findById(postId);
-        model.addAttribute("postFindById",postFindById);
+        model.addAttribute("postFindById", postFindById);
         return "posts";
     }
 
@@ -65,5 +74,14 @@ public class PostsController {
     public String delete(@PathVariable Long postId) {
         postsService.delete(postId);
         return "redirect:/";
+    }
+
+    @GetMapping("/posts/search")
+    public String searchPostsByKeyword(Pageable pageable, Model model, @RequestParam String q) {
+        Page<PostsResponseDto> searchedPostsListByKeyword = postsService.getSearchedPostsListByKeyword(
+            pageable, q);
+        model.addAttribute("postsList",searchedPostsListByKeyword);
+        model.addAttribute("keyword", q);
+        return "index";
     }
 }
