@@ -5,6 +5,7 @@ import com.blog.domain.posts.PostsEditor;
 import com.blog.domain.posts.PostsRepository;
 import com.blog.exception.PostsNotFound;
 import com.blog.web.dto.PostsResponseDto;
+import com.blog.web.dto.PostsResponseWithCategoryDto;
 import com.blog.web.dto.PostsSaveRequestDto;
 import com.blog.web.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +43,10 @@ public class PostsService {
         Posts posts = postsRepository.findById(id)
             .orElseThrow(PostsNotFound::new);
         return new PostsResponseDto(posts);
+    }
+
+    public PostsResponseWithCategoryDto findByIdWithCategory(Long id) {
+        return postsRepository.findByIdWithCategoryId(id);
     }
 
     public Page<PostsResponseDto> getPostsList(Pageable pageable) {

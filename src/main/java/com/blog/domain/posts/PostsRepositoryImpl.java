@@ -3,6 +3,7 @@ package com.blog.domain.posts;
 import static com.blog.domain.posts.QPosts.posts;
 
 import com.blog.web.dto.PostsResponseDto;
+import com.blog.web.dto.PostsResponseWithCategoryDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -45,5 +46,17 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
             .where(posts.title.contains(keyword)).fetch().size();
 
         return new PageImpl<>(postsList,pageable,totalCount);
+    }
+
+    @Override
+    public PostsResponseWithCategoryDto findByIdWithCategoryId(Long id) {
+        List<PostsResponseWithCategoryDto> response = jpaQueryFactory.select(
+                Projections.constructor(PostsResponseWithCategoryDto.class, posts.id,
+                    posts.title, posts.content, posts.createDate, posts.category.title))
+            .from(posts)
+            .where(posts.id.eq(id))
+            .fetch();
+
+        return response.get(0);
     }
 }

@@ -1,7 +1,7 @@
 package com.blog.web.controller;
 
 import com.blog.domain.category.Category;
-import com.blog.domain.category.CategoryRepository;
+import com.blog.service.CategoryService;
 import com.blog.service.PostsService;
 import com.blog.web.dto.PostsResponseDto;
 import java.util.List;
@@ -20,12 +20,12 @@ public class HomeController {
 
     private final PostsService postsService;
 
-    private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
 
     @GetMapping("/")
     public String index(Pageable pageable, Model model) {
         Page<PostsResponseDto> postsList = postsService.getPostsList(pageable);
-        List<Category> allCategorizedPosts = categoryRepository.findAll();
+        List<Category> allCategorizedPosts = categoryService.findAllCategory();
         model.addAttribute("postsList", postsList);
         model.addAttribute("allCategorizedPosts", allCategorizedPosts);
         return "index";

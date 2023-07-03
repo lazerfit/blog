@@ -6,5 +6,6 @@ import org.springframework.data.domain.Pageable;
 
 public interface CategoryRepositoryCustom {
 
-    public Page<PostsResponseDto> getCategorizedPostsList(Pageable pageable,String q);
+    Page<PostsResponseDto> getCategorizedPostsList(Pageable pageable,String q);
+
 }

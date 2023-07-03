@@ -9,6 +9,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +33,6 @@ public class CategoryService {
     }
 
     public List<Category> findAllCategory() {
-        return categoryRepository.findAll();
+        return categoryRepository.findAll(Sort.by(Sort.DEFAULT_DIRECTION,"listOrder"));
     }
 }

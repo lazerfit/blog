@@ -12,9 +12,10 @@
     <div class="card bg-light mb-3">
       <div class="card-header">
         <form name="deletePost" id="deletePosts" th:action="@{/posts/delete/{postId}(postId=${postId})}" method="post">
+          <h6 th:if="${postFindById.categoryTitle}" th:text="${postFindById.categoryTitle}"></h6>
         <h2 th:text="${postFindById.title}">Header</h2>
           <input type="hidden" id="postFindById_title" th:value="${postFindById.title}">
-        <span style="color: #aaa" th:text="${#temporals.format(postFindById.getCreatedDate(),'yyyy-MM-dd')}">Date</span>
+        <span style="color: #aaa" th:text="${#temporals.format(postFindById.createdDate(),'yyyy-MM-dd')}">Date</span>
         <a th:href="@{/posts/edit/{postId}(postId=${postId})}" sec:authorize="hasRole('ROLE_ADMIN')" style="color: #aaa;text-decoration-line: none">· 수정 ·</a>
           <button id="del-button" class="del-button" sec:authorize="hasRole('ROLE_ADMIN')" style="color: #aaa;text-decoration-line: none">삭제</button>
         </form>

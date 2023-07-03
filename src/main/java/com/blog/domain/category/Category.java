@@ -29,7 +29,7 @@ public class Category {
     private List<Posts> posts = new ArrayList<>();
 
     @Column(unique = true)
-    private Long listOrder=1L;
+    private Long listOrder;
 
     @Builder
     public Category(String title, Long listOrder) {

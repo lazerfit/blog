@@ -30,6 +30,7 @@ public class WebSecurityConfig {
             .authorizeHttpRequests(requests -> requests
                 .requestMatchers("/").permitAll()
                 .requestMatchers(HttpMethod.GET,"/posts/*").permitAll()
+                .requestMatchers("/posts/search/*").permitAll()
                 .requestMatchers("/posts/new").hasRole("ADMIN")
                 .requestMatchers("/posts/delete/*").hasRole("ADMIN")
                 .requestMatchers("/posts/edit/*").hasRole("ADMIN")

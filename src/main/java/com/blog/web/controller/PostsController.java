@@ -4,6 +4,7 @@ import com.blog.domain.category.Category;
 import com.blog.service.CategoryService;
 import com.blog.service.PostsService;
 import com.blog.web.dto.PostsResponseDto;
+import com.blog.web.dto.PostsResponseWithCategoryDto;
 import com.blog.web.dto.PostsSaveRequestDto;
 import com.blog.web.dto.PostsUpdateRequestDto;
 import com.blog.web.form.CreatePostsForm;
@@ -65,8 +66,10 @@ public class PostsController {
 
     @GetMapping("/posts/{postId}")
     public String findById(@PathVariable Long postId, Model model) {
-        PostsResponseDto postFindById = postsService.findById(postId);
+        PostsResponseWithCategoryDto postFindById = postsService.findByIdWithCategory(postId);
+        List<Category> allCategorizedPosts = categoryService.findAllCategory();
         model.addAttribute("postFindById", postFindById);
+        model.addAttribute("allCategorizedPosts", allCategorizedPosts);
         return "posts";
     }
 
