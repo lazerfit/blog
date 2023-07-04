@@ -49,6 +49,7 @@ lazerfit 의 개인 blog 프로젝트입니다.
 ***
 
 ## *개발 일지*
+- ### [230704] 게시글 수정 내 카테고리 수정 추가
 - ### [230704] Add category on Posts
   - Category 별 게시글 조회
 - ### [230630] Add Category
