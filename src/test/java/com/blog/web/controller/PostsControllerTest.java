@@ -14,8 +14,11 @@ import com.blog.domain.posts.Posts;
 import com.blog.domain.posts.PostsRepository;
 import com.blog.web.dto.PostsSearchRequestDto;
 import com.blog.web.dto.PostsUpdateRequestDto;
+import com.blog.web.dto.PostsUpdateRequestDto.PostsUpdateRequestDtoBuilder;
+import com.blog.web.form.EditPostsForm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.stream.IntStream;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,8 +46,18 @@ class PostsControllerTest {
     private CategoryRepository categoryRepository;
 
     @BeforeEach
-    public void tearDown() {
+    void insertCategories() {
+        Category category1 = new Category("Java", 1L);
+        Category category2 = new Category("Spring", 2L);
+
+        categoryRepository.save(category1);
+        categoryRepository.save(category2);
+    }
+
+    @AfterEach()
+    void tearDown() {
         postsRepository.deleteAll();
+        categoryRepository.deleteAll();
     }
 
     @Test
@@ -181,8 +194,33 @@ class PostsControllerTest {
             .category(category2)
             .build());
 
-        mockMvc.perform(get("/posts/category?q={category}",category1.getTitle())
-        ).andDo(print())
+        mockMvc.perform(get("/posts/category?q={category}", category1.getTitle())
+            ).andDo(print())
             .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("edit category on Posts")
+    @WithMockUser(roles = "ADMIN")
+    void editCategoryOnPosts() throws Exception {
+
+        Category foundCategory1 = categoryRepository.findCategoryByTitle("Java").orElseThrow();
+        Category foundCategory2 = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
+
+        Posts posts = postsRepository.save(Posts.builder()
+            .title("제목1")
+            .content("내용1")
+            .category(foundCategory1)
+            .build());
+
+        EditPostsForm editPostsForm = new EditPostsForm("수정된 제목", "수정된 내용", "Spring");
+        PostsUpdateRequestDtoBuilder request = PostsUpdateRequestDto.builder().title("수정제목")
+            .content("수정내용").category(foundCategory2);
+        mockMvc.perform(post("/posts/edit/{postId}", posts.getId())
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(editPostsForm)))
+            .andDo(print())
+            .andExpect(status().is3xxRedirection());
+
     }
 }

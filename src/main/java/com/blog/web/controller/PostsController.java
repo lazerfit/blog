@@ -20,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Slf4j
@@ -61,7 +62,7 @@ public class PostsController {
 
 
     @PostMapping("/posts/edit/{postId}")
-    public String edit(@PathVariable Long postId, @Valid EditPostsForm form) {
+    public String edit(@PathVariable Long postId, @RequestBody @Valid EditPostsForm form) {
         Category categoryByTitle = categoryService.getCategoryByTitle(form.getCategoryTitle());
         PostsUpdateRequestDto request = new PostsUpdateRequestDto(form.getTitle(),
             form.getContent(),categoryByTitle);
