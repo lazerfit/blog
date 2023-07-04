@@ -1,6 +1,7 @@
 package com.blog.domain.posts;
 
 import com.blog.domain.category.Category;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -30,7 +31,7 @@ public class Posts extends BasetimeEntity{
 
     private String author;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id",referencedColumnName = "id")
     private Category category;
 
@@ -51,5 +52,6 @@ public class Posts extends BasetimeEntity{
     public void edit(PostsEditor postsEditor) {
         title=postsEditor.title();
         content=postsEditor.content();
+        category=new Category(postsEditor.categoryTitle(), this.category.getListOrder());
     }
 }

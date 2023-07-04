@@ -1,7 +1,6 @@
 package com.blog.service;
 
 import com.blog.domain.posts.Posts;
-import com.blog.domain.posts.PostsEditor;
 import com.blog.domain.posts.PostsRepository;
 import com.blog.exception.PostsNotFound;
 import com.blog.web.dto.PostsResponseDto;
@@ -27,16 +26,22 @@ public class PostsService {
         postsRepository.save(request.toEntity());
     }
 
-    @Transactional
+/*    @Transactional
     public void edit(Long id, PostsUpdateRequestDto request) {
         Posts posts = postsRepository.findById(id).orElseThrow(PostsNotFound::new);
 
         PostsEditor.PostsEditorBuilder editorBuilder=posts.toEditor();
         PostsEditor postsEditor = editorBuilder.title(request.title())
             .content(request.content())
+            .categoryTitle(request.categoryTitle())
             .build();
 
         posts.edit(postsEditor);
+    }*/
+
+    @Transactional
+    public void edit(Long id, PostsUpdateRequestDto request) {
+        postsRepository.edit(id,request);
     }
 
     public PostsResponseDto findById(Long id) {
@@ -46,7 +51,7 @@ public class PostsService {
     }
 
     public PostsResponseWithCategoryDto findByIdWithCategory(Long id) {
-        return postsRepository.findByIdWithCategoryId(id);
+        return postsRepository.findByIdContainCategory(id);
     }
 
     public Page<PostsResponseDto> getPostsList(Pageable pageable) {
@@ -60,6 +65,11 @@ public class PostsService {
 
     public Page<PostsResponseDto> getSearchedPostsListByKeyword(Pageable pageable,String q) {
         return postsRepository.getPostsListByKeyword(pageable, q);
+    }
+
+    public Page<PostsResponseWithCategoryDto> getCategorizedPosts(Pageable pageable,
+        String q) {
+        return postsRepository.getCategorizedPosts(pageable, q);
     }
 }
 

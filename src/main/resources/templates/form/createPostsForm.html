@@ -13,7 +13,7 @@
     <div class="form-group" style="padding: 1px">
       <select class="form-select" id="exampleSelect1" th:field="*{categoryTitle}" style="margin-bottom: 5px;width: 20%">
         <th:block th:each="category:${allCategories}">
-          <option th:if="${category.title.equals('카테고리 없음')}" th:value="${category.title}" selected=>카테고리</option>
+          <option th:if="${category.title.equals('카테고리 없음')}" th:value="${category.title}" selected>카테고리</option>
           <option th:unless="${category.title.equals('카테고리 없음')}" th:value="${category.title}" th:text="${category.title}">1</option>
         </th:block>
       </select>

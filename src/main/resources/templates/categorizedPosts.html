@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <title>Home</title>
+</head>
+<body>
+
+<div layout:fragment="leftcolumn">
+  <div class="container">
+    <span th:inline="text" style="padding-left: 10px">
+      [[${keyword}]]
+    </span>
+    <span class="badge rounded-pill bg-primary" th:inline="text">
+      [[${categorizedPosts.getTotalElements()}]]
+    </span>
+    <th:block th:each="post:${categorizedPosts}">
+      <div class="card bg-light mb-3">
+        <div class="card-body-index">
+          <h4 class="card-title">
+            <a th:text="${post.getTitle()}"
+               th:href="@{/posts/{id}(id=${post.getId()})}"
+               style="color: black;text-decoration-line: none">Light card title</a></h4>
+          <p class="card-text text-truncate" th:utext="${post.getContent()}">content.</p>
+        </div>
+        <div class="card-footer">
+          <p style="color: #aaa" th:text="${#temporals.format(post.getCreatedDate(),'yyyy-MM-dd')}">Date</p>
+        </div>
+      </div>
+    </th:block>
+    <div> <!-- pagination -->
+      <ul class="pagination justify-content-center"
+          th:with="
+          pageNumber=${categorizedPosts.getNumber()},
+          pageSize=${categorizedPosts.getSize()},
+          startPage=${T(java.lang.Math).floor(pageNumber/pageSize)*pageSize+1},
+          totalPage=${categorizedPosts.getTotalPages()},
+          endPage=(${startPage + pageSize - 1 < totalPage ? startPage + pageSize - 1 : totalPage})">
+        <li class="page-item" th:classappend="${categorizedPosts.hasPrevious()} ? '#':'disabled'">
+          <a class="page-link" th:href="@{/posts/category(q=${keyword},page=${pageNumber})}">&laquo;</a>
+        </li>
+        <li class="page-item"
+            th:each="page:${#numbers.sequence(startPage,endPage)}"
+            th:classappend="${page==pageNumber+1} ? 'active'">
+          <a th:text="${page}" class="page-link" th:href="@{/posts/category(q=${keyword},page=${page})}">1</a>
+        </li>
+        <li class="page-item" th:classappend="${categorizedPosts.hasNext()} ? '#':'disabled'">
+          <a class="page-link" th:href="@{/posts/category(q=${keyword},page=${pageNumber+2})}">&raquo;</a>
+        </li> <!-- ${postsList.hasNext()} ? -->
+      </ul>
+    </div> <!-- /pagination -->
+  </div> <!-- /container -->
+</div>
+<!--<th:block th:each="category:${allCategorizedPosts}">-->
+<!--  <a th:text="${category.getListOrder()}"></a>-->
+<!--</th:block>-->
+</body>
+</html>

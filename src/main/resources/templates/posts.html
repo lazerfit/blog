@@ -12,17 +12,17 @@
     <div class="card bg-light mb-3">
       <div class="card-header">
         <form name="deletePost" id="deletePosts" th:action="@{/posts/delete/{postId}(postId=${postId})}" method="post">
-          <h6 th:if="${postFindById.categoryTitle}" th:text="${postFindById.categoryTitle}"></h6>
-        <h2 th:text="${postFindById.title}">Header</h2>
-          <input type="hidden" id="postFindById_title" th:value="${postFindById.title}">
-        <span style="color: #aaa" th:text="${#temporals.format(postFindById.createdDate(),'yyyy-MM-dd')}">Date</span>
+          <h6 th:if="${postFindById.getCategoryTitle()}" th:text="${postFindById.getCategoryTitle()}" style="padding-left: 5px"></h6>
+        <h2 th:text="${postFindById.getTitle()}">Header</h2>
+          <input type="hidden" id="postFindById_title" th:value="${postFindById.getTitle()}">
+        <span style="color: #aaa" th:text="${#temporals.format(postFindById.getCreatedDate(),'yyyy-MM-dd')}">Date</span>
         <a th:href="@{/posts/edit/{postId}(postId=${postId})}" sec:authorize="hasRole('ROLE_ADMIN')" style="color: #aaa;text-decoration-line: none">· 수정 ·</a>
           <button id="del-button" class="del-button" sec:authorize="hasRole('ROLE_ADMIN')" style="color: #aaa;text-decoration-line: none">삭제</button>
         </form>
         <script src="/js/deletePost.js"></script>
       </div>
       <div class="card-body">
-        <p class="card-text" th:utext="${postFindById.content}">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <p class="card-text" th:utext="${postFindById.getContent()}">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
       </div>
       <div class="card-footer">
         <a href="#" title="facebook" onclick="facebook()"><img src="/img/facebook.png" class="share-button" alt="facebook"/></a>

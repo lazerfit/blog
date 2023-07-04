@@ -8,6 +8,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.blog.domain.category.Category;
+import com.blog.domain.category.CategoryRepository;
 import com.blog.domain.posts.Posts;
 import com.blog.domain.posts.PostsRepository;
 import com.blog.web.dto.PostsSearchRequestDto;
@@ -20,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -35,6 +38,9 @@ class PostsControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @BeforeEach
     public void tearDown() {
@@ -144,8 +150,8 @@ class PostsControllerTest {
             .build());
 
         mockMvc.perform(post("/posts")
-            .contentType(APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(posts)))
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(posts)))
             .andDo(print())
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
@@ -153,5 +159,30 @@ class PostsControllerTest {
             .andExpect(jsonPath("$.validationErrors[:1].fieldName").value("title"));
     }
 
-    
+    @Test
+    @DisplayName("get Categorized Posts")
+    @WithMockUser(roles = "ADMIN")
+    void getCategorizedPosts() throws Exception {
+        Category category1 = new Category("Java", 1L);
+        Category category2 = new Category("Spring", 2L);
+
+        categoryRepository.save(category1);
+        categoryRepository.save(category2);
+
+        postsRepository.save(Posts.builder()
+            .title("제목1")
+            .content("내용1")
+            .category(category1)
+            .build());
+
+        postsRepository.save(Posts.builder()
+            .title("제목2")
+            .content("내용2")
+            .category(category2)
+            .build());
+
+        mockMvc.perform(get("/posts/category?q={category}",category1.getTitle())
+        ).andDo(print())
+            .andExpect(status().isOk());
+    }
 }

@@ -3,6 +3,7 @@ package com.blog.domain.posts;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.blog.config.QdslConfig;
+import com.blog.domain.category.CategoryRepository;
 import com.blog.web.dto.PostsResponseDto;
 import jakarta.persistence.EntityManager;
 import java.util.stream.IntStream;
@@ -24,6 +25,9 @@ class PostsRepositoryImplTest {
 
     @Autowired
     private PostsRepository postsRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @BeforeEach
     void insertMockData() {

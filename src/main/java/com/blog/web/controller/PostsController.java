@@ -30,6 +30,7 @@ public class PostsController {
     private final PostsService postsService;
 
     private final CategoryService categoryService;
+
     @GetMapping("/posts/new")
     public String createPostsForm(Model model) {
         List<Category> allCategories = categoryService.findAllCategory();
@@ -41,25 +42,29 @@ public class PostsController {
     @PostMapping("/posts/new")
     public String save(@Valid CreatePostsForm form) {
         Category getCategoryByTitle = categoryService.getCategoryByTitle(form.getCategoryTitle());
-        PostsSaveRequestDto request = new PostsSaveRequestDto(form.getTitle(), form.getContent(),getCategoryByTitle);
+        PostsSaveRequestDto request = new PostsSaveRequestDto(form.getTitle(), form.getContent(),
+            getCategoryByTitle);
         postsService.save(request);
         return "redirect:/";
     }
 
     @GetMapping("/posts/edit/{postId}")
     public String editForm(@PathVariable Long postId, Model model) {
-        PostsResponseDto originalPosts = postsService.findById(postId);
+        PostsResponseWithCategoryDto originalPosts = postsService.findByIdWithCategory(postId);
         EditPostsForm editPostsForm = new EditPostsForm(originalPosts.getTitle(),
-            originalPosts.getContent());
+            originalPosts.getContent(),originalPosts.getCategoryTitle());
+        List<Category> allCategories = categoryService.findAllCategory();
         model.addAttribute("editPostsForm", editPostsForm);
+        model.addAttribute("allCategories", allCategories);
         return "form/editPostsForm";
     }
 
 
     @PostMapping("/posts/edit/{postId}")
     public String edit(@PathVariable Long postId, @Valid EditPostsForm form) {
+        Category categoryByTitle = categoryService.getCategoryByTitle(form.getCategoryTitle());
         PostsUpdateRequestDto request = new PostsUpdateRequestDto(form.getTitle(),
-            form.getContent());
+            form.getContent(),categoryByTitle);
         postsService.edit(postId, request);
         return "redirect:/posts/{postId}";
     }
@@ -83,8 +88,20 @@ public class PostsController {
     public String searchPostsByKeyword(Pageable pageable, Model model, @RequestParam String q) {
         Page<PostsResponseDto> searchedPostsListByKeyword = postsService.getSearchedPostsListByKeyword(
             pageable, q);
-        model.addAttribute("postsList",searchedPostsListByKeyword);
+        model.addAttribute("postsList", searchedPostsListByKeyword);
         model.addAttribute("keyword", q);
         return "index";
+    }
+
+    @GetMapping("/posts/category")
+    public String getCategorizedPosts(Pageable pageable, @RequestParam String q,
+        Model model) {
+        Page<PostsResponseWithCategoryDto> categorizedPosts = postsService.getCategorizedPosts(
+            pageable, q);
+        List<Category> allCategorizedPosts = categoryService.findAllCategory();
+        model.addAttribute("categorizedPosts", categorizedPosts);
+        model.addAttribute("keyword", q);
+        model.addAttribute("allCategorizedPosts", allCategorizedPosts);
+        return "categorizedPosts";
     }
 }

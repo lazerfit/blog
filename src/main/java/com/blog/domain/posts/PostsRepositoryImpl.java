@@ -4,6 +4,7 @@ import static com.blog.domain.posts.QPosts.posts;
 
 import com.blog.web.dto.PostsResponseDto;
 import com.blog.web.dto.PostsResponseWithCategoryDto;
+import com.blog.web.dto.PostsUpdateRequestDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -49,7 +50,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     }
 
     @Override
-    public PostsResponseWithCategoryDto findByIdWithCategoryId(Long id) {
+    public PostsResponseWithCategoryDto findByIdContainCategory(Long id) {
         List<PostsResponseWithCategoryDto> response = jpaQueryFactory.select(
                 Projections.constructor(PostsResponseWithCategoryDto.class, posts.id,
                     posts.title, posts.content, posts.createDate, posts.category.title))
@@ -58,5 +59,34 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
             .fetch();
 
         return response.get(0);
+    }
+
+    @Override
+    public Page<PostsResponseWithCategoryDto> getCategorizedPosts(Pageable pageable,
+        String q) {
+        List<PostsResponseWithCategoryDto> postsList = jpaQueryFactory.select(
+                Projections.constructor(PostsResponseWithCategoryDto.class, posts.id, posts.title,
+                    posts.content, posts.createDate, posts.category.title))
+            .from(posts)
+            .where(posts.category.title.eq(q))
+            .limit(pageable.getPageSize())
+            .offset(pageable.getOffset())
+            .orderBy(posts.id.desc())
+            .fetch();
+
+        long totalCount=jpaQueryFactory.selectFrom(posts)
+            .where(posts.category.title.eq(q)).fetch().size();
+
+        return new PageImpl<>(postsList,pageable,totalCount);
+    }
+
+    @Override
+    public void edit(Long id, PostsUpdateRequestDto requestDto) {
+        jpaQueryFactory.update(posts)
+            .where(posts.id.eq(id))
+            .set(posts.title, requestDto.title())
+            .set(posts.content,requestDto.content())
+            .set(posts.category,requestDto.category())
+            .execute();
     }
 }
