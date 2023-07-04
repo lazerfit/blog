@@ -31,7 +31,7 @@ public class Posts extends BasetimeEntity{
 
     private String author;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
     @JoinColumn(name = "category_id",referencedColumnName = "id")
     private Category category;
 
@@ -41,17 +41,5 @@ public class Posts extends BasetimeEntity{
         this.content = content;
         this.author = author;
         this.category=category;
-    }
-
-    public PostsEditor.PostsEditorBuilder toEditor() {
-        return PostsEditor.builder()
-            .title(title)
-            .content(content);
-    }
-
-    public void edit(PostsEditor postsEditor) {
-        title=postsEditor.title();
-        content=postsEditor.content();
-        category=new Category(postsEditor.categoryTitle(), this.category.getListOrder());
     }
 }
