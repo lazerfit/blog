@@ -55,6 +55,8 @@ lazerfit 의 개인 blog 프로젝트입니다.
     - Update Query - Querydsl 작성 시 InvalidDataAccessApiUsageException: Executing an update/delete query 오류 발생
       - 게시글 update query 와 동일 / 계속 오류 발생 / 정확한 원인 발견 안됨
       - Dirty Checking 으로 해결
+    - Controller Test 시 listOrder Validation 오류 발생
+      - @NotBlank -> @NotNull 로 해결
 - ### [230704] 게시글 수정 내 카테고리 수정 추가
   - Home 화면에 보여지는 카테고리 순서 수정 기능 필요
     - 현재 Category Table / list_order 컬럼으로 순서 정렬
