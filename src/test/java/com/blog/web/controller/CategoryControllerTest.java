@@ -4,9 +4,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.blog.domain.category.Category;
 import com.blog.domain.category.CategoryRepository;
 import com.blog.domain.posts.PostsRepository;
+import com.blog.exception.CategoryNotFound;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,6 +36,14 @@ class CategoryControllerTest {
     private ObjectMapper objectMapper;
 
     @BeforeEach
+    void insertCategories() {
+        Category category1 = new Category("Spring", 1L);
+        Category category2 = new Category("Java", 2L);
+        categoryRepository.save(category1);
+        categoryRepository.save(category2);
+    }
+
+    @AfterEach
     void tearDown() {
         categoryRepository.deleteAll();
     }
@@ -48,5 +59,19 @@ class CategoryControllerTest {
             )
             .andDo(print())
             .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    @DisplayName("카테고리 삭제")
+    @WithMockUser(roles = {"ADMIN"})
+    void deleteCategoryById() throws Exception {
+
+        Category category = categoryRepository.findCategoryByTitle("Spring")
+            .orElseThrow(CategoryNotFound::new);
+
+        mockMvc.perform(post("/admin/setting/category/delete/{categoryId}", category.getId()))
+            .andDo(print())
+            .andExpect(status().is3xxRedirection());
+
     }
 }

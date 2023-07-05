@@ -25,6 +25,82 @@
   <button type="reset" class="btn btn-secondary" style="margin-top: 10px">취소</button>
   <button type="submit" class="btn btn-primary" style="margin-top: 10px">확인</button>
   </form>
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-primary" id="category_modal_btn" data-bs-toggle="modal" data-bs-target="#mainModal">
+    카테고리 수정
+  </button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="mainModal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="mainModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">카테고리 수정</h5>
+          <button type="button" class="close" onclick="$('#mainModal').modal('hide');" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <table class="table table-hover table-bordered">
+            <thead>
+              <tr>
+                <th scope="col">카테고리 명</th>
+                <th scope="col">정렬 순서</th>
+                <th scope="col">삭제</th>
+              </tr>
+            </thead>
+            <tbody>
+            <th:block th:if="${category.listOrder}>0" th:each="category:${allCategory}"
+            th:with="category_id=${category.getId()}">
+              <tr>
+                <th scope="row" th:text="${category.title}" contenteditable="true">spring</th>
+                <td th:text="${category.listOrder}" contenteditable="true">1</td>
+<!--                <input type="hidden" id="categoryId" class="categoryId" th:value="${category.getId()}"/>-->
+                <td>
+                  <button type="button" class="btn btn-sm open-delete-modal delete-category-btn"
+                          onclick="transferCategoryId(this.getAttribute('data-category-id'))"
+                          data-bs-toggle="modal" data-bs-target="#editModal"
+                          th:data-category-id="${category_id}"
+                          th:value="${category_id}" >삭제</button>
+                </td>
+              </tr>
+            </th:block>
+            </tbody>
+
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="$('#mainModal').modal('hide');">Close</button>
+          <button type="submit" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="editModal" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fs-5" id="ModalLabel">카테고리 삭제</h5>
+          <button type="button" class="close" data-bs-toggle="modal" href="#mainModal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form>
+        <div class="modal-body">
+            <input type="hidden" id="editId" value="">
+            <div class="modal-body">
+              <p>정말 삭제하시겠습니까?</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-toggle="modal" href="#mainModal">Back</button>
+              <button type="button" class="btn btn-primary request-delete-button" onclick="deleteCategory()">Delete</button>
+            </div>
+        </div>
+          <script src="/js/deleteCategoryOnModal.js"></script>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
 <div layout:fragment="rightcolumn">
 

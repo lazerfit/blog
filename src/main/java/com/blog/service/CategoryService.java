@@ -2,6 +2,7 @@ package com.blog.service;
 
 import com.blog.domain.category.Category;
 import com.blog.domain.category.CategoryRepository;
+import com.blog.domain.posts.PostsRepository;
 import com.blog.exception.CategoryNotFound;
 import com.blog.web.dto.CategoryCreateRequestDto;
 import com.blog.web.dto.PostsResponseDto;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final PostsRepository postsRepository;
 
     public Page<PostsResponseDto> getCategorizedPosts(Pageable pageable,String q) {
         return categoryRepository.getCategorizedPostsList(pageable,q);
@@ -34,5 +36,9 @@ public class CategoryService {
 
     public List<Category> findAllCategory() {
         return categoryRepository.findAll(Sort.by(Sort.DEFAULT_DIRECTION,"listOrder"));
+    }
+
+    public void delete(Long id) {
+        categoryRepository.deleteById(id);
     }
 }
