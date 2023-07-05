@@ -51,6 +51,10 @@ lazerfit 의 개인 blog 프로젝트입니다.
 ## *개발 일지*
 - ### [230705] 카테고리 관리 / 카테고리 수정 / 카테고리 삭제 기능 추가
   - 카테고리 수정 Button click -> 카테고리 Table Modal Popup -> 삭제 Button click -> Category delete 처리
+  - Category 수정 
+    - Update Query - Querydsl 작성 시 InvalidDataAccessApiUsageException: Executing an update/delete query 오류 발생
+      - 게시글 update query 와 동일 / 계속 오류 발생 / 정확한 원인 발견 안됨
+      - Dirty Checking 으로 해결
 - ### [230704] 게시글 수정 내 카테고리 수정 추가
   - Home 화면에 보여지는 카테고리 순서 수정 기능 필요
     - 현재 Category Table / list_order 컬럼으로 순서 정렬
