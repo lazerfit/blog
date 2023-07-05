@@ -49,7 +49,12 @@ lazerfit 의 개인 blog 프로젝트입니다.
 ***
 
 ## *개발 일지*
+- ### [230705] 카테고리 관리 / 카테고리 수정 / 카테고리 삭제 기능 추가
+  - 카테고리 수정 Button click -> 카테고리 Table Modal Popup -> 삭제 Button click -> Category delete 처리
 - ### [230704] 게시글 수정 내 카테고리 수정 추가
+  - Home 화면에 보여지는 카테고리 순서 수정 기능 필요
+    - 현재 Category Table / list_order 컬럼으로 순서 정렬
+    - 해결 방법 생각중임
 - ### [230704] Add category on Posts
   - Category 별 게시글 조회
 - ### [230630] Add Category
@@ -73,8 +78,9 @@ lazerfit 의 개인 blog 프로젝트입니다.
   - [230623] 프로필 사진 클릭 시 [관리/글쓰기/로그아웃] 토글 창 나오도록 개선
   - [230627] 토글창 이외 클릭 -> 드랍다운 메뉴 닫힘
 - ### [230620] 시큐리티 핸들러 처리
-  - AccessDinedException 오류 Page 추가
-  - authenticationEntryPoint 오류 Page 추가
+  - ~~AccessDinedException 오류 Page 추가~~
+  - ~~authenticationEntryPoint 오류 Page 추가~~
+    - 401.html, 403.html 'static/error' 경로에 추가 -> 자동으로 작동
 - ### [230619] 로그인 기능 구현
   - Spring security 6 
   - 로그인 시 ROLE_ADMIN 부여
