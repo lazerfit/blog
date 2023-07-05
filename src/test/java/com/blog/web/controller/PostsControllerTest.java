@@ -14,7 +14,6 @@ import com.blog.domain.posts.Posts;
 import com.blog.domain.posts.PostsRepository;
 import com.blog.web.dto.PostsSearchRequestDto;
 import com.blog.web.dto.PostsUpdateRequestDto;
-import com.blog.web.dto.PostsUpdateRequestDto.PostsUpdateRequestDtoBuilder;
 import com.blog.web.form.EditPostsForm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.stream.IntStream;
@@ -47,8 +46,8 @@ class PostsControllerTest {
 
     @BeforeEach
     void insertCategories() {
-        Category category1 = new Category("Java", 1L);
-        Category category2 = new Category("Spring", 2L);
+        Category category1 = new Category("Java", 1);
+        Category category2 = new Category("Spring", 2);
 
         categoryRepository.save(category1);
         categoryRepository.save(category2);
@@ -66,7 +65,6 @@ class PostsControllerTest {
         Posts posts = postsRepository.save(Posts.builder()
             .title("title")
             .content("content")
-            .author("author")
             .build());
 
         mockMvc.perform(get("/posts/" + posts.getId())
@@ -84,7 +82,6 @@ class PostsControllerTest {
             i -> postsRepository.save(Posts.builder()
                 .title("title" + i)
                 .content("content" + i)
-                .author("author" + i)
                 .build())
         );
 
@@ -107,7 +104,6 @@ class PostsControllerTest {
         Posts posts = postsRepository.save(Posts.builder()
             .title("title")
             .content("content")
-            .author("author")
             .build());
 
         PostsUpdateRequestDto updateRequestDto = PostsUpdateRequestDto.builder()
@@ -133,7 +129,6 @@ class PostsControllerTest {
         Posts posts = postsRepository.save(Posts.builder()
             .title("title")
             .content("content")
-            .author("author")
             .build());
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/posts/{postId}", posts.getId())
@@ -176,8 +171,8 @@ class PostsControllerTest {
     @DisplayName("get Categorized Posts")
     @WithMockUser(roles = "ADMIN")
     void getCategorizedPosts() throws Exception {
-        Category category1 = new Category("Java", 1L);
-        Category category2 = new Category("Spring", 2L);
+        Category category1 = new Category("Java", 1);
+        Category category2 = new Category("Spring", 2);
 
         categoryRepository.save(category1);
         categoryRepository.save(category2);
@@ -214,8 +209,7 @@ class PostsControllerTest {
             .build());
 
         EditPostsForm editPostsForm = new EditPostsForm("수정된 제목", "수정된 내용", "Spring");
-        PostsUpdateRequestDtoBuilder request = PostsUpdateRequestDto.builder().title("수정제목")
-            .content("수정내용").category(foundCategory2);
+
         mockMvc.perform(post("/posts/edit/{postId}", posts.getId())
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(editPostsForm)))

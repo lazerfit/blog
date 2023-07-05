@@ -8,7 +8,7 @@ public class CategoryResponseDto {
 
     private final Long id;
     private final String title;
-    private final Long listOrder;
+    private final Integer listOrder;
 
     public CategoryResponseDto(Category category) {
         this.id= category.getId();

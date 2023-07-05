@@ -12,7 +12,7 @@
     <span th:inline="text" style="padding-left: 10px">
       [[${keyword}]]
     </span>
-    <span class="badge rounded-pill bg-primary" th:inline="text">
+    <span class="badge rounded-pill bg-primary" th:inline="text" style="margin-left: 1px">
       [[${categorizedPosts.getTotalElements()}]]
     </span>
     <th:block th:each="post:${categorizedPosts}">

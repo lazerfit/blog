@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 public class CategoryCreateRequestDto {
 
     private final String title;
-    private final Long listOrder;
+    private final Integer listOrder;
 
     public Category toEntity() {
         return Category.builder()

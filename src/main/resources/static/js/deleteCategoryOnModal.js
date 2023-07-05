@@ -1,5 +1,5 @@
 function deleteCategory() {
-  const editModal = document.getElementById("editModal");
+  const editModal = document.getElementById("deleteModal");
   const categoryId = editModal.querySelector("#editId").value;
 
   $.ajax({
@@ -11,8 +11,27 @@ function deleteCategory() {
   })
 }
 
-function transferCategoryId(categoryId) {
-  const editModal = document.getElementById("editModal");
-  const editId = editModal.querySelector("#editId");
+function transferCategoryIdTodeleteModal(categoryId) {
+  const deleteModal = document.getElementById("deleteModal");
+  const editId = deleteModal.querySelector("#editId");
   editId.value = categoryId;
 }
+
+function transferCategoryIdToEditModal(categoryId, categoryTitle, categoryListOrder) {
+  const editModal = document.getElementById("editModal");
+  const categoryIdInput = editModal.querySelector("#categoryId");
+  categoryIdInput.value = categoryId;
+  console.log(categoryId)
+
+  const titleInput = editModal.querySelector("#editFloatingInput");
+  titleInput.value = categoryTitle;
+  console.log(categoryTitle)
+
+  const listOrderInput = editModal.querySelector("#editFloatingNumber");
+  listOrderInput.value = categoryListOrder;
+  console.log(categoryListOrder)
+}
+
+
+
+

@@ -29,17 +29,15 @@ public class Posts extends BasetimeEntity{
     @Column(length = 10000, nullable = false)
     private String content;
 
-    private String author;
 
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
     @JoinColumn(name = "category_id",referencedColumnName = "id")
     private Category category;
 
     @Builder
-    public Posts(String title, String content, String author,Category category) {
+    public Posts(String title, String content, Category category) {
         this.title = title;
         this.content = content;
-        this.author = author;
         this.category=category;
     }
 }

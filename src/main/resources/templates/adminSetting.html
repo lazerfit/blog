@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <title>Setting</title>
+<!--  <link rel="stylesheet" href="/css/adminPage.css">-->
+</head>
+<body>
+<div layout:fragment="leftcolumn">
+<h4 style="margin-top: 10px">관리자 페이지입니다.</h4>
+</div>
+<div layout:fragment="rightcolumn">
+
+  <div class="list-group" style="margin-top: 10px">
+    <a href="" id="manageCategory" onclick="manageCategory()" class="list-group-item list-group-item-action" data-bs-toggle="list">카테고리 관리</a>
+    <a href="#" class="list-group-item list-group-item-action" data-bs-toggle="list">계정 관리</a>
+  <script>
+    function manageCategory() {
+      window.location.href="/admin/setting/category"
+    }
+  </script>
+  </div>
+</div>
+</body>
+</html>

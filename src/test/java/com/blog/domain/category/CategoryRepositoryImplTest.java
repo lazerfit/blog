@@ -34,7 +34,7 @@ class CategoryRepositoryImplTest {
 
         categoryRepository.save(Category.builder()
             .title("Java")
-            .listOrder(1L)
+            .listOrder(1)
             .build());
 
         em.flush();

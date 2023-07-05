@@ -28,13 +28,18 @@ public class Category {
     @OneToMany(mappedBy = "category")
     private List<Posts> posts = new ArrayList<>();
 
-    @Column(unique = true)
-    private Long listOrder;
+    @Column
+    private Integer listOrder;
 
     @Builder
-    public Category(String title, Long listOrder) {
+    public Category(String title, Integer listOrder) {
         this.title = title;
         this.listOrder=listOrder;
+    }
+
+    public void edit(String title, Integer listOrder) {
+        this.title = title;
+        this.listOrder = listOrder;
     }
 }
 

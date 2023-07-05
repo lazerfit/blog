@@ -40,8 +40,8 @@ class PostsServiceTest {
 
     @BeforeEach
     void insertCategory() {
-        Category category1 = new Category("Spring", 1L);
-        Category category2 = new Category("Java", 2L);
+        Category category1 = new Category("Spring", 1);
+        Category category2 = new Category("Java", 2);
         categoryRepository.save(category1);
         categoryRepository.save(category2);
     }
@@ -137,8 +137,8 @@ class PostsServiceTest {
     @Test
     @DisplayName("게시글 카테고리 분류")
     void getCategorizedPosts() {
-        Category category = new Category("Spring", 1L);
-        Category category2 = new Category("Java", 2L);
+        Category category = new Category("Spring", 1);
+        Category category2 = new Category("Java", 2);
         categoryRepository.save(category);
         categoryRepository.save(category2);
 

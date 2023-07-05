@@ -26,19 +26,6 @@ public class PostsService {
         postsRepository.save(request.toEntity());
     }
 
-/*    @Transactional
-    public void edit(Long id, PostsUpdateRequestDto request) {
-        Posts posts = postsRepository.findById(id).orElseThrow(PostsNotFound::new);
-
-        PostsEditor.PostsEditorBuilder editorBuilder=posts.toEditor();
-        PostsEditor postsEditor = editorBuilder.title(request.title())
-            .content(request.content())
-            .categoryTitle(request.categoryTitle())
-            .build();
-
-        posts.edit(postsEditor);
-    }*/
-
     @Transactional
     public void edit(Long id, PostsUpdateRequestDto request) {
         postsRepository.edit(id,request);
@@ -58,6 +45,7 @@ public class PostsService {
         return postsRepository.getPostsList(pageable);
     }
 
+    @Transactional
     public void delete(Long id) {
         Posts posts = postsRepository.findById(id).orElseThrow(PostsNotFound::new);
         postsRepository.delete(posts);

@@ -1,0 +1,24 @@
+### 회원가입
+
+POST http://localhost:8080/auth/signup
+Content-Type: application/json
+
+{
+  "name": "sg",
+  "email": "unpadded7479@duck.com",
+  "password": "1123"
+}
+
+### 로그인
+
+POST http://localhost:8080/auth/login
+Content-Type: application/x-www-form-urlencoded
+
+username=unpadded74799@duck.com$password=1123&remember=1
+
+### 사용자 페이지
+
+GET http://localhost:8080/user
+
+
+

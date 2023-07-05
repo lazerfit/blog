@@ -25,4 +25,9 @@ public class AuthController {
     public void signUp(@RequestBody SiteUserDto siteUserDto) {
         authService.signUp(siteUserDto);
     }
+
+    @GetMapping("/admin/setting")
+    public String adminManagePage() {
+        return "adminSetting";
+    }
 }
