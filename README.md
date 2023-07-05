@@ -61,7 +61,8 @@ lazerfit 의 개인 blog 프로젝트입니다.
   - Home 화면에 보여지는 카테고리 순서 수정 기능 필요
     - 현재 Category Table / list_order 컬럼으로 순서 정렬
     - ~~해결 방법 생각중임~~
-      - Modal Popup -> editable Table 에서 수정 후 Update Query 나가도록 할 예정
+      - ~~Modal Popup -> editable Table 에서 수정 후 Update Query 나가도록 할 예정~~
+      - Modal Popup(Table) -> Second Modal Popup(수정 form) 에서 수정
 - ### [230704] Add category on Posts
   - Category 별 게시글 조회
 - ### [230630] Add Category
