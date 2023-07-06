@@ -17,21 +17,6 @@ function transferCategoryIdTodeleteModal(categoryId) {
   editId.value = categoryId;
 }
 
-function transferCategoryIdToEditModal(categoryId, categoryTitle, categoryListOrder) {
-  const editModal = document.getElementById("editModal");
-  const categoryIdInput = editModal.querySelector("#categoryId");
-  categoryIdInput.value = categoryId;
-  console.log(categoryId)
-
-  const titleInput = editModal.querySelector("#editFloatingInput");
-  titleInput.value = categoryTitle;
-  console.log(categoryTitle)
-
-  const listOrderInput = editModal.querySelector("#editFloatingNumber");
-  listOrderInput.value = categoryListOrder;
-  console.log(categoryListOrder)
-}
-
 
 
 

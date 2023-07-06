@@ -14,14 +14,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/admin/setting/category")
 public class CategoryController {
 
     private final CategoryService categoryService;
+    private static final String REDIRECT_HOME_URL="redirect:/admin/setting/category";
 
-    @GetMapping("/admin/setting/category")
+    @GetMapping("")
     public String manageCategory(Model model) {
         List<Category> allCategory = categoryService.findAllCategory();
         model.addAttribute("categoryForm", new CategoryForm());
@@ -30,7 +33,7 @@ public class CategoryController {
         return "form/manageCategoryForm";
     }
 
-    @PostMapping("/admin/setting/category")
+    @PostMapping("")
     public String createCategory(CategoryForm categoryForm) {
         CategoryCreateRequestDto categoryCreateRequestDto = new CategoryCreateRequestDto(
             categoryForm.getTitle(),
@@ -38,20 +41,20 @@ public class CategoryController {
 
         categoryService.save(categoryCreateRequestDto);
 
-        return "redirect:/admin/setting/category";
+        return REDIRECT_HOME_URL;
     }
 
-    @PostMapping("/admin/setting/category/delete/{categoryId}")
+    @PostMapping("/delete/{categoryId}")
     public String deleteCategory(@PathVariable Long categoryId) {
         categoryService.delete(categoryId);
 
-        return "redirect:/admin/setting/category";
+        return REDIRECT_HOME_URL;
     }
 
-    @PostMapping("/admin/setting/category/edit/{categoryId}")
+    @PostMapping("/edit/{categoryId}")
     public String editCategory(@RequestBody @Valid CategoryEditForm editForm,@PathVariable Long categoryId) {
         categoryService.edit(categoryId,editForm);
 
-        return "redirect:/admin/setting/category";
+        return REDIRECT_HOME_URL;
     }
 }
