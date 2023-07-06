@@ -49,6 +49,9 @@ lazerfit 의 개인 blog 프로젝트입니다.
 ***
 
 ## *개발 일지*
+- ### [230706] 카테고리 수정 기능 구현 완료
+  - 카테고리 관리 / 카테고리 수정,삭제,추가 기능 구현 완료
+  - 게시글 수정 / 카테고리 수정 기능 구현 완료
 - ### [230705] 카테고리 관리 / 카테고리 수정 / 카테고리 삭제 기능 추가
   - 카테고리 수정 Button click -> 카테고리 Table Modal Popup -> 삭제 Button click -> Category delete 처리
   - Category 수정 
@@ -57,6 +60,7 @@ lazerfit 의 개인 blog 프로젝트입니다.
       - Dirty Checking 으로 해결
     - Controller Test 시 listOrder Validation 오류 발생
       - @NotBlank -> @NotNull 로 해결
+    - ajax 통신 통해 수정 요청
 - ### [230704] 게시글 수정 내 카테고리 수정 추가
   - Home 화면에 보여지는 카테고리 순서 수정 기능 필요
     - 현재 Category Table / list_order 컬럼으로 순서 정렬
