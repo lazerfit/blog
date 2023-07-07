@@ -88,7 +88,7 @@ class PostsServiceTest {
             .category(category2)
             .build();
 
-        postsRepository.edit(posts.getId(),request);
+        postsRepository.edit(posts.getId(), request);
 
         Posts foundPosts = postsRepository.findById(posts.getId()).orElseThrow();
 
@@ -131,7 +131,7 @@ class PostsServiceTest {
 
         var ex = Assertions.assertThrows(PostsNotFound.class, () ->
             afterFoundPost.orElseThrow(PostsNotFound::new));
-        Assertions.assertEquals("존재하지 않는 글입니다.",ex.getMessage());
+        Assertions.assertEquals("존재하지 않는 글입니다.", ex.getMessage());
     }
 
     @Test
@@ -156,7 +156,8 @@ class PostsServiceTest {
 
         PageRequest pageRequest = PageRequest.of(0, 6);
 
-        Page<PostsResponseWithCategoryDto> categorizedPosts = postsRepository.getCategorizedPosts(pageRequest,
+        Page<PostsResponseWithCategoryDto> categorizedPosts = postsRepository.getCategorizedPosts(
+            pageRequest,
             "Spring");
 
         assertThat(categorizedPosts.stream().toList().get(0).getTitle()).isEqualTo("제목1");

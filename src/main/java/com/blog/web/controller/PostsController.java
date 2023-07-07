@@ -42,8 +42,9 @@ public class PostsController {
     @PostMapping("/posts/new")
     public String save(@Valid CreatePostsForm form) {
         Category getCategoryByTitle = categoryService.getCategoryByTitle(form.getCategoryTitle());
+        log.info(form.getTags());
         PostsSaveRequestDto request = new PostsSaveRequestDto(form.getTitle(), form.getContent(),
-            getCategoryByTitle);
+            getCategoryByTitle,form.getTags());
         postsService.save(request);
         return "redirect:/";
     }

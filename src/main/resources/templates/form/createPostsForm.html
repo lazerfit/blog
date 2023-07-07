@@ -4,6 +4,11 @@
       layout:decorate="~{layout}">
 <head>
   <title>New Post</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+
 </head>
 <body>
 <div layout:fragment="leftcolumn">
@@ -22,11 +27,16 @@
   </div>
   <div class="card">
   <textarea class="summernote" th:field="*{content}"></textarea>
-</div>
+  </div>
+  <div>
+    <input id="tags" th:field="*{tags}" name="tags" class="tags" placeholder="#태그입력">
+
+    <script src="/js/settingTagify.js"></script>
     <script src="/js/summernote.js"></script>
     <script src="/js/refreshAlert.js"></script>
-    <button type="button" class="btn btn-secondary" onclick="location.href='/'" style="float: right;margin-top: 10px;margin-left: 10px">Cancel</button>
-  <button type="submit" class="btn btn-primary" data-bitwarden-clicked="1" style="float: right;margin-top: 10px">Submit</button>
+    <button type="button" class="btn btn-secondary" onclick="location.href='/'" style="float: right;margin-top: 1px;margin-left: 10px">Cancel</button>
+    <button type="submit" class="btn btn-primary" data-bitwarden-clicked="1" style="float: right;margin-top: 1px">Submit</button>
+  </div>
   </form>
 </div>
 </div>
