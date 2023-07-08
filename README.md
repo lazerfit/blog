@@ -49,6 +49,10 @@ lazerfit 의 개인 blog 프로젝트입니다.
 ***
 
 ## *개발 일지*
+- ### [230708] PostsController 내 공통 ModelAttribute @ModelAttribute 통해 글로벌 관리
+- ### [230708] 게시글 페이지 내 Tag 표시
+  - Tag 클릭 시 Home 화면에 해당 Tag 로 필터 된 게시글 표시되도록
+    - 완료
 - ### [230707] Tag 기능 개발 시작
   - Tagify Library 사용
   - tag 저장 기능 구현 완료
