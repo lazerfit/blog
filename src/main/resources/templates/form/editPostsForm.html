@@ -15,7 +15,7 @@
       <div class="card">
         <div class="form-group" style="padding: 1px">
           <select class="form-select" id="exampleSelect1" th:field="*{categoryTitle}" style="margin-bottom: 5px;width: 20%">
-            <th:block th:each="category:${allCategories}">
+            <th:block th:each="category:${allCategorizedPosts}">
               <option th:value="${category.title}" th:text="${category.title}">1</option>
             </th:block>
           </select>

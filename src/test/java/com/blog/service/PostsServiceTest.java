@@ -10,16 +10,20 @@ import com.blog.domain.posts.PostsRepository;
 import com.blog.exception.PostsNotFound;
 import com.blog.web.dto.PostsResponseDto;
 import com.blog.web.dto.PostsResponseWithCategoryDto;
+import com.blog.web.dto.PostsSaveRequestDto;
 import com.blog.web.dto.PostsUpdateRequestDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.json.AutoConfigureJson;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
@@ -27,6 +31,7 @@ import org.springframework.data.domain.PageRequest;
 
 @DataJpaTest
 @Import(QdslConfig.class)
+@AutoConfigureJson
 class PostsServiceTest {
 
     @Autowired
@@ -37,6 +42,9 @@ class PostsServiceTest {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     void insertCategory() {
@@ -162,5 +170,69 @@ class PostsServiceTest {
 
         assertThat(categorizedPosts.stream().toList().get(0).getTitle()).isEqualTo("제목1");
         assertThat(categorizedPosts.stream().toList()).hasSize(1);
+    }
+
+    @Test
+    @DisplayName("태그 저장")
+    void insertTags() throws Exception {
+        String tagData = "[{\"value\":\"Spring\"},{\"value\":\"Java\"}]";
+
+        Category category = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
+
+        PostsSaveRequestDto postsSaveRequestDto = new PostsSaveRequestDto("제목", "내용", category,
+            tagData);
+
+        postsRepository.save(postsSaveRequestDto.toEntity());
+
+        List<Posts> all = postsRepository.findAll();
+
+        assertThat(all.get(0).getTags()).isEqualTo("Spring,Java");
+    }
+
+    @Test
+    @DisplayName("getTags as List")
+    void getTagsAsList() {
+        String tagData = "[{\"value\":\"Spring\"},{\"value\":\"Java\"}]";
+
+        Category category = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
+
+        PostsSaveRequestDto postsSaveRequestDto = new PostsSaveRequestDto("제목", "내용", category,
+            tagData);
+
+        postsRepository.save(postsSaveRequestDto.toEntity());
+
+        List<Posts> all = postsRepository.findAll();
+
+        Posts posts = postsRepository.findById(all.get(0).getId()).orElseThrow(PostsNotFound::new);
+        String tags = posts.getTags();
+
+        List<String> tagList = Stream.of(tags.split(",", -1)).toList();
+
+        assertThat(tagList.get(0)).isEqualTo("Spring");
+        assertThat(tagList.get(1)).isEqualTo("Java");
+    }
+
+    @Test
+    @DisplayName("classified by tags")
+    void getPostsByTags() {
+        String tagData = "[{\"value\":\"Spring\"},{\"value\":\"Java\"}]";
+
+        Category category = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
+
+        PostsSaveRequestDto postsSaveRequestDto = new PostsSaveRequestDto("제목", "내용", category,
+            tagData);
+
+        IntStream.range(1,30).forEach(i -> postsRepository.save(
+            new PostsSaveRequestDto("제목"+i,"내용"+i,category,tagData).toEntity()));
+
+//        postsRepository.save(postsSaveRequestDto.toEntity());
+
+        PageRequest pageRequest = PageRequest.of(0, 6);
+
+        Page<PostsResponseWithCategoryDto> postsByTags = postsRepository.getPostsByTags(pageRequest,
+            "Spring");
+
+        assertThat(postsByTags.stream().toList().get(0).getTitle()).isEqualTo("제목29");
+        assertThat(postsByTags.stream().toList().get(0).getTags()).isEqualTo("Spring,Java");
     }
 }

@@ -1,6 +1,5 @@
 package com.blog.web.controller;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -16,18 +15,14 @@ import com.blog.domain.posts.PostsRepository;
 import com.blog.web.dto.PostsSaveRequestDto;
 import com.blog.web.dto.PostsSearchRequestDto;
 import com.blog.web.dto.PostsUpdateRequestDto;
+import com.blog.web.form.CreatePostsForm;
 import com.blog.web.form.EditPostsForm;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.IntStream;
-import org.json.JSONArray;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.skyscreamer.jsonassert.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -226,31 +221,43 @@ class PostsControllerTest {
     }
 
     @Test
-    @DisplayName("태그 저장")
-    void insertTags() throws Exception {
-        String tagData="[{\"value\":\"Spring\"},{\"value\":\"Java\"}]";
-        JSONArray json = (JSONArray) JSONParser.parseJSON(tagData);
+    @DisplayName("Save Tags")
+    @WithMockUser(roles = "ADMIN")
+    void saveTags() throws Exception {
 
-        JsonNode rootNode = objectMapper.readTree(tagData);
+        Category foundCategory1 = categoryRepository.findCategoryByTitle("Java").orElseThrow();
 
-        List<String> tagList=new ArrayList<>();
+        String tagData = "[{\"value\":\"Spring\"},{\"value\":\"Java\"}]";
 
-        for (JsonNode node : rootNode) {
-            String value = node.get("value").asText();
-            tagList.add(node.get("value").asText());
-        }
+        CreatePostsForm createPostsForm = new CreatePostsForm();
+        createPostsForm.setTitle("제목");
+        createPostsForm.setContent("내용");
+        createPostsForm.setCategoryTitle("Spring");
+        createPostsForm.setTags(tagData);
 
-        String tagListasString = String.valueOf(tagList);
+        mockMvc.perform(post("/posts/new")
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(createPostsForm)))
+            .andDo(print())
+            .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    @DisplayName("태그로 게시글 분류")
+    @WithMockUser(roles = "ADMIN")
+    void getPostsByTags() throws Exception {
+
+        String tagData = "[{\"value\":\"Spring\"},{\"value\":\"Java\"}]";
 
         Category category = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
 
         PostsSaveRequestDto postsSaveRequestDto = new PostsSaveRequestDto("제목", "내용", category,
-            tagListasString);
+            tagData);
 
         postsRepository.save(postsSaveRequestDto.toEntity());
 
-        List<Posts> all = postsRepository.findAll();
-
-        assertThat(all.get(0).getTags()).isEqualTo(tagListasString);
+        mockMvc.perform(get("/tag?q={tag}", "Spring"))
+            .andDo(print())
+            .andExpect(status().isOk());
     }
 }

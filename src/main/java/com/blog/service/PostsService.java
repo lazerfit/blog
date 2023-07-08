@@ -7,6 +7,8 @@ import com.blog.web.dto.PostsResponseDto;
 import com.blog.web.dto.PostsResponseWithCategoryDto;
 import com.blog.web.dto.PostsSaveRequestDto;
 import com.blog.web.dto.PostsUpdateRequestDto;
+import java.util.List;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -58,6 +60,17 @@ public class PostsService {
     public Page<PostsResponseWithCategoryDto> getCategorizedPosts(Pageable pageable,
         String q) {
         return postsRepository.getCategorizedPosts(pageable, q);
+    }
+
+    public List<String> getTagsAsList(Long id) {
+        Posts posts = postsRepository.findById(id).orElseThrow(PostsNotFound::new);
+        String tags = posts.getTags();
+        return Stream.of(tags.split(",", -1)).toList();
+    }
+
+    public Page<PostsResponseWithCategoryDto> getPostsByTags(Pageable pageable, String q) {
+        return postsRepository.getPostsByTags(pageable,q);
+
     }
 }
 

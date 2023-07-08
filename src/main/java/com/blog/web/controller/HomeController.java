@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -25,10 +26,14 @@ public class HomeController {
     @GetMapping("/")
     public String index(Pageable pageable, Model model) {
         Page<PostsResponseDto> postsList = postsService.getPostsList(pageable);
-        List<Category> allCategorizedPosts = categoryService.findAllCategory();
         model.addAttribute("postsList", postsList);
-        model.addAttribute("allCategorizedPosts", allCategorizedPosts);
         return "index";
+    }
+
+    @ModelAttribute
+    public void addAttribute(Model model) {
+        List<Category> allCategory = categoryService.findAllCategory();
+        model.addAttribute("allCategorizedPosts", allCategory);
     }
 }
 

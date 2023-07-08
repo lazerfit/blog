@@ -11,6 +11,7 @@ public interface PostsRepositoryCustom {
     Page<PostsResponseDto> getPostsListByKeyword(Pageable pageable,String keyword);
     PostsResponseWithCategoryDto findByIdContainCategory(Long id);
     Page<PostsResponseWithCategoryDto> getCategorizedPosts(Pageable pageable,String category);
+    Page<PostsResponseWithCategoryDto> getPostsByTags(Pageable pageable,String tag);
 
     void edit(Long id, PostsUpdateRequestDto requestDto);
 }

@@ -53,7 +53,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     public PostsResponseWithCategoryDto findByIdContainCategory(Long id) {
         List<PostsResponseWithCategoryDto> response = jpaQueryFactory.select(
                 Projections.constructor(PostsResponseWithCategoryDto.class, posts.id,
-                    posts.title, posts.content, posts.createDate, posts.category.title))
+                    posts.title, posts.content, posts.createDate, posts.category.title,posts.tags))
             .from(posts)
             .where(posts.id.eq(id))
             .fetch();
@@ -66,7 +66,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
         String q) {
         List<PostsResponseWithCategoryDto> postsList = jpaQueryFactory.select(
                 Projections.constructor(PostsResponseWithCategoryDto.class, posts.id, posts.title,
-                    posts.content, posts.createDate, posts.category.title))
+                    posts.content, posts.createDate, posts.category.title,posts.tags))
             .from(posts)
             .where(posts.category.title.eq(q))
             .limit(pageable.getPageSize())
@@ -88,5 +88,22 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
             .set(posts.content,requestDto.content())
             .set(posts.category,requestDto.category())
             .execute();
+    }
+
+    @Override
+    public Page<PostsResponseWithCategoryDto> getPostsByTags(Pageable pageable, String tag) {
+        List<PostsResponseWithCategoryDto> response = jpaQueryFactory.select(
+                Projections.constructor(PostsResponseWithCategoryDto.class, posts.id, posts.title,
+                    posts.content, posts.createDate, posts.category.title, posts.tags))
+            .from(posts)
+            .where(posts.tags.contains(tag))
+            .limit(pageable.getPageSize())
+            .offset(pageable.getOffset())
+            .orderBy(posts.id.desc())
+            .fetch();
+
+        long totalCount=jpaQueryFactory.selectFrom(posts).where(posts.tags.contains(tag)).fetch().size();
+
+        return new PageImpl<>(response, pageable, totalCount);
     }
 }

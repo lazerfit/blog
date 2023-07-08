@@ -191,3 +191,15 @@ a:hover{
 #category_modal_btn, #add_category_btn {
   margin-top: 30px;
 }
+
+.tag-btn {
+  padding: 4px;
+  cursor: pointer;
+  text-align: center;
+  color: gray;
+}
+
+.tag-btn:hover {
+  background-color: #eb6864;
+  color: white;
+}

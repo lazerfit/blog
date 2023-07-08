@@ -48,7 +48,7 @@ public class PostsSaveRequestDto {
 
             for (JsonNode node : rootNode) {
                 String value = node.get("value").asText();
-                tagList.add(node.get("value").asText());
+                tagList.add(value);
             }
 
 
@@ -56,6 +56,8 @@ public class PostsSaveRequestDto {
             log.info(String.valueOf(e));
         }
 
-        return String.valueOf(tagList);
+        return String.join(",", tagList);
+
+
     }
 }
