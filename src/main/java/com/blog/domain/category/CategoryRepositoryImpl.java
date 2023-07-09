@@ -3,7 +3,6 @@ package com.blog.domain.category;
 import static com.blog.domain.category.QCategory.category;
 import static com.blog.domain.posts.QPosts.posts;
 
-import com.blog.web.dto.CategoryEditRequestDto;
 import com.blog.web.dto.PostsResponseDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -33,15 +32,5 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom{
             .where(QCategory.category.title.eq(q)).fetch().size();
 
         return new PageImpl<>(categorizedPostsList, pageable, totalCount);
-    }
-
-    @Override
-    public void edit(Long categoryId,CategoryEditRequestDto requestDto) {
-        jpaQueryFactory.update(category)
-            .where(category.id.eq(categoryId))
-            .set(category.title,requestDto.getTitle())
-            .set(category.listOrder,requestDto.getListOrder())
-            .execute();
-
     }
 }

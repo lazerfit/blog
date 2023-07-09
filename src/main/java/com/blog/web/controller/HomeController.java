@@ -27,11 +27,13 @@ public class HomeController {
     public String index(Pageable pageable, Model model) {
         Page<PostsResponseDto> postsList = postsService.getPostsList(pageable);
         model.addAttribute("postsList", postsList);
+        List<PostsResponseDto> popularPosts = postsService.getPopularPosts();
+        model.addAttribute("popularPosts",popularPosts);
         return "index";
     }
 
     @ModelAttribute
-    public void addAttribute(Model model) {
+    public void addCategory(Model model) {
         List<Category> allCategory = categoryService.findAllCategory();
         model.addAttribute("allCategorizedPosts", allCategory);
     }

@@ -5,6 +5,7 @@ import static com.blog.domain.posts.QPosts.posts;
 import com.blog.web.dto.PostsResponseDto;
 import com.blog.web.dto.PostsResponseWithCategoryDto;
 import com.blog.web.dto.PostsUpdateRequestDto;
+import com.blog.web.dto.QPostsResponseDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+
 @Slf4j
 @RequiredArgsConstructor
 public class PostsRepositoryImpl implements PostsRepositoryCustom{
@@ -22,7 +24,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     @Override
     public Page<PostsResponseDto> getPostsList(Pageable pageable) {
         List<PostsResponseDto> postsList = jpaQueryFactory
-            .select( Projections.constructor(PostsResponseDto.class,posts.id,posts.title,posts.content,posts.createDate))
+            .select(new QPostsResponseDto(posts.id, posts.title,posts.content,posts.createDate,posts.category,posts.tags,posts.hit))
             .from(posts)
             .limit(pageable.getPageSize())
             .offset(pageable.getOffset())
@@ -36,7 +38,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     @Override
     public Page<PostsResponseDto> getPostsListByKeyword(Pageable pageable, String keyword) {
         List<PostsResponseDto> postsList = jpaQueryFactory.select(
-                Projections.constructor(PostsResponseDto.class,posts.id,posts.title,posts.content,posts.createDate))
+                new QPostsResponseDto(posts.id, posts.title,posts.content,posts.createDate,posts.category,posts.tags,posts.hit))
             .from(posts)
             .where(posts.title.contains(keyword))
             .limit(pageable.getPageSize())
@@ -53,7 +55,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     public PostsResponseWithCategoryDto findByIdContainCategory(Long id) {
         List<PostsResponseWithCategoryDto> response = jpaQueryFactory.select(
                 Projections.constructor(PostsResponseWithCategoryDto.class, posts.id,
-                    posts.title, posts.content, posts.createDate, posts.category.title,posts.tags))
+                    posts.title, posts.content, posts.createDate, posts.category.title,posts.tags,posts.hit))
             .from(posts)
             .where(posts.id.eq(id))
             .fetch();
@@ -66,7 +68,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
         String q) {
         List<PostsResponseWithCategoryDto> postsList = jpaQueryFactory.select(
                 Projections.constructor(PostsResponseWithCategoryDto.class, posts.id, posts.title,
-                    posts.content, posts.createDate, posts.category.title,posts.tags))
+                    posts.content, posts.createDate, posts.category.title,posts.tags,posts.hit))
             .from(posts)
             .where(posts.category.title.eq(q))
             .limit(pageable.getPageSize())
@@ -94,7 +96,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     public Page<PostsResponseWithCategoryDto> getPostsByTags(Pageable pageable, String tag) {
         List<PostsResponseWithCategoryDto> response = jpaQueryFactory.select(
                 Projections.constructor(PostsResponseWithCategoryDto.class, posts.id, posts.title,
-                    posts.content, posts.createDate, posts.category.title, posts.tags))
+                    posts.content, posts.createDate, posts.category.title, posts.tags,posts.hit))
             .from(posts)
             .where(posts.tags.contains(tag))
             .limit(pageable.getPageSize())
@@ -105,5 +107,22 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
         long totalCount=jpaQueryFactory.selectFrom(posts).where(posts.tags.contains(tag)).fetch().size();
 
         return new PageImpl<>(response, pageable, totalCount);
+    }
+
+    @Override
+    public List<Posts> getPopularPosts() {
+        return jpaQueryFactory.selectFrom(posts)
+            .orderBy(posts.hit.desc())
+            .limit(3)
+            .fetch();
+    }
+
+    @Override
+    public List<Posts> getCategorizedPostsNotContainPage(String q) {
+        return jpaQueryFactory.selectFrom(posts)
+            .where(posts.category.title.eq(q))
+            .orderBy(posts.createDate.desc())
+            .limit(6)
+            .fetch();
     }
 }

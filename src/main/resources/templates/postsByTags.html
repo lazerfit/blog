@@ -8,27 +8,27 @@
 <body>
 
 <div layout:fragment="leftcolumn">
-  <div class="container">
-    <span th:inline="text" style="padding-left: 10px">
-      [['#'+${keyword}]]
-    </span>
-    <span class="badge rounded-pill bg-primary" th:inline="text" style="margin-left: 1px">
-      [[${postsByTags.getTotalElements()}]]
-    </span>
-    <th:block th:each="post:${postsByTags}">
-      <div class="card bg-light mb-3">
-        <div class="card-body-index">
-          <h4 class="card-title">
-            <a th:text="${post.getTitle()}"
-               th:href="@{/posts/{id}(id=${post.getId()})}"
-               style="color: black;text-decoration-line: none">Light card title</a></h4>
-          <p class="card-text text-truncate" th:utext="${post.getContent()}">content.</p>
-        </div>
-        <div class="card-footer">
-          <p style="color: #aaa" th:text="${#temporals.format(post.getCreatedDate(),'yyyy-MM-dd')}">Date</p>
-        </div>
+    <div class="container">
+      <div class="content-wrap">
+        <article id="content">
+          <div class="post-header">
+            <h1>
+              <span th:text="${keyword}">전체 글</span>
+              <em th:text="${postsByTags.getTotalElements()}">21</em>
+            </h1>
+          </div>
+          <div class="content-inner">
+            <div class="post-item" th:each="post:${postsByTags}">
+              <a href="#" th:href="@{/posts/{id}(id=${post.getId()})}">
+                <span class="title" th:text="${post.getTitle()}"></span>
+                <span class="excerpt" th:utext="${post.getContent()}"></span>
+                <span class="meta" th:text="${#temporals.format(post.getCreatedDate(),'yyyy-MM-dd')}"></span>
+              </a>
+            </div>
+          </div>
+        </article>
       </div>
-    </th:block>
+    </div>
     <div> <!-- pagination -->
       <ul class="pagination justify-content-center"
           th:with="
@@ -51,6 +51,5 @@
       </ul>
     </div> <!-- /pagination -->
   </div> <!-- /container -->
-</div>
 </body>
 </html>

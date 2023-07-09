@@ -36,11 +36,19 @@ public class Posts extends BasetimeEntity{
     @JoinColumn(name = "category_id",referencedColumnName = "id")
     private Category category;
 
+    @Column(columnDefinition = "bigint default 0",nullable = false)
+    private Long hit;
+
     @Builder
-    public Posts(String title, String content, Category category,String tags) {
+    public Posts(String title, String content, String tags, Category category, Long hit) {
         this.title = title;
         this.content = content;
-        this.category=category;
-        this.tags=tags;
+        this.tags = tags;
+        this.category = category;
+        this.hit = hit;
+    }
+
+    public void updateHit(Long hit) {
+        this.hit=hit;
     }
 }

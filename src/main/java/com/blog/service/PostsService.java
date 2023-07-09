@@ -43,6 +43,7 @@ public class PostsService {
         return postsRepository.findByIdContainCategory(id);
     }
 
+    @Transactional(readOnly = true)
     public Page<PostsResponseDto> getPostsList(Pageable pageable) {
         return postsRepository.getPostsList(pageable);
     }
@@ -70,7 +71,24 @@ public class PostsService {
 
     public Page<PostsResponseWithCategoryDto> getPostsByTags(Pageable pageable, String q) {
         return postsRepository.getPostsByTags(pageable,q);
+    }
 
+    @Transactional
+    public void addHit(Long id) {
+        Posts posts = postsRepository.findById(id).orElseThrow(PostsNotFound::new);
+        Long hit=posts.getHit()+1L;
+        posts.updateHit(hit);
+    }
+
+    public List<PostsResponseDto> getPopularPosts() {
+        List<Posts> popularPosts = postsRepository.getPopularPosts();
+        return popularPosts.stream().map(PostsResponseDto::new).toList();
+    }
+
+    public List<PostsResponseDto> getCategorizedPostsNotContainPage(String q) {
+        List<Posts> categorizedPostsNotContainPage = postsRepository.getCategorizedPostsNotContainPage(
+            q);
+        return categorizedPostsNotContainPage.stream().map(PostsResponseDto::new).toList();
     }
 }
 

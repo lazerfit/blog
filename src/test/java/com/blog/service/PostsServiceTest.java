@@ -12,7 +12,6 @@ import com.blog.web.dto.PostsResponseDto;
 import com.blog.web.dto.PostsResponseWithCategoryDto;
 import com.blog.web.dto.PostsSaveRequestDto;
 import com.blog.web.dto.PostsUpdateRequestDto;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -42,9 +41,6 @@ class PostsServiceTest {
 
     @Autowired
     private CategoryRepository categoryRepository;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @BeforeEach
     void insertCategory() {
@@ -174,13 +170,13 @@ class PostsServiceTest {
 
     @Test
     @DisplayName("태그 저장")
-    void insertTags() throws Exception {
+    void insertTags(){
         String tagData = "[{\"value\":\"Spring\"},{\"value\":\"Java\"}]";
 
         Category category = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
 
         PostsSaveRequestDto postsSaveRequestDto = new PostsSaveRequestDto("제목", "내용", category,
-            tagData);
+            tagData,0L);
 
         postsRepository.save(postsSaveRequestDto.toEntity());
 
@@ -197,7 +193,7 @@ class PostsServiceTest {
         Category category = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
 
         PostsSaveRequestDto postsSaveRequestDto = new PostsSaveRequestDto("제목", "내용", category,
-            tagData);
+            tagData,0L);
 
         postsRepository.save(postsSaveRequestDto.toEntity());
 
@@ -219,11 +215,8 @@ class PostsServiceTest {
 
         Category category = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
 
-        PostsSaveRequestDto postsSaveRequestDto = new PostsSaveRequestDto("제목", "내용", category,
-            tagData);
-
-        IntStream.range(1,30).forEach(i -> postsRepository.save(
-            new PostsSaveRequestDto("제목"+i,"내용"+i,category,tagData).toEntity()));
+        IntStream.range(1, 30).forEach(i -> postsRepository.save(
+            new PostsSaveRequestDto("제목" + i, "내용" + i, category, tagData,0L).toEntity()));
 
 //        postsRepository.save(postsSaveRequestDto.toEntity());
 
@@ -234,5 +227,25 @@ class PostsServiceTest {
 
         assertThat(postsByTags.stream().toList().get(0).getTitle()).isEqualTo("제목29");
         assertThat(postsByTags.stream().toList().get(0).getTags()).isEqualTo("Spring,Java");
+    }
+
+    @Test
+    @DisplayName("조회수 체크")
+    void hitTest() {
+        String tagData = "[{\"value\":\"Spring\"},{\"value\":\"Java\"}]";
+
+        Category category = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
+
+        postsRepository.save(Posts.builder().title("제목").content("내용").category(category).tags(tagData).hit(0L).build());
+
+        List<Posts> posts = postsRepository.findAll();
+
+        Long hit=posts.get(0).getHit()+1L;
+
+        posts.get(0).updateHit(hit);
+
+        Posts posts1 = postsRepository.findById(posts.get(0).getId()).orElseThrow();
+
+        assertThat(posts1.getHit()).isEqualTo(1L);
     }
 }

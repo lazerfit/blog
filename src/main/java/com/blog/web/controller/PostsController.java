@@ -1,7 +1,6 @@
 package com.blog.web.controller;
 
 import com.blog.domain.category.Category;
-import com.blog.domain.posts.PostsRepository;
 import com.blog.service.CategoryService;
 import com.blog.service.PostsService;
 import com.blog.web.dto.PostsResponseDto;
@@ -29,8 +28,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class PostsController {
 
-    private final PostsRepository postsRepository;
-
     private final PostsService postsService;
 
     private final CategoryService categoryService;
@@ -45,7 +42,7 @@ public class PostsController {
     public String save(@Valid CreatePostsForm form) {
         Category getCategoryByTitle = categoryService.getCategoryByTitle(form.getCategoryTitle());
         PostsSaveRequestDto request = new PostsSaveRequestDto(form.getTitle(), form.getContent(),
-            getCategoryByTitle, form.getTags());
+            getCategoryByTitle, form.getTags(),0L);
         postsService.save(request);
         return "redirect:/";
     }
@@ -71,10 +68,14 @@ public class PostsController {
 
     @GetMapping("/posts/{postId}")
     public String findById(@PathVariable Long postId, Model model) {
+        postsService.addHit(postId);
         PostsResponseWithCategoryDto postFindById = postsService.findByIdWithCategory(postId);
         List<String> tagList = postsService.getTagsAsList(postId);
+        var anotherCategory = postsService.getCategorizedPostsNotContainPage(
+            postFindById.getCategoryTitle());
         model.addAttribute("postFindById", postFindById);
         model.addAttribute("tagList", tagList);
+        model.addAttribute("anotherCategory",anotherCategory);
         return "posts";
     }
 
@@ -86,7 +87,7 @@ public class PostsController {
 
     @GetMapping("/posts/search")
     public String searchPostsByKeyword(Pageable pageable, Model model
-        , @RequestParam @ModelAttribute("keyword") String q) {
+        , @RequestParam String q) {
         Page<PostsResponseDto> searchedPostsListByKeyword = postsService.getSearchedPostsListByKeyword(
             pageable, q);
         model.addAttribute("postsList", searchedPostsListByKeyword);
@@ -94,25 +95,29 @@ public class PostsController {
     }
 
     @GetMapping("/posts/category")
-    public String getCategorizedPosts(Pageable pageable, @RequestParam @ModelAttribute("keyword") String q,
+    public String getCategorizedPosts(Pageable pageable, @RequestParam String q,
         Model model) {
         Page<PostsResponseWithCategoryDto> categorizedPosts = postsService.getCategorizedPosts(
             pageable, q);
         model.addAttribute("categorizedPosts", categorizedPosts);
+
         return "categorizedPosts";
     }
 
     @GetMapping("/tag")
     public String getPostsClassifiedByTags(Pageable pageable
-        , @RequestParam @ModelAttribute("keyword") String q, Model model) {
+        , @RequestParam String q, Model model) {
         Page<PostsResponseWithCategoryDto> postsByTags = postsService.getPostsByTags(pageable, q);
         model.addAttribute("postsByTags", postsByTags);
         return "postsByTags";
     }
 
     @ModelAttribute
-    public void commonLayoutAttribute(Model model) {
-        List<Category> allCategorizedPosts = categoryService.findAllCategory();
-        model.addAttribute("allCategorizedPosts", allCategorizedPosts);
+    public void commonLayoutAttribute(Model model, String q) {
+        List<Category> allCategory = categoryService.findAllCategory();
+        model.addAttribute("allCategorizedPosts", allCategory);
+        List<PostsResponseDto> popularPosts = postsService.getPopularPosts();
+        model.addAttribute("popularPosts",popularPosts);
+        model.addAttribute("keyword", q);
     }
 }

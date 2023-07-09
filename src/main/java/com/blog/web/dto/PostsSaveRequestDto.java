@@ -25,12 +25,15 @@ public class PostsSaveRequestDto {
 
     private final String tags;
 
+    private final Long hit;
+
     public Posts toEntity(){
         return Posts.builder()
             .title(title)
             .content(content)
             .category(category)
             .tags(this.nullCheckAndSetDefaultValue(tags))
+            .hit(hit)
             .build();
     }
 

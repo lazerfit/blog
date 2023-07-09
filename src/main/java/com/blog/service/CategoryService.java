@@ -47,7 +47,6 @@ public class CategoryService {
     public void edit(Long categoryId, CategoryEditForm form) {
         CategoryEditRequestDto request = CategoryEditRequestDto.builder()
             .title(form.getTitle()).listOrder(form.getListOrder()).build();
-//        categoryRepository.edit(categoryId,request);
         Category category = categoryRepository.findById(categoryId)
             .orElseThrow(CategoryNotFound::new);
 

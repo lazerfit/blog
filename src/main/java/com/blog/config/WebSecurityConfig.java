@@ -1,6 +1,5 @@
 package com.blog.config;
 
-import com.blog.domain.user.UserRepository;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +16,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
+    private static final String ROLE_ADMIN="ADMIN";
+
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring().requestMatchers("/favicon.ico", "/error", "/img/**")
@@ -24,17 +25,16 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http,
-        UserRepository userRepository) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(requests -> requests
                 .requestMatchers("/").permitAll()
                 .requestMatchers(HttpMethod.GET,"/posts/*").permitAll()
                 .requestMatchers("/posts/search/*").permitAll()
                 .requestMatchers("/posts/category/*").permitAll()
-                .requestMatchers("/posts/new").hasRole("ADMIN")
-                .requestMatchers("/posts/delete/*").hasRole("ADMIN")
-                .requestMatchers("/posts/edit/*").hasRole("ADMIN")
+                .requestMatchers("/posts/new").hasRole(ROLE_ADMIN)
+                .requestMatchers("/posts/delete/*").hasRole(ROLE_ADMIN)
+                .requestMatchers("/posts/edit/*").hasRole(ROLE_ADMIN)
                 .requestMatchers("/admin/**").permitAll()
                 .requestMatchers("/auth/signup").permitAll()
                 .requestMatchers("/auth/login").permitAll()
@@ -48,7 +48,6 @@ public class WebSecurityConfig {
                 .defaultSuccessUrl("/")
                 .permitAll()
             )
-//            .logout(LogoutConfigurer::permitAll)
             .csrf(AbstractHttpConfigurer::disable)
             .rememberMe(rm -> rm.rememberMeParameter("remember")
                 .alwaysRemember(false)
