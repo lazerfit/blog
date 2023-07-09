@@ -20,6 +20,7 @@
   <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 </head>
 <body>
+<div class="wrap">
 <div class="header" style="text-align: left;padding-left: 20px">
 <h4><a class="navbar-brand" th:href="@{/}">Gran Adentura</a></h4>
   <div th:if="${#authorization.expression('isAuthenticated()')}">
@@ -65,7 +66,6 @@
     </div>
   </div>
 </nav>
-
 <div class="row">
   <div class="leftcolumn" layout:fragment="leftcolumn">
 
@@ -90,16 +90,20 @@
         <li class="list-group-item d-flex justify-content-between align-items-center border-0 categoryList"><a th:href="@{/}">전체 글</a></li>
     <th:block th:each="category:${allCategorizedPosts}">
           <li th:if="${category.getListOrder()>0}" class="list-group-item d-flex justify-content-between align-items-center border-0 categoryList" style="padding-top: 0">
-            <a th:href="@{/posts/category(q=${category.getTitle()})}" th:text="${category.getTitle()}"></a>
+            <a th:href="@{/posts/category(q=${category.getTitle()})}" th:text="${category.getTitle()}" style="color: gray"></a>
           </li>
     </th:block>
       </ul>
     </div>
     <div class="card">
-      <h3>Popular Post</h3>
-      <div class="fakeimg">Image</div><br>
-      <div class="fakeimg">Image</div><br>
-      <div class="fakeimg">Image</div>
+      <h6 style="margin-left: 11px">인기글</h6>
+      <ul class="list-group list-group-light">
+        <th:block th:each="post:${popularPosts}">
+          <li class="list-group-item d-flex justify-content-between align-items-center border-0 categoryList" style="padding-top: 0">
+            <a th:href="@{/posts/{id}(id=${post.getId()})}" th:text="${post.getTitle()}" style="color: gray"></a>
+          </li>
+        </th:block>
+      </ul>
     </div>
   </div>
 </div>
@@ -127,6 +131,6 @@
   }
 </script>
 </div>
-
+</div>
 </body>
 </html>
