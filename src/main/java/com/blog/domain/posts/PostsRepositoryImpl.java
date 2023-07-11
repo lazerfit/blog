@@ -7,9 +7,11 @@ import com.blog.exception.PostsNotFound;
 import com.blog.web.dto.CommentsResponseDto;
 import com.blog.web.dto.PostsResponseDto;
 import com.blog.web.dto.PostsResponseWithCategoryDto;
+import com.blog.web.dto.PostsResponseWithoutCommentDto;
 import com.blog.web.dto.PostsUpdateRequestDto;
 import com.blog.web.dto.QCommentsResponseDto;
 import com.blog.web.dto.QPostsResponseDto;
+import com.blog.web.dto.QPostsResponseWithoutCommentDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -26,9 +28,10 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<PostsResponseDto> getPostsList(Pageable pageable) {
-        List<PostsResponseDto> postsList = jpaQueryFactory
-            .select(new QPostsResponseDto(posts.id, posts.title,posts.content,posts.createDate,posts.category,posts.tags,posts.hit))
+    public Page<PostsResponseWithoutCommentDto> getPostsList(Pageable pageable) {
+        List<PostsResponseWithoutCommentDto> postsList = jpaQueryFactory
+            .select(new QPostsResponseWithoutCommentDto(posts.id, posts.title, posts.content,
+                posts.createDate, posts.category, posts.tags, posts.hit))
             .from(posts)
             .limit(pageable.getPageSize())
             .offset(pageable.getOffset())
@@ -36,6 +39,8 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
             .fetch();
         long totalCount = jpaQueryFactory.selectFrom(posts)
             .fetch().size();
+
+
         return new PageImpl<>(postsList,pageable,totalCount);
     }
 
@@ -114,8 +119,10 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     }
 
     @Override
-    public List<Posts> getPopularPosts() {
-        return jpaQueryFactory.selectFrom(posts)
+    public List<PostsResponseWithoutCommentDto> getPopularPosts() {
+        return jpaQueryFactory.select(new QPostsResponseWithoutCommentDto(posts.id, posts.title, posts.content,
+                posts.createDate, posts.category, posts.tags, posts.hit))
+            .from(posts)
             .orderBy(posts.hit.desc())
             .limit(3)
             .fetch();
@@ -161,7 +168,6 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
                 comment.createDate,
                 comment.parent.id))
             .from(comment)
-//            .join(comment.posts, posts)
             .where(posts.id.eq(postId).and(comment.parent.id.isNull()))
             .orderBy(comment.id.asc())
             .fetch();
@@ -174,7 +180,6 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
                 comment.createDate,
                 comment.parent.id))
             .from(comment)
-//            .join(comment.posts, posts)
             .where(posts.id.eq(postId).and(comment.parent.id.isNotNull()))
             .orderBy(comment.id.asc())
             .fetch();
@@ -188,7 +193,6 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
         postsResponseDto.insertComment(parentComment);
 
         return postsResponseDto;
-
     }
 
 }

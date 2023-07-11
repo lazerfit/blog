@@ -1,5 +1,6 @@
 package com.blog.web.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
 import java.time.LocalDateTime;
 import lombok.Getter;
 
@@ -14,6 +15,7 @@ public class PostsResponseWithCategoryDto {
     private final String tags;
     private final Long hit;
 
+    @QueryProjection
     public PostsResponseWithCategoryDto(Long id, String title, String content,
         LocalDateTime createdDate,
         String categoryTitle, String tags, Long hit) {

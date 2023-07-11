@@ -5,8 +5,10 @@ import com.blog.service.CategoryService;
 import com.blog.service.PostsService;
 import com.blog.web.dto.PostsResponseDto;
 import com.blog.web.dto.PostsResponseWithCategoryDto;
+import com.blog.web.dto.PostsResponseWithoutCommentDto;
 import com.blog.web.dto.PostsSaveRequestDto;
 import com.blog.web.dto.PostsUpdateRequestDto;
+import com.blog.web.form.CommentForm;
 import com.blog.web.form.CreatePostsForm;
 import com.blog.web.form.EditPostsForm;
 import jakarta.validation.Valid;
@@ -73,6 +75,7 @@ public class PostsController {
         List<String> tagList = postsService.getTagsAsList(postId);
         var anotherCategory = postsService.getCategorizedPostsNotContainPage(
             postsResponseDto.getCategory().getTitle());
+        model.addAttribute("commentForm", new CommentForm());
         model.addAttribute("postFindById", postsResponseDto);
         model.addAttribute("tagList", tagList);
         model.addAttribute("anotherCategory",anotherCategory);
@@ -116,7 +119,7 @@ public class PostsController {
     public void commonLayoutAttribute(Model model, String q) {
         List<Category> allCategory = categoryService.findAllCategory();
         model.addAttribute("allCategorizedPosts", allCategory);
-        List<PostsResponseDto> popularPosts = postsService.getPopularPosts();
+        List<PostsResponseWithoutCommentDto> popularPosts = postsService.getPopularPosts();
         model.addAttribute("popularPosts",popularPosts);
         model.addAttribute("keyword", q);
     }

@@ -14,6 +14,7 @@ import com.blog.exception.PostsNotFound;
 import com.blog.web.dto.CommentsSaveRequestDto;
 import com.blog.web.dto.PostsResponseDto;
 import com.blog.web.dto.PostsResponseWithCategoryDto;
+import com.blog.web.dto.PostsResponseWithoutCommentDto;
 import com.blog.web.dto.PostsSaveRequestDto;
 import com.blog.web.dto.PostsUpdateRequestDto;
 import jakarta.persistence.EntityManager;
@@ -126,7 +127,7 @@ class PostsServiceTest {
 
         PageRequest request = PageRequest.of(0, 6);
 
-        List<PostsResponseDto> postsList = postsRepository.getPostsList(request).stream().toList();
+        List<PostsResponseWithoutCommentDto> postsList = postsRepository.getPostsList(request).stream().toList();
 
         assertThat(postsList.get(0).getTitle()).isEqualTo("제목10");
         assertThat(postsList.get(0).getContent()).isEqualTo("내용10");

@@ -3,7 +3,7 @@ package com.blog.web.controller;
 import com.blog.domain.category.Category;
 import com.blog.service.CategoryService;
 import com.blog.service.PostsService;
-import com.blog.web.dto.PostsResponseDto;
+import com.blog.web.dto.PostsResponseWithoutCommentDto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,9 +25,9 @@ public class HomeController {
 
     @GetMapping("/")
     public String index(Pageable pageable, Model model) {
-        Page<PostsResponseDto> postsList = postsService.getPostsList(pageable);
+        Page<PostsResponseWithoutCommentDto> postsList = postsService.getPostsList(pageable);
         model.addAttribute("postsList", postsList);
-        List<PostsResponseDto> popularPosts = postsService.getPopularPosts();
+        List<PostsResponseWithoutCommentDto> popularPosts = postsService.getPopularPosts();
         model.addAttribute("popularPosts",popularPosts);
         return "index";
     }

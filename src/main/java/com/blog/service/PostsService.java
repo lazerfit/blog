@@ -5,6 +5,7 @@ import com.blog.domain.posts.PostsRepository;
 import com.blog.exception.PostsNotFound;
 import com.blog.web.dto.PostsResponseDto;
 import com.blog.web.dto.PostsResponseWithCategoryDto;
+import com.blog.web.dto.PostsResponseWithoutCommentDto;
 import com.blog.web.dto.PostsSaveRequestDto;
 import com.blog.web.dto.PostsUpdateRequestDto;
 import java.util.List;
@@ -45,7 +46,7 @@ public class PostsService {
     }
 
     @Transactional(readOnly = true)
-    public Page<PostsResponseDto> getPostsList(Pageable pageable) {
+    public Page<PostsResponseWithoutCommentDto> getPostsList(Pageable pageable) {
         return postsRepository.getPostsList(pageable);
     }
 
@@ -81,9 +82,8 @@ public class PostsService {
         posts.updateHit(hit);
     }
 
-    public List<PostsResponseDto> getPopularPosts() {
-        List<Posts> popularPosts = postsRepository.getPopularPosts();
-        return popularPosts.stream().map(PostsResponseDto::new).toList();
+    public List<PostsResponseWithoutCommentDto> getPopularPosts() {
+        return postsRepository.getPopularPosts();
     }
 
     public List<PostsResponseDto> getCategorizedPostsNotContainPage(String q) {

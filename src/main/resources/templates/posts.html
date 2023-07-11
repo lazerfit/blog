@@ -72,18 +72,18 @@
         댓글
         <span class="count">1</span>
       </h2>
-      <div class="comment-list">
+      <div class="comment-list" th:each="comment:${postFindById.getComments()}">
         <ul>
           <li>
             <div class="author-meta">
-              <span class="nickname">물소</span>
-              <span class="date">
+              <span class="nickname" th:text="${comment.getUsername()}">물소</span>
+              <span class="date" th:text="${comment.getCreateDate()}">
                 2023.07.09 22:33
               </span>
               <span class="control">
               </span>
             </div>
-            <p>
+            <p th:text="${comment.getContent()}">
               깔끔하게 글 잘쓰시네요!! 잘 보고 갑니당 ㅎㅎ
               <br>
               <a href="#" class="reply">답글</a>
@@ -91,9 +91,9 @@
           </li>
         </ul>
       </div>
-      <form>
+      <form th:action="@{/posts/{postId}(postId=${postFindById.getId()})/comment}" method="post" th:object="${commentForm}">
         <div class="comment-form">
-          <textarea id="comment" name="comment" cols rows="4" placeholder="소중한 댓글을 입력해주세요."></textarea>
+          <textarea id="comment" name="comment" cols rows="4" placeholder="소중한 댓글을 입력해주세요." th:field="*{content}"></textarea>
         </div>
         <div class="form-row">
         <div class="field">
