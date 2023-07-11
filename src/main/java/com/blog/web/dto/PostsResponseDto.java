@@ -4,6 +4,7 @@ import com.blog.domain.category.Category;
 import com.blog.domain.posts.Posts;
 import com.querydsl.core.annotations.QueryProjection;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -18,6 +19,7 @@ public class PostsResponseDto {
     private final Category category;
     private final String tags;
     private final Long hit;
+    private List<CommentsResponseDto> comments;
 
 
     public PostsResponseDto(Posts posts) {
@@ -28,6 +30,7 @@ public class PostsResponseDto {
         this.category =posts.getCategory();
         this.tags=posts.getTags();
         this.hit=posts.getHit();
+        this.comments=posts.getComments().stream().map(CommentsResponseDto::new).toList();
     }
 
     @QueryProjection
@@ -40,5 +43,9 @@ public class PostsResponseDto {
         this.category = category;
         this.tags = tags;
         this.hit = hit;
+    }
+
+    public void insertComment(List<CommentsResponseDto> responseDto) {
+        this.comments=responseDto;
     }
 }

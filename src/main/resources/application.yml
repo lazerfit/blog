@@ -1,13 +1,15 @@
 spring:
   jpa:
+    show-sql: true
     open-in-view: false
     hibernate:
+      show-sql: true
       ddl-auto: update
       naming:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
     properties:
       hibernate:
-        show_sql: ture
+        jdbc: trace
         format_sql: true
   session:
     timeout: 86400
@@ -34,6 +36,10 @@ spring:
         one-indexed-parameters: true
   logging:
     level:
-      org.hibernate.sql: debug
-
-
+      org:
+        hibernate:
+          SQL: debug
+          type:
+            descriptor:
+              sql:
+                BasicBinder: trace

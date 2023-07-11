@@ -18,7 +18,7 @@
       <div class="post-card-header">
         <div class="inner">
         <form name="deletePost" id="deletePosts" th:action="@{/posts/delete/{postId}(postId=${postId})}" method="post">
-          <span class="category" th:if="${postFindById.getCategoryTitle()}" th:text="${postFindById.getCategoryTitle()}" style="padding-left: 2px"></span>
+          <span class="category" th:if="${postFindById.getCategory().getTitle()}" th:text="${postFindById.getCategory().getTitle()}" style="padding-left: 2px"></span>
           <span class="post-card-title" th:text="${postFindById.getTitle()}">Header</span>
           <input type="hidden" id="postFindById_title" th:value="${postFindById.getTitle()}">
           <span class="meta">
@@ -46,7 +46,7 @@
     <div class="another_category">
       <h4>
         '
-        <a th:href="@{/posts/category(q=${postFindById.getCategoryTitle()})}" th:text="${postFindById.getCategoryTitle()}"></a>
+        <a th:href="@{/posts/category(q=${postFindById.getCategory().getTitle()})}" th:text="${postFindById.getCategory().getTitle()}"></a>
         ' 카테고리의 다른 글
       </h4>
       <table>

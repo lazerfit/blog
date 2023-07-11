@@ -69,11 +69,11 @@ public class PostsController {
     @GetMapping("/posts/{postId}")
     public String findById(@PathVariable Long postId, Model model) {
         postsService.addHit(postId);
-        PostsResponseWithCategoryDto postFindById = postsService.findByIdWithCategory(postId);
+        PostsResponseDto postsResponseDto = postsService.getPostsById(postId);
         List<String> tagList = postsService.getTagsAsList(postId);
         var anotherCategory = postsService.getCategorizedPostsNotContainPage(
-            postFindById.getCategoryTitle());
-        model.addAttribute("postFindById", postFindById);
+            postsResponseDto.getCategory().getTitle());
+        model.addAttribute("postFindById", postsResponseDto);
         model.addAttribute("tagList", tagList);
         model.addAttribute("anotherCategory",anotherCategory);
         return "posts";

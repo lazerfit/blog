@@ -1,6 +1,7 @@
 package com.blog.domain.posts;
 
 import com.blog.domain.category.Category;
+import com.blog.domain.comments.Comment;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,10 +11,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
+import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.ColumnDefault;
+@Slf4j
 @Getter
 @NoArgsConstructor
 @Entity
@@ -36,8 +42,12 @@ public class Posts extends BasetimeEntity{
     @JoinColumn(name = "category_id",referencedColumnName = "id")
     private Category category;
 
-    @Column(columnDefinition = "bigint default 0",nullable = false)
+    @ColumnDefault("0")
+    @Column(nullable = false)
     private Long hit;
+
+    @OneToMany(orphanRemoval = true,mappedBy = "posts")
+    private List<Comment> comments=new ArrayList<>();
 
     @Builder
     public Posts(String title, String content, String tags, Category category, Long hit) {

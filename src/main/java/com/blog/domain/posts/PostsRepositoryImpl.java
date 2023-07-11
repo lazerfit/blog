@@ -1,10 +1,14 @@
 package com.blog.domain.posts;
 
+import static com.blog.domain.comments.QComment.comment;
 import static com.blog.domain.posts.QPosts.posts;
 
+import com.blog.exception.PostsNotFound;
+import com.blog.web.dto.CommentsResponseDto;
 import com.blog.web.dto.PostsResponseDto;
 import com.blog.web.dto.PostsResponseWithCategoryDto;
 import com.blog.web.dto.PostsUpdateRequestDto;
+import com.blog.web.dto.QCommentsResponseDto;
 import com.blog.web.dto.QPostsResponseDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -118,11 +122,73 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     }
 
     @Override
-    public List<Posts> getCategorizedPostsNotContainPage(String q) {
-        return jpaQueryFactory.selectFrom(posts)
+    public List<PostsResponseDto> getCategorizedPostsNotContainPage(String q) {
+        return jpaQueryFactory.select(new QPostsResponseDto(
+                posts.id,
+                posts.title,
+                posts.content,
+                posts.createDate,
+                posts.category,
+                posts.tags,
+                posts.hit))
+            .from(posts)
             .where(posts.category.title.eq(q))
             .orderBy(posts.createDate.desc())
             .limit(6)
             .fetch();
     }
+
+    @Override
+    public PostsResponseDto findByIdWithQdsl(Long postId) {
+        PostsResponseDto postsResponseDto = jpaQueryFactory
+            .select(new QPostsResponseDto(
+                posts.id,
+                posts.title,
+                posts.content,
+                posts.createDate,
+                posts.category,
+                posts.tags,
+                posts.hit))
+            .from(posts)
+            .where(posts.id.eq(postId))
+            .fetchOne();
+
+        List<CommentsResponseDto> parentComment = jpaQueryFactory
+            .select(new QCommentsResponseDto(
+                comment.id,
+                comment.username,
+                comment.content,
+                comment.createDate,
+                comment.parent.id))
+            .from(comment)
+//            .join(comment.posts, posts)
+            .where(posts.id.eq(postId).and(comment.parent.id.isNull()))
+            .orderBy(comment.id.asc())
+            .fetch();
+
+        List<CommentsResponseDto> childComment = jpaQueryFactory
+            .select(new QCommentsResponseDto(
+                comment.id,
+                comment.username,
+                comment.content,
+                comment.createDate,
+                comment.parent.id))
+            .from(comment)
+//            .join(comment.posts, posts)
+            .where(posts.id.eq(postId).and(comment.parent.id.isNotNull()))
+            .orderBy(comment.id.asc())
+            .fetch();
+
+        parentComment.forEach(p-> p.insertChildComment(childComment.stream().filter(c->c.getParentId().equals(p.getId())).toList()));
+
+        if (postsResponseDto == null) {
+            throw new PostsNotFound();
+        }
+
+        postsResponseDto.insertComment(parentComment);
+
+        return postsResponseDto;
+
+    }
+
 }

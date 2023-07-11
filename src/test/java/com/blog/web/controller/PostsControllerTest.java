@@ -10,14 +10,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.blog.domain.category.Category;
 import com.blog.domain.category.CategoryRepository;
+import com.blog.domain.comments.Comment;
+import com.blog.domain.comments.CommentsRepository;
 import com.blog.domain.posts.Posts;
 import com.blog.domain.posts.PostsRepository;
 import com.blog.web.dto.PostsSaveRequestDto;
 import com.blog.web.dto.PostsSearchRequestDto;
 import com.blog.web.dto.PostsUpdateRequestDto;
+import com.blog.web.form.CommentForm;
 import com.blog.web.form.CreatePostsForm;
 import com.blog.web.form.EditPostsForm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityManager;
+import java.util.List;
 import java.util.stream.IntStream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,6 +34,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -46,6 +52,12 @@ class PostsControllerTest {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private CommentsRepository commentsRepository;
+
+    @Autowired
+    private EntityManager em;
+
     @BeforeEach
     void insertCategories() {
         Category category1 = new Category("Java", 1);
@@ -53,6 +65,14 @@ class PostsControllerTest {
 
         categoryRepository.save(category1);
         categoryRepository.save(category2);
+
+        String tagData = "[{\"value\":\"Spring\"},{\"value\":\"Java\"}]";
+
+        Category category = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
+
+        postsRepository.save(
+            Posts.builder().title("제목").content("내용").category(category).tags(tagData).hit(0L)
+                .build());
     }
 
     @AfterEach()
@@ -252,11 +272,79 @@ class PostsControllerTest {
         Category category = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
 
         PostsSaveRequestDto postsSaveRequestDto = new PostsSaveRequestDto("제목", "내용", category,
-            tagData);
+            tagData, 0L);
 
         postsRepository.save(postsSaveRequestDto.toEntity());
 
         mockMvc.perform(get("/tag?q={tag}", "Spring"))
+            .andDo(print())
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("댓글 저장")
+    @WithMockUser(roles = "ADMIN")
+    void saveComment() throws Exception {
+
+        List<Posts> all = postsRepository.findAll();
+
+        CommentForm commentForm = new CommentForm();
+        commentForm.setUsername("sg");
+        commentForm.setContent("정말 멋집 글이네요");
+        commentForm.setPostId(all.get(0).getId());
+        commentForm.setParentId(null);
+
+        mockMvc.perform(post("/posts/1/comment")
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(commentForm)))
+            .andDo(print())
+            .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    @DisplayName("대댓글 저장")
+    void saveSubComment() throws Exception {
+
+        List<Posts> all = postsRepository.findAll();
+
+        commentsRepository.save(Comment.builder()
+            .username("sg")
+            .content("정말 좋은 글이네요")
+            .parent(null)
+            .posts(all.get(0))
+            .build());
+
+        List<Comment> allComments = commentsRepository.findAll();
+        Long parentId = allComments.get(0).getId();
+
+        CommentForm SubCommentForm = new CommentForm();
+        SubCommentForm.setUsername("kim");
+        SubCommentForm.setContent("정말 감사합니다.");
+        SubCommentForm.setPostId(all.get(0).getId());
+        SubCommentForm.setParentId(parentId);
+
+        mockMvc.perform(post("/posts/1/comment")
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(SubCommentForm)))
+            .andDo(print())
+            .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    @DisplayName("게시글 가져오기 - 댓글 포함")
+    @Transactional
+    void getPostsWithComment() throws Exception{
+
+        List<Posts> all = postsRepository.findAll();
+
+        commentsRepository.save(Comment.builder()
+            .username("sg")
+            .content("정말 좋은 글이네요")
+            .parent(null)
+            .posts(all.get(0))
+            .build());
+
+        mockMvc.perform(get("/posts/1"))
             .andDo(print())
             .andExpect(status().isOk());
     }

@@ -33,6 +33,7 @@ public class PostsService {
         postsRepository.edit(id,request);
     }
 
+    @Transactional(readOnly = true)
     public PostsResponseDto findById(Long id) {
         Posts posts = postsRepository.findById(id)
             .orElseThrow(PostsNotFound::new);
@@ -86,9 +87,13 @@ public class PostsService {
     }
 
     public List<PostsResponseDto> getCategorizedPostsNotContainPage(String q) {
-        List<Posts> categorizedPostsNotContainPage = postsRepository.getCategorizedPostsNotContainPage(
+        return postsRepository.getCategorizedPostsNotContainPage(
             q);
-        return categorizedPostsNotContainPage.stream().map(PostsResponseDto::new).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public PostsResponseDto getPostsById(Long id) {
+        return postsRepository.findByIdWithQdsl(id);
     }
 }
 

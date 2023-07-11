@@ -15,6 +15,9 @@ public interface PostsRepositoryCustom {
     Page<PostsResponseWithCategoryDto> getPostsByTags(Pageable pageable,String tag);
     List<Posts> getPopularPosts();
 
-    List<Posts> getCategorizedPostsNotContainPage(String q);
+    List<PostsResponseDto> getCategorizedPostsNotContainPage(String q);
     void edit(Long id, PostsUpdateRequestDto requestDto);
+
+    // Using When go into Posts Detail page
+    PostsResponseDto findByIdWithQdsl(Long postId);
 }
