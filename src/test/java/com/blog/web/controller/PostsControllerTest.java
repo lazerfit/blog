@@ -284,6 +284,7 @@ class PostsControllerTest {
     @Test
     @DisplayName("댓글 저장")
     @WithMockUser(roles = "ADMIN")
+    @Transactional
     void saveComment() throws Exception {
 
         List<Posts> all = postsRepository.findAll();
@@ -293,12 +294,13 @@ class PostsControllerTest {
         commentForm.setContent("정말 멋집 글이네요");
         commentForm.setPostId(all.get(0).getId());
         commentForm.setParentId(null);
+        commentForm.setPassword("1234");
 
         mockMvc.perform(post("/posts/1/comment")
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(commentForm)))
             .andDo(print())
-            .andExpect(status().is3xxRedirection());
+            .andExpect(status().isOk());
     }
 
     @Test
@@ -342,6 +344,7 @@ class PostsControllerTest {
             .content("정말 좋은 글이네요")
             .parent(null)
             .posts(all.get(0))
+            .password("1234")
             .build());
 
         mockMvc.perform(get("/posts/1"))

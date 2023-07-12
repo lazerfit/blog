@@ -35,6 +35,9 @@ public class Comment extends BasetimeEntity {
     @Column(nullable = false,length = 20)
     private String username;
 
+    @Column(nullable = false, length = 100)
+    private String password;
+
     @Column(nullable = false,length = 500)
     private String content;
 
@@ -51,10 +54,11 @@ public class Comment extends BasetimeEntity {
 
 
     @Builder
-    public Comment(String username, String content, Comment parent, Posts posts) {
+    public Comment(String username, String content, Comment parent, Posts posts, String password) {
         this.username = username;
         this.content = content;
         this.parent = parent;
         this.posts = posts;
+        this.password=password;
     }
 }

@@ -13,6 +13,7 @@ public class CommentsSaveRequestDto {
     private final String content;
     private final Comment parentComment;
     private final Posts posts;
+    private final String password;
 
     public Comment toEntity() {
         return Comment.builder()
@@ -20,6 +21,7 @@ public class CommentsSaveRequestDto {
             .content(content)
             .parent(parentComment)
             .posts(posts)
+            .password(password)
             .build();
     }
 

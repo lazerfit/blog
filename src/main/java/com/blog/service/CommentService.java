@@ -9,7 +9,9 @@ import com.blog.exception.PostsNotFound;
 import com.blog.web.dto.CommentsResponseDto;
 import com.blog.web.dto.CommentsSaveRequestDto;
 import com.blog.web.form.CommentForm;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,12 +23,15 @@ public class CommentService {
 
     private final PostsRepository postsRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Transactional
     public void save(Long postId,CommentForm form) {
         Posts post = postsRepository.findById(postId).orElseThrow(PostsNotFound::new);
         Comment comment = commentsRepository.findById(form.getParentId()).orElse(null);
         CommentsSaveRequestDto request = new CommentsSaveRequestDto(
-            form.getUsername(), form.getContent(), comment, post);
+            form.getUsername(), form.getContent(), comment, post, passwordEncoder.encode(
+            form.getPassword()));
         commentsRepository.save(request.toEntity());
     }
 
@@ -35,5 +40,9 @@ public class CommentService {
         Comment comment = commentsRepository.findById(id).orElseThrow(CommentNotFound::new);
 
         return new CommentsResponseDto(comment);
+    }
+
+    public List<CommentsResponseDto> findByPostsId(Long postsId) {
+        return commentsRepository.findByPostsId(postsId);
     }
 }

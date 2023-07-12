@@ -14,6 +14,7 @@ public class CommentForm {
     @NotBlank(message = "내용은 필수입니다.") String content;
     Long parentId;
     @NotNull(message = "게시글 ID 는 필수입니다.") Long postId;
+    @NotBlank(message = "비밀번호는 필수입니다.") String password;
 
     public void setParentId(Long parentId) {
         this.parentId = Objects.requireNonNullElse(parentId, 0L);

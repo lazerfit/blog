@@ -1,13 +1,13 @@
-function toggleDropdown() {
-  var dropdownContent = document.getElementById("dropdownContent");
+function toggleDropdown(dropdownId) {
+  const dropdownContent = document.getElementById(dropdownId);
   dropdownContent.classList.toggle("show");
 }
 
 window.addEventListener("click", function (event) {
   if (!event.target.matches(".profile")) {
-    var dropdowns = document.getElementsByClassName("dropdown-content");
-    for (var i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
+    const dropdowns = document.getElementsByClassName("dropdown-content");
+    for (let i = 0; i < dropdowns.length; i++) {
+      const openDropdown = dropdowns[i];
       if (openDropdown.classList.contains("show")) {
         openDropdown.classList.remove("show");
       }
