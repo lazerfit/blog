@@ -51,6 +51,8 @@ lazerfit 의 개인 blog 프로젝트입니다.
 ***
 
 ## *개발 일지*
+- ### [230714] 댓글 수정 / 삭제 구현
+  - to replace text inside a div element -> using innerHTML
 - ### [230712] 게시글 페이지 내 댓글 입력 구현
   - ajax 비동기 통해 댓글 입력 시 화면 깜빡임 없이 화면에 댓글 보여짐
 - ### [230711] 댓글 저장 및 조회 기능 개발

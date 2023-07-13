@@ -470,6 +470,10 @@ a:hover{
   margin: 0 0 28px;
 }
 
+.post-item a span:hover {
+  color: #eb6864
+}
+
 .post-header {
   margin-bottom: 28px;
   padding-bottom: 18px;
@@ -626,4 +630,28 @@ a:hover{
   cursor: pointer;
 }
 
+.comment-modal-btn, .comment-del-btn{
+  background-color: #eb6864;
+  border: none;
+  color: white;
+}
 
+.comment-del-btn {
+  width: 85px;
+}
+
+.edit-comment {
+  padding: 12px;
+  height: 200px;
+  width: 100%;
+  font-size: 16px;
+  resize: vertical;
+  border: 1px solid #eee;
+}
+
+.comment-username {
+  padding: 12px;
+  font-size: 18px;
+  color: black;
+  margin-bottom: 5px;
+}

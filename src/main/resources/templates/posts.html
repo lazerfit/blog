@@ -76,34 +76,41 @@
         <ul>
           <li>
             <div class="author-meta">
-              <span class="nickname" th:text="${comment.getUsername()}">물소</span>
-              <span class="date" th:text="${#temporals.format(comment.getCreateDate(),'yyyy-MM-dd')}">
+              <span class="nickname" id="commentUsername" th:data-commentId="${comment.id}" th:text="${comment.getUsername()}">물소</span>
+              <span class="date" th:data-commentId="${comment.id}" th:text="${#temporals.format(comment.getCreateDate(),'yyyy-MM-dd')}">
                 2023.07.09 22:33
               </span>
               <span class="control">
                 <div class="dropdown" data-bs-target="dropdownComment">
                   <img src="/img/menu.png" alt="더보기" class="more" onclick="manageCommentDropdown(this)">
                     <div class="dropdown-content comment-dropdown" th:data-commentId="${comment.id}" style="display: none">
-                      <a href="#" data-bs-toggle="modal" th:data-commentId="${comment.id}" data-bs-target="#manageCommentModal" class="comment-manage" onclick="openManageModal(this)">수정/삭제</a>
+                      <a href="#" data-bs-toggle="modal" th:data-commentId="${comment.id}"
+                         th:data-username="${comment.username}"
+                         th:data-content="${comment.content}"
+                         data-bs-target="#manageCommentModal" class="comment-manage"
+                         onclick="openManageModal(this)">수정/삭제</a>
                     </div>
                   <script src="/js/manageCommentDropdown.js"></script>
                   <script src="/js/openCommentManageModal.js"></script>
                 </div>
               </span>
-              <!-- delete modal  -->
+              <!-- manage modal  -->
               <div class="modal fade" id="manageCommentModal" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-labelledby="ModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title fs-5" id="manageModalLabel">댓글 수정/삭제</h5>
+                      <h5 class="modal-title fs-5" id="manageModalLabel" >댓글 수정/삭제</h5>
                       <button type="button" class="close" data-bs-toggle="modal" href="#manageCommentModal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
                     </div>
                       <div class="modal-body">
-                        <input type="hidden" id="editId" value="">
+                        <input type="hidden" id="commentId" value="">
                         <div class="modal-body">
-                          <p>정말 삭제하시겠습니까?</p>
+                          <button type="button" class="btn btn-md comment-modal-btn"
+                          onclick="openEditModal()">수정</button>
+                          <button type="button" class="btn btn-md comment-modal-btn"
+                          onclick="openDeleteModal()">삭제</button>
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" onclick="$('#manageCommentModal').modal('hide')">나가기</button>
@@ -112,11 +119,64 @@
                   </div>
                 </div>
               </div>
-              <!-- /deleteModal -->
+              <!-- /manage Modal -->
+              <!-- delete Modal -->
+              <div class="modal fade" id="deleteCommentModal" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-labelledby="ModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title fs-5" id="deleteModalLabel">댓글 삭제</h5>
+                      <button type="button" class="close" data-bs-toggle="modal" href="#manageCommentModal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <input type="hidden" id="deleteCommentId" value="">
+                      <div class="modal-body">
+                        <p style="color: black;font-size: 20px">정말 삭제하시겠습니까?</p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="backToMainModel()">나가기</button>
+                        <button type="button" class="btn btn-secondary comment-del-btn" onclick="deleteComment()">삭제</button>
+                      </div>
+                      <script src="/js/deleteComment.js"></script>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- /delete Modal -->
+              <!-- edit Modal -->
+              <div class="modal fade" id="editCommentModal" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-labelledby="ModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title fs-5" id="editModalLabel">댓글 수정</h5>
+                      <button type="button" class="close" data-bs-toggle="modal" href="#manageCommentModal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <input type="hidden" id="editCommentId" value="">
+                      <div class="modal-body">
+                        <input type="hidden" class="edit-comment-username" id="editUsername" value="">
+                        <input type="hidden" class="edit-comment-content" id="editContent" value="">
+                        <div class="comment-username" id="comment-username">물소</div>
+                        <textarea class="edit-comment" id="content-area" ></textarea>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="cancel()">나가기</button>
+                        <button type="button" class="btn btn-secondary comment-del-btn" onclick="deleteComment()">수정</button>
+                      </div>
+                      <script src="/js/editComment.js"></script>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- /edit Modal -->
 
 
             </div>
-            <p th:text="${comment.getContent()}">
+            <p class="comment-content" id="commentContent" th:data-commentId="${comment.id}" th:text="${comment.getContent()}">
               깔끔하게 글 잘쓰시네요!! 잘 보고 갑니당 ㅎㅎ
               <br>
             </p>
@@ -127,7 +187,7 @@
       <form id="submit-commentForm">
         <div class="comment-form">
           <div class="input-info" id="inputInfo">
-            <input type="hidden" name="postId" class="postId" id="postId" th:value="${postId}">
+            <input type="hidden" name="postId" class="postId" id="postId" th:value="${postFindById.getId()}">
             <input type="text" name="username" class="username" placeholder="닉네임">
             <input type="password" name="password" class="password" placeholder="비밀번호">
           </div>

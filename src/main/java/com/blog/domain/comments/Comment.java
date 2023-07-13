@@ -61,4 +61,8 @@ public class Comment extends BasetimeEntity {
         this.posts = posts;
         this.password=password;
     }
+
+    public void edit(String content) {
+        this.content=content;
+    }
 }

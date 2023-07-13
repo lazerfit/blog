@@ -6,6 +6,7 @@ import com.blog.domain.posts.Posts;
 import com.blog.domain.posts.PostsRepository;
 import com.blog.exception.CommentNotFound;
 import com.blog.exception.PostsNotFound;
+import com.blog.web.dto.CommentEditRequest;
 import com.blog.web.dto.CommentsResponseDto;
 import com.blog.web.dto.CommentsSaveRequestDto;
 import com.blog.web.form.CommentForm;
@@ -44,5 +45,16 @@ public class CommentService {
 
     public List<CommentsResponseDto> findByPostsId(Long postsId) {
         return commentsRepository.findByPostsId(postsId);
+    }
+
+    public void delete(Long commentId) {
+        Comment comment = commentsRepository.findById(commentId).orElseThrow(CommentNotFound::new);
+        commentsRepository.delete(comment);
+    }
+
+    @Transactional
+    public void edit(CommentEditRequest request) {
+        Comment comment = commentsRepository.findById(request.getId()).orElseThrow(CommentNotFound::new);
+        comment.edit(request.getContent());
     }
 }
