@@ -7,6 +7,7 @@ import com.blog.domain.posts.PostsRepository;
 import com.blog.exception.CommentNotFound;
 import com.blog.exception.PostsNotFound;
 import com.blog.web.dto.CommentEditRequest;
+import com.blog.web.dto.CommentPassword;
 import com.blog.web.dto.CommentsResponseDto;
 import com.blog.web.dto.CommentsSaveRequestDto;
 import com.blog.web.form.CommentForm;
@@ -41,6 +42,11 @@ public class CommentService {
         Comment comment = commentsRepository.findById(id).orElseThrow(CommentNotFound::new);
 
         return new CommentsResponseDto(comment);
+    }
+
+    public CommentPassword findPassword(Long id) {
+        Comment comment = commentsRepository.findById(id).orElseThrow(CommentNotFound::new);
+        return new CommentPassword(comment.getPassword());
     }
 
     public List<CommentsResponseDto> findByPostsId(Long postsId) {

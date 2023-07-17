@@ -2,6 +2,7 @@ package com.blog.web.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.blog.domain.category.Category;
 import com.blog.domain.category.CategoryRepository;
@@ -9,11 +10,8 @@ import com.blog.domain.comments.Comment;
 import com.blog.domain.comments.CommentsRepository;
 import com.blog.domain.posts.Posts;
 import com.blog.domain.posts.PostsRepository;
+import com.blog.web.form.CommentEditForm;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,6 +65,7 @@ class CommentControllerTest {
         postsRepository.deleteAll();
         categoryRepository.deleteAll();
     }
+
     @Test
     @DisplayName("Comment Delete")
     @WithMockUser(roles = "ADMIN")
@@ -82,22 +82,38 @@ class CommentControllerTest {
             .content("ss")
             .build();
 
-        Map<String,Long> commentId=new HashMap<>();
-        Map<String,Long> postId=new HashMap<>();
-        List<Map<String,Long>> commentInfo=new ArrayList<>();
-
-        commentId.put("commentId",1L);
-        commentId.put("postId",1L);
-
-        commentInfo.add(commentId);
-        commentInfo.add(postId);
-
-        commentsRepository.save(comment);
-
-        System.out.println("--------------"+commentInfo);
         mockMvc.perform(post("/posts/comment/delete")
-                .param("commentId","1")
-                .param("postId","1"))
-            .andDo(print());
+                .param("commentId", "1")
+                .param("postId", "1"))
+            .andDo(print())
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("comment edit")
+    @WithMockUser(roles = "ADMIN")
+    @Transactional
+    void editComment() throws Exception {
+
+        Posts posts = postsRepository.findById(1L).orElseThrow();
+
+        Comment comment = Comment.builder()
+            .password("1234")
+            .parent(null)
+            .posts(posts)
+            .username("s")
+            .content("ss")
+            .build();
+
+        CommentEditForm form = new CommentEditForm();
+        form.setId(1L);
+        form.setPassword("1234");
+        form.setContent("멍");
+
+        mockMvc.perform(post("/posts/comment/manage/edit")
+                .content(objectMapper.writeValueAsString(form))
+                .contentType(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andExpect(status().isOk());
     }
 }

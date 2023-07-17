@@ -1,6 +1,6 @@
 // Create Comment
 $('.reply-btn').on('click',function (){
-  const postId=document.getElementById("postId").value
+  const postId=document.getElementById("get-postId").value
   const username=document.getElementById("inputInfo").querySelector(".username").value
   const password=document.getElementById("inputInfo").querySelector(".password").value
   const content=document.getElementById("inputComment").querySelector("#comment").value
@@ -31,3 +31,40 @@ $('.reply-btn').on('click',function (){
 });
 
 // Delete Comment
+function deleteComment() {
+
+  $('#deleteCommentModal').modal('hide')
+
+  let commentId=document.getElementById('deleteCommentId').value;
+  let postId=document.getElementById('deletePostId').value;
+
+  console.log(commentId);
+  console.log(postId);
+
+  $.ajax({
+    url:"/posts/admin/comment/delete",
+    type:"POST",
+    data:{
+      "commentId":commentId,
+      "postId":postId
+    }
+  }).done(function (result){
+    $('#comment-table').replaceWith(result);
+  }).fail(function (){
+    window.location.reload();
+  })
+
+function userDelete() {
+
+  $('#deleteCommentModal').modal('hide')
+
+  const commentId=document.getElementById('deleteCommentId').value;
+
+  $.ajax({
+    url: "/posts/comment/manage/delete",
+    type: "POST"
+  })
+
+}
+
+}

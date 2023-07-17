@@ -14,4 +14,8 @@ public class CommentEditRequest {
         this.content=form.getContent();
     }
 
+    public CommentEditRequest(Long id, String content) {
+        this.id = id;
+        this.content = content;
+    }
 }

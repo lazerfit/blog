@@ -5,10 +5,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CommentEditForm {
+public class CommentPasswordCheckForm {
 
-    private Long id;
-    private String content;
+    private Long commentId;
     private String password;
 
 }

@@ -9,6 +9,7 @@ import com.blog.web.dto.PostsResponseWithoutCommentDto;
 import com.blog.web.dto.PostsSaveRequestDto;
 import com.blog.web.dto.PostsUpdateRequestDto;
 import com.blog.web.form.CommentForm;
+import com.blog.web.form.CommentPasswordCheckForm;
 import com.blog.web.form.CreatePostsForm;
 import com.blog.web.form.EditPostsForm;
 import jakarta.validation.Valid;
@@ -76,6 +77,7 @@ public class PostsController {
         var anotherCategory = postsService.getCategorizedPostsNotContainPage(
             postsResponseDto.getCategory().getTitle());
         model.addAttribute("commentForm", new CommentForm());
+        model.addAttribute("passwordForm", new CommentPasswordCheckForm());
         model.addAttribute("postFindById", postsResponseDto);
         model.addAttribute("tagList", tagList);
         model.addAttribute("anotherCategory",anotherCategory);

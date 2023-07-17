@@ -1,0 +1,16 @@
+@font-face {
+  font-family: 'AppleSDGothicNeoR';
+  src: local("/font/AppleSDGothicNeoR.tff");
+}
+* {
+  box-sizing: border-box;
+  font-family: AppleSDGothicNeoR,'Noto Sans KR', sans-serif;
+}
+
+body {
+  font-family: AppleSDGothicNeoR,'Noto Sans KR', sans-serif;
+  background: white;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}

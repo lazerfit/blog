@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+  <title>댓글 수정/삭제</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous">
+  <!-- JavaScript Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/journal/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <script th:inline="javascript">
+    $(document).ready(function (){
+      const id=[[${comment.id}]];
+      console.log(id);
+    });
+  </script>
+</head>
+<body id="modify">
+<div class="wrap">
+<div class="header header-title">
+  <h1 style="text-align: center">댓글 수정/삭제</h1>
+</div>
+  <button type="button" class="btn btn-md"  onclick="$('#editCommentModal').modal('show');" style="margin-left: 175px;margin-top: 20px">수정</button>
+  <button type="button" class="btn btn-md " th:data-commentId="${comment.id}" onclick="openDeleteModal(this)" style="margin-top: 20px">삭제</button>
+</div>
+<!-- edit Modal -->
+<div class="modal fade" id="editCommentModal" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fs-5" id="editModalLabel">댓글 수정</h5>
+        <button type="button" class="close" onclick="$('#editCommentModal').modal('hide')" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form>
+      <div class="modal-body">
+        <input type="hidden" id="editCommentId" value="">
+        <div class="modal-body">
+          <input type="hidden" id="commentId" th:value="${comment.getId()}">
+          <div class="comment-username" id="comment-username" th:text="${comment.getUsername()}">물소</div>
+          <textarea class="edit-comment" id="content-area" th:text="${comment.getContent()}"></textarea>
+          <input type="password" class="edit-comment-password comment-pwd" id="edit-password" placeholder="비밀번호">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="cancel()">나가기</button>
+          <button type="button" class="btn btn-secondary comment-del-btn" onclick="userEditComment()">수정</button>
+        </div>
+        <script src="/js/editComment.js"></script>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- /edit Modal -->
+<!-- delete Modal -->
+<div class="modal fade" id="deleteCommentModal" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fs-5" id="deleteModalLabel">댓글 삭제</h5>
+        <button type="button" class="close" onclick="$('#deleteCommentModal').modal('hide')" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="deleteForm" th:object="${passwordForm}" method="post" th:action="@{/posts/comment/manage/delete}">
+      <div class="modal-body">
+        <input type="hidden" id="comment-id" value="" th:field="*{commentId}"/>
+        <div class="modal-body">
+          <p style="color: black;font-size: 20px">정말 삭제하시겠습니까?</p>
+          <input type="password" class="comment-pwd" id="comment-pwd" placeholder="비밀번호" style="margin-top: 5px" th:field="*{password}">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="backToMainModel()">나가기</button>
+          <button type="submit" class="btn btn-secondary comment-del-btn"
+          onclick="userDeleteComment()">삭제</button>
+        </div>
+        <script src="/js/userDeleteComment.js"></script>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- /delete Modal -->
+</body>

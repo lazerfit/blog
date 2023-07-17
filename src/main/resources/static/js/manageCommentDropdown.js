@@ -8,6 +8,4 @@ function manageCommentDropdown(element) {
     dropdownContent.style.display = "none";
   }
 
-  document.getElementById('commentId').value=commentId;
-
 }
