@@ -9,10 +9,10 @@ function openManageComment(element) {
 }
 
 function openDeleteModal(elem) {
-  $('#deleteCommentModal').modal('show')
-  const id = elem.getAttribute('data-commentId');
+  $('#deleteCommentModal').modal('show');
+/*  const id = elem.getAttribute('data-commentId');
   const inputId = document.getElementById('comment-id');
-  inputId.value=id;
+  inputId.value=id;*/
 }
 
 

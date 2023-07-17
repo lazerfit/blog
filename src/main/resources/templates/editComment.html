@@ -25,7 +25,7 @@
   <h1 style="text-align: center">댓글 수정/삭제</h1>
 </div>
   <button type="button" class="btn btn-md"  onclick="$('#editCommentModal').modal('show');" style="margin-left: 175px;margin-top: 20px">수정</button>
-  <button type="button" class="btn btn-md " th:data-commentId="${comment.id}" onclick="openDeleteModal(this)" style="margin-top: 20px">삭제</button>
+  <button type="button" class="btn btn-md " th:data-commentId="${comment.id}" onclick="$('#deleteCommentModal').modal('show')" style="margin-top: 20px">삭제</button>
 </div>
 <!-- edit Modal -->
 <div class="modal fade" id="editCommentModal" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-labelledby="ModalLabel" aria-hidden="true">
@@ -74,10 +74,10 @@
           <p style="color: black;font-size: 20px">정말 삭제하시겠습니까?</p>
           <input type="password" class="comment-pwd" id="comment-pwd" placeholder="비밀번호" style="margin-top: 5px" th:field="*{password}">
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer" th:data-commentId="${comment.id}">
           <button type="button" class="btn btn-secondary" onclick="backToMainModel()">나가기</button>
-          <button type="submit" class="btn btn-secondary comment-del-btn"
-          onclick="userDeleteComment()">삭제</button>
+          <button type="button" class="btn btn-secondary comment-del-btn"
+          onclick="userDeleteComment(this)">삭제</button>
         </div>
         <script src="/js/userDeleteComment.js"></script>
       </div>

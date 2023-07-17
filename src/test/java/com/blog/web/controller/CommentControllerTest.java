@@ -10,7 +10,6 @@ import com.blog.domain.comments.Comment;
 import com.blog.domain.comments.CommentsRepository;
 import com.blog.domain.posts.Posts;
 import com.blog.domain.posts.PostsRepository;
-import com.blog.web.form.CommentEditForm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,9 +18,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 @AutoConfigureMockMvc
@@ -105,14 +104,10 @@ class CommentControllerTest {
             .content("ss")
             .build();
 
-        CommentEditForm form = new CommentEditForm();
-        form.setId(1L);
-        form.setPassword("1234");
-        form.setContent("멍");
-
-        mockMvc.perform(post("/posts/comment/manage/edit")
-                .content(objectMapper.writeValueAsString(form))
-                .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(MockMvcRequestBuilders.post("/posts/comment/manage/edit")
+                .param("id","1")
+                .param("password","1234")
+                .param("content","멍"))
             .andDo(print())
             .andExpect(status().isOk());
     }

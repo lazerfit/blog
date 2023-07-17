@@ -678,3 +678,18 @@ button.close {
 .header-title h1 {
   padding-top: 20px;
 }
+
+.btn-confirm:hover {
+  background-color: #eb6864;
+  border: none;
+}
+
+.child-comment {
+  padding: 40px;
+  border-top: 1px solid #eee;
+  background-color: #fafafa;
+}
+
+.child-comment .author-meta p {
+  font-size: 13px;
+}

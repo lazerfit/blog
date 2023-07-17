@@ -199,13 +199,69 @@
 
 
             </div>
-            <p class="comment-content" id="commentContent" th:data-commentId="${comment.id}" th:text="${comment.getContent()}">
+            <div class="comment-id" th:data-commentId="${comment.id}" style="margin-bottom: 20px">
+            <p class="comment-content" id="commentContent" th:data-commentId="${comment.id}" th:data-postId="${postId}" th:text="${comment.getContent()}">
               깔끔하게 글 잘쓰시네요!! 잘 보고 갑니당 ㅎㅎ
               <br>
             </p>
-            <a href="#" class="reply">답글</a>
+            <a href="javascript:void(0)" onclick="openSubComment(this)" class="reply">답글</a>
+            </div>
+            <!-- child comment -->
+            <div class="child-comment" th:if="${comment.getChild()}" th:each="child:${comment.getChild()}" th:data-commentId="${child.getId()}">
+              <div class="author-meta">
+                <span class="nickname" th:data-commentId="${child.id}" th:text="${child.getUsername()}">물소</span>
+                <span class="date" th:data-commentId="${child.id}" th:text="${#temporals.format(child.getCreateDate(),'yyyy-MM-dd')}">
+                2023.07.09 22:33
+                </span>
+                <span class="control">
+                <div class="dropdown" data-bs-target="dropdownComment">
+                  <img src="/img/menu.png" alt="더보기" class="more" onclick="manageCommentDropdown(this)">
+                    <div class="dropdown-content comment-dropdown" th:data-commentId="${child.id}" style="display: none">
+                      <a href="javascript:void(0)" class="comment-manage"
+                         onclick="openManageComment(this)">수정/삭제</a>
+                      <a href="javascript:void(0)" class="comment-manage"
+                         th:data-postId="${postId}"
+                         onclick="openDeleteCommentModal(this)" sec:authorize="hasRole('ROLE_ADMIN')">
+                        삭제(관리자)
+                      </a>
+                    </div>
+                  <script>
+                    function openDeleteCommentModal(element) {
+                      const commentId = $(element).closest('.dropdown-content').attr(
+                          'data-commentId');
+                      const dropdownContent = document.querySelector(".comment-dropdown[data-commentId='" + commentId + "']");
+                      const postId = element.getAttribute('data-postId');
+                      dropdownContent.style.display="none"
+
+                      const inputCommentId = document.getElementById('deleteCommentId');
+                      const inputPostId = document.getElementById('deletePostId');
+                      inputCommentId.value=commentId;
+                      inputPostId.value=postId;
+
+                      $('#deleteCommentId').val(commentId);
+                      $('#deleteCommentModal').modal('show');
+                    }
+                  </script>
+                  <script src="/js/manageCommentDropdown.js"></script>
+                  <script src="/js/openCommentManageModal.js"></script>
+                </div>
+              </span>
+                <p th:text="${child.content}">
+                  대댓글
+                </p>
+              </div>
+            </div>
+            <!-- /child comment -->
+
           </li>
         </ul>
+        <script>
+          function openSubComment(elem) {
+            const id=$(elem).closest('.comment-id').attr('data-commentId')
+            const postId=document.getElementById('commentContent').getAttribute('data-postId')
+            window.open('/posts/comment/subcomment/new?commentId='+id+'&postId='+postId,'대댓글','width=500,height=500')
+          }
+        </script>
       </div>
       <form id="submit-commentForm">
         <div class="comment-form">
@@ -219,12 +275,6 @@
           </div>
           </div>
         <div class="form-row">
-        <div class="field">
-          <div class="secret">
-            <input type="checkbox" name="secret" id="secret">
-            <label for="secret" tabindex="0">비밀글</label>
-          </div>
-        </div>
         <div class="submit">
           <button type="button" class="reply-btn">등록</button>
         </div>

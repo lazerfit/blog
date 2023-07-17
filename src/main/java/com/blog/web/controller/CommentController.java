@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -91,6 +92,24 @@ public class CommentController {
             return "성공";
         }
         return "비밀번호를 확인해주세요";
+    }
+
+    @GetMapping("/posts/comment/subcomment/new")
+    public String subComment(@RequestParam Long commentId,@RequestParam Long postId ,Model model) {
+
+        model.addAttribute("parentId", commentId);
+        model.addAttribute("postId", postId);
+
+        return "subComment";
+    }
+
+    @PostMapping("/posts/comment/subcomment/new")
+    @ResponseBody
+    public String subComment(@RequestBody CommentForm form) {
+        log.debug("form={}",form.toString());
+        commentService.save(form.getPostId(),form);
+
+        return "";
     }
 
     @ModelAttribute

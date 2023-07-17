@@ -7,9 +7,10 @@ function backToMainModel(){
   console.log(id);
 }
 
-function userDeleteComment() {
+function userDeleteComment(elem) {
 
-  const id=document.getElementById('comment-id').value;
+
+  const id= $(elem).closest('.modal-footer').attr('data-commentId');
   const password=document.getElementById('comment-pwd').value;
 
   $.ajax({
