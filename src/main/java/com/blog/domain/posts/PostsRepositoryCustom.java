@@ -9,7 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface PostsRepositoryCustom {
-    Page<PostsResponseWithoutCommentDto> getPosts(Pageable pageable);
+    Page<PostsResponseWithoutCommentDto> getPostsWithPaging(Pageable pageable);
     Page<PostsResponseDto> getPostsListByKeyword(Pageable pageable,String keyword);
     PostsResponseWithCategoryDto findByIdContainCategory(Long id);
     Page<PostsResponseWithCategoryDto> getCategorizedPosts(Pageable pageable,String category);

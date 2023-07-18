@@ -128,7 +128,8 @@ class PostServiceTest {
 
         PageRequest request = PageRequest.of(0, 6);
 
-        List<PostsResponseWithoutCommentDto> postsList = postsRepository.getPosts(request).stream().toList();
+        List<PostsResponseWithoutCommentDto> postsList = postsRepository.getPostsWithPaging(request)
+            .stream().toList();
 
         assertThat(postsList.get(0).getTitle()).isEqualTo("제목10");
         assertThat(postsList.get(0).getContent()).isEqualTo("내용10");
@@ -143,7 +144,7 @@ class PostServiceTest {
 
         Optional<Post> searchedPost = postsRepository.getPostById(1L);
 
-        Assertions.assertThrows(PostNotFound.class,()->
+        Assertions.assertThrows(PostNotFound.class, () ->
             searchedPost.orElseThrow(PostNotFound::new));
     }
 
@@ -266,7 +267,7 @@ class PostServiceTest {
         Post post = postsRepository.findById(1L).orElseThrow();
 
         CommentsSaveRequestDto request = new CommentsSaveRequestDto("ddodi",
-            "정말 좋은 글이네요", null, post,"1234");
+            "정말 좋은 글이네요", null, post, "1234");
 
         commentsRepository.save(request.toEntity());
 
@@ -277,9 +278,6 @@ class PostServiceTest {
         assertThat(comment.getContent()).isEqualTo("정말 좋은 글이네요");
         assertThat(comment.getPost().getTitle()).isEqualTo("제목");
 
-//        Comment foundCommentByPostsId = commentsRepository.findByPostsId(1L);
-
-//        assertThat(foundCommentByPostsId.getUsername()).isEqualTo("ddodi");
     }
 
     @Test
@@ -289,21 +287,35 @@ class PostServiceTest {
         Post post = postsRepository.findById(1L).orElseThrow();
 
         CommentsSaveRequestDto request = new CommentsSaveRequestDto("ddodi",
-            "정말 좋은 글이네요", null, post,"1234");
+            "정말 좋은 글이네요", null, post, "1234");
 
         commentsRepository.save(request.toEntity());
         Comment savedComment = commentsRepository.findById(1L).orElseThrow(CommentNotFound::new);
 
         CommentsSaveRequestDto sbuRequest = new CommentsSaveRequestDto("kim",
-            "감사합니다.", savedComment, post,"1234");
+            "감사합니다.", savedComment, post, "1234");
 
         commentsRepository.save(sbuRequest.toEntity());
-
 
         PostsResponseDto responseDto = postsRepository.findByIdWithQdsl(post.getId());
 
         assertThat(responseDto.getComments().get(0).getContent()).isEqualTo("정말 좋은 글이네요");
         assertThat(responseDto.getComments().get(0).getChild().get(0).getContent()).isEqualTo(
             "감사합니다.");
+    }
+
+    @Test
+    @DisplayName("게시글 페이징 처리")
+    void getPostsWithPaging() {
+
+        PageRequest pageRequest = PageRequest.of(0, 6);
+
+        Page<PostsResponseWithoutCommentDto> postsWithPaging = postsRepository.getPostsWithPaging(
+            pageRequest);
+
+        System.out.println("======"+postsWithPaging.stream().toList().get(0));
+        assertThat(postsWithPaging.stream().toList().get(0).getId()).isEqualTo(1L);
+        assertThat(postsWithPaging.getTotalPages()).isEqualTo(1);
+
     }
 }

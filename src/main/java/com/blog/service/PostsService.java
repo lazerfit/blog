@@ -39,8 +39,8 @@ public class PostsService {
     }
 
     @Transactional(readOnly = true)
-    public Page<PostsResponseWithoutCommentDto> getPosts(Pageable pageable) {
-        return postsRepository.getPosts(pageable);
+    public Page<PostsResponseWithoutCommentDto> getPostsWithPaging(Pageable pageable) {
+        return postsRepository.getPostsWithPaging(pageable);
     }
 
     @Transactional

@@ -28,7 +28,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<PostsResponseWithoutCommentDto> getPosts(Pageable pageable) {
+    public Page<PostsResponseWithoutCommentDto> getPostsWithPaging(Pageable pageable) {
         List<PostsResponseWithoutCommentDto> postsList = jpaQueryFactory
             .select(new QPostsResponseWithoutCommentDto(post.id, post.title, post.content,
                 post.generationTimeStamp, post.category, post.tag, post.views))
