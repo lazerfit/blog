@@ -19,7 +19,7 @@
           </div>
           <div class="content-inner">
             <div class="post-item" th:each="post:${postsByTags}">
-              <a href="#" th:href="@{/posts/{id}(id=${post.getId()})}">
+              <a href="#" th:href="@{/post/{id}(id=${post.getId()})}">
                 <span class="title" th:text="${post.getTitle()}"></span>
                 <span class="excerpt" th:utext="${post.getContent()}"></span>
                 <span class="meta" th:text="${#temporals.format(post.getCreatedDate(),'yyyy-MM-dd')}"></span>

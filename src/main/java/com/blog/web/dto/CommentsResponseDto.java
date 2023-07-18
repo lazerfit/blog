@@ -13,7 +13,7 @@ public class CommentsResponseDto {
     private final Long id;
     private final String username;
     private final String content;
-    private final LocalDateTime createDate;
+    private final LocalDateTime generationTimeStamp;
     private final Long parentId;
     private List<CommentsResponseDto> child=new ArrayList<>();
 
@@ -21,17 +21,21 @@ public class CommentsResponseDto {
         this.id= comment.getId();
         this.username=comment.getUsername();
         this.content=comment.getContent();
-        this.createDate=comment.getGenerationTimeStamp();
-        this.parentId=comment.getParent() != null ? comment.getParent().getId():0L;
+        this.generationTimeStamp =comment.getGenerationTimeStamp();
+        this.parentId= checkNullAndSetDefaultValue(comment);
+    }
+
+    private static long checkNullAndSetDefaultValue(Comment comment) {
+        return comment.getParent() != null ? comment.getParent().getId() : 0L;
     }
 
     @QueryProjection
-    public CommentsResponseDto(Long id, String username, String content, LocalDateTime createDate,
+    public CommentsResponseDto(Long id, String username, String content, LocalDateTime generationTimeStamp,
         Long parentId) {
         this.id = id;
         this.username = username;
         this.content = content;
-        this.createDate = createDate;
+        this.generationTimeStamp = generationTimeStamp;
         this.parentId = parentId;
     }
 

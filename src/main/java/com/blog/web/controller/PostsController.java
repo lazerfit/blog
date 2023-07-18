@@ -74,7 +74,7 @@ public class PostsController {
 
     @GetMapping("/post/{postId}")
     public String findById(@PathVariable Long postId, Model model) {
-        postsService.addHit(postId);
+        postsService.addViews(postId);
         PostsResponseDto postsResponseDto = postsService.getPostsById(postId);
         List<String> tagList = postsService.getTagsAsList(postId);
         var anotherCategory = postsService.getCategorizedPostsNotContainPage(

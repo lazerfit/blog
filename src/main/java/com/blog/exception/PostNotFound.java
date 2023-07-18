@@ -1,10 +1,10 @@
 package com.blog.exception;
 
-public class PostsNotFound extends TopException{
+public class PostNotFound extends TopException{
 
     private static final String MESSAGE = "존재하지 않는 글입니다.";
 
-    public PostsNotFound() {
+    public PostNotFound() {
         super(MESSAGE);
     }
 

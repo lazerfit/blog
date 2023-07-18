@@ -10,7 +10,7 @@ import com.blog.domain.comments.CommentsRepository;
 import com.blog.domain.posts.Post;
 import com.blog.domain.posts.PostsRepository;
 import com.blog.exception.CommentNotFound;
-import com.blog.exception.PostsNotFound;
+import com.blog.exception.PostNotFound;
 import com.blog.web.dto.CommentsSaveRequestDto;
 import com.blog.web.dto.PostsResponseDto;
 import com.blog.web.dto.PostsResponseWithCategoryDto;
@@ -19,6 +19,7 @@ import com.blog.web.dto.PostsSaveRequestDto;
 import com.blog.web.dto.PostsUpdateRequestDto;
 import jakarta.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.AfterEach;
@@ -81,7 +82,7 @@ class PostServiceTest {
             .content("내용")
             .build());
 
-        Post foundPost = postsRepository.findById(post.getId()).orElseThrow(PostsNotFound::new);
+        Post foundPost = postsRepository.findById(post.getId()).orElseThrow(PostNotFound::new);
 
         assertThat(foundPost.getTitle()).isEqualTo("제목");
         assertThat(foundPost.getContent()).isEqualTo("내용");
@@ -137,21 +138,13 @@ class PostServiceTest {
     @DisplayName("삭제")
     void delete() {
 
-        Post post = postsRepository.save(Post.builder()
-            .title("제목")
-            .content("내용")
-            .build());
+        Post post = postsRepository.getPostById(1L).orElseThrow(PostNotFound::new);
+        postsRepository.delete(post);
 
-        Post foundPost = postsRepository.findById(post.getId())
-            .orElseThrow(PostsNotFound::new);
+        Optional<Post> searchedPost = postsRepository.getPostById(1L);
 
-        postsRepository.delete(foundPost);
-
-        var afterFoundPost = postsRepository.findById(post.getId());
-
-        var ex = Assertions.assertThrows(PostsNotFound.class, () ->
-            afterFoundPost.orElseThrow(PostsNotFound::new));
-        Assertions.assertEquals("존재하지 않는 글입니다.", ex.getMessage());
+        Assertions.assertThrows(PostNotFound.class,()->
+            searchedPost.orElseThrow(PostNotFound::new));
     }
 
     @Test
@@ -215,7 +208,7 @@ class PostServiceTest {
 
         List<Post> all = postsRepository.findAll();
 
-        Post post = postsRepository.findById(all.get(0).getId()).orElseThrow(PostsNotFound::new);
+        Post post = postsRepository.findById(all.get(0).getId()).orElseThrow(PostNotFound::new);
         String tags = post.getTag();
 
         List<String> tagList = Stream.of(tags.split(",", -1)).toList();

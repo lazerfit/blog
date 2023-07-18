@@ -17,13 +17,13 @@
     <div class="card bg-light mb-3 content-wrap">
       <div class="post-card-header">
         <div class="inner">
-        <form name="deletePost" id="deletePosts" th:action="@{/posts/delete/{postId}(postId=${postId})}" method="post">
+        <form name="deletePost" id="deletePosts" th:action="@{/post/delete/{postId}(postId=${postId})}" method="post">
           <span class="category" th:if="${postFindById.getCategory().getTitle()}" th:text="${postFindById.getCategory().getTitle()}" style="padding-left: 2px"></span>
           <span class="post-card-title" th:text="${postFindById.getTitle()}">Header</span>
           <input type="hidden" id="postFindById_title" th:value="${postFindById.getTitle()}">
           <span class="meta">
         <span  th:text="${#temporals.format(postFindById.getCreatedDate(),'yyyy-MM-dd')}">Date</span>
-        <a th:href="@{/posts/edit/{postId}(postId=${postId})}" sec:authorize="hasRole('ROLE_ADMIN')" style="text-decoration-line: none">· 수정 ·</a>
+        <a th:href="@{/post/edit/{postId}(postId=${postId})}" sec:authorize="hasRole('ROLE_ADMIN')" style="text-decoration-line: none">· 수정 ·</a>
           <button id="del-button" class="del-button" sec:authorize="hasRole('ROLE_ADMIN')" style="text-decoration-line: none">삭제</button>
           </span>
         </form>
@@ -46,13 +46,13 @@
     <div class="another_category">
       <h4>
         '
-        <a th:href="@{/posts/category(q=${postFindById.getCategory().getTitle()})}" th:text="${postFindById.getCategory().getTitle()}"></a>
+        <a th:href="@{/post/category(q=${postFindById.getCategory().getTitle()})}" th:text="${postFindById.getCategory().getTitle()}"></a>
         ' 카테고리의 다른 글
       </h4>
       <table>
         <tbody th:if="${another_category.getId()!=postFindById.getId()}" th:each="another_category:${anotherCategory}">
           <tr>
-            <th><a th:href="@{/posts/{id}(id=${another_category.getId()})}" th:text="${another_category.getTitle()}"></a></th>
+            <th><a th:href="@{/post/{id}(id=${another_category.getId()})}" th:text="${another_category.getTitle()}"></a></th>
             <td th:text="${#temporals.format(another_category.getCreatedDate(),'yyyy-MM-dd')}"></td>
           </tr>
         </tbody>
@@ -70,14 +70,14 @@
     <div class="comments" id="comment-table" th:fragment="commentList">
       <h2>
         댓글
-        <span class="count" th:text="${postFindById.getComments().size()}">1</span>
+        <span class="count" th:text="${commentSize}">1</span>
       </h2>
       <div class="comment-list" th:each="comment:${postFindById.getComments()}">
         <ul>
           <li>
             <div class="author-meta">
               <span class="nickname" id="commentUsername" th:data-commentId="${comment.id}" th:text="${comment.getUsername()}">물소</span>
-              <span class="date" th:data-commentId="${comment.id}" th:text="${#temporals.format(comment.getCreateDate(),'yyyy-MM-dd')}">
+              <span class="date" th:data-commentId="${comment.id}" th:text="${#temporals.format(comment.getGenerationTimeStamp(),'yyyy-MM-dd')}">
                 2023.07.09 22:33
               </span>
               <span class="control">
@@ -139,7 +139,7 @@
                           const postId=document.getElementById('deletePostId').value;
 
                           $.ajax({
-                            url: "/posts/admin/comment/delete",
+                            url: "/post/admin/comment/delete",
                             data:{
                               "commentId":commentId,
                               "postId":postId
@@ -166,7 +166,7 @@
                         <span aria-hidden="true">&times;</span>
                       </button>
                     </div>
-                    <form id="passwordForm" name="passwordForm" th:object="${passwordForm}" method="post" th:action="@{/posts/comment/manage}">
+                    <form id="passwordForm" name="passwordForm" th:object="${passwordForm}" method="post" th:action="@{/post/comment/manage}">
                     <div class="modal-body">
                       <input type="hidden" id="commentId" value="" th:field="*{commentId}" th:data-commentId="${comment.id}">
                       <div class="modal-body">
@@ -210,7 +210,7 @@
             <div class="child-comment" th:if="${comment.getChild()}" th:each="child:${comment.getChild()}" th:data-commentId="${child.getId()}">
               <div class="author-meta">
                 <span class="nickname" th:data-commentId="${child.id}" th:text="${child.getUsername()}">물소</span>
-                <span class="date" th:data-commentId="${child.id}" th:text="${#temporals.format(child.getCreateDate(),'yyyy-MM-dd')}">
+                <span class="date" th:data-commentId="${child.id}" th:text="${#temporals.format(child.getGenerationTimeStamp(),'yyyy-MM-dd')}">
                 2023.07.09 22:33
                 </span>
                 <span class="control">
@@ -259,7 +259,7 @@
           function openSubComment(elem) {
             const id=$(elem).closest('.comment-id').attr('data-commentId')
             const postId=document.getElementById('commentContent').getAttribute('data-postId')
-            window.open('/posts/comment/subcomment/new?commentId='+id+'&postId='+postId,'대댓글','width=500,height=500')
+            window.open('/post/comment/subcomment/new?commentId='+id+'&postId='+postId,'대댓글','width=500,height=500')
           }
         </script>
       </div>

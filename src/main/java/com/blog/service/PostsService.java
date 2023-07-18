@@ -2,7 +2,7 @@ package com.blog.service;
 
 import com.blog.domain.posts.Post;
 import com.blog.domain.posts.PostsRepository;
-import com.blog.exception.PostsNotFound;
+import com.blog.exception.PostNotFound;
 import com.blog.web.dto.PostsResponseDto;
 import com.blog.web.dto.PostsResponseWithCategoryDto;
 import com.blog.web.dto.PostsResponseWithoutCommentDto;
@@ -34,13 +34,6 @@ public class PostsService {
         postsRepository.edit(id,request);
     }
 
-    @Transactional(readOnly = true)
-    public PostsResponseDto findById(Long id) {
-        Post post = postsRepository.findById(id)
-            .orElseThrow(PostsNotFound::new);
-        return new PostsResponseDto(post);
-    }
-
     public PostsResponseWithCategoryDto findByIdWithCategory(Long id) {
         return postsRepository.findByIdContainCategory(id);
     }
@@ -51,8 +44,8 @@ public class PostsService {
     }
 
     @Transactional
-    public void delete(Long id) {
-        Post post = postsRepository.findById(id).orElseThrow(PostsNotFound::new);
+    public void delete(Long postId) {
+        Post post = postsRepository.getPostById(postId).orElseThrow(PostNotFound::new);
         postsRepository.delete(post);
     }
 
@@ -66,7 +59,7 @@ public class PostsService {
     }
 
     public List<String> getTagsAsList(Long id) {
-        Post post = postsRepository.findById(id).orElseThrow(PostsNotFound::new);
+        Post post = postsRepository.findById(id).orElseThrow(PostNotFound::new);
         String tags = post.getTag();
         return Stream.of(tags.split(",", -1)).toList();
     }
@@ -76,8 +69,8 @@ public class PostsService {
     }
 
     @Transactional
-    public void addHit(Long id) {
-        Post post = postsRepository.findById(id).orElseThrow(PostsNotFound::new);
+    public void addViews(Long id) {
+        Post post = postsRepository.findById(id).orElseThrow(PostNotFound::new);
         Long hit= post.getViews()+1L;
         post.addViews(hit);
     }

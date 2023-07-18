@@ -17,8 +17,8 @@ public class PostsResponseDto {
     private final String content;
     private final LocalDateTime createdDate;
     private final Category category;
-    private final String tags;
-    private final Long hit;
+    private final String tag;
+    private final Long views;
     private List<CommentsResponseDto> comments;
 
 
@@ -28,21 +28,21 @@ public class PostsResponseDto {
         this.content= post.getContent();
         this.createdDate= post.getGenerationTimeStamp();
         this.category = post.getCategory();
-        this.tags= post.getTag();
-        this.hit= post.getViews();
+        this.tag = post.getTag();
+        this.views = post.getViews();
         this.comments= post.getComments().stream().map(CommentsResponseDto::new).toList();
     }
 
     @QueryProjection
     public PostsResponseDto(Long id, String title, String content, LocalDateTime createdDate,
-        Category category, String tags, Long hit) {
+        Category category, String tag, Long views) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.createdDate = createdDate;
         this.category = category;
-        this.tags = tags;
-        this.hit = hit;
+        this.tag = tag;
+        this.views = views;
     }
 
     public void insertComment(List<CommentsResponseDto> responseDto) {

@@ -3,7 +3,7 @@ package com.blog.domain.posts;
 import static com.blog.domain.comments.QComment.comment;
 import static com.blog.domain.posts.QPost.post;
 
-import com.blog.exception.PostsNotFound;
+import com.blog.exception.PostNotFound;
 import com.blog.web.dto.CommentsResponseDto;
 import com.blog.web.dto.PostsResponseDto;
 import com.blog.web.dto.PostsResponseWithCategoryDto;
@@ -188,7 +188,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
         parentComment.forEach(p-> p.insertChildComment(childComment.stream().filter(c->c.getParentId().equals(p.getId())).toList()));
 
         if (postsResponseDto == null) {
-            throw new PostsNotFound();
+            throw new PostNotFound();
         }
 
         postsResponseDto.insertComment(parentComment);

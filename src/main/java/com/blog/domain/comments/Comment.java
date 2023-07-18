@@ -2,6 +2,7 @@ package com.blog.domain.comments;
 
 import com.blog.domain.posts.BaseTimeEntity;
 import com.blog.domain.posts.Post;
+import com.blog.web.dto.CommentsResponseDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -60,6 +61,13 @@ public class Comment extends BaseTimeEntity {
         this.parent = parent;
         this.post = post;
         this.password=password;
+    }
+
+    public Comment(CommentsResponseDto responseDto) {
+        this.id= responseDto.getId();
+        this.username= responseDto.getUsername();
+        this.content= responseDto.getContent();
+
     }
 
     public void edit(String content) {

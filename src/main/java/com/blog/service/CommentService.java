@@ -5,7 +5,7 @@ import com.blog.domain.comments.CommentsRepository;
 import com.blog.domain.posts.Post;
 import com.blog.domain.posts.PostsRepository;
 import com.blog.exception.CommentNotFound;
-import com.blog.exception.PostsNotFound;
+import com.blog.exception.PostNotFound;
 import com.blog.web.dto.CommentEditRequest;
 import com.blog.web.dto.CommentPassword;
 import com.blog.web.dto.CommentsResponseDto;
@@ -29,7 +29,7 @@ public class CommentService {
 
     @Transactional
     public void save(Long postId,CommentForm form) {
-        Post post = postsRepository.findById(postId).orElseThrow(PostsNotFound::new);
+        Post post = postsRepository.findById(postId).orElseThrow(PostNotFound::new);
         Comment comment = commentsRepository.findById(form.getParentId()).orElse(null);
         CommentsSaveRequestDto request = new CommentsSaveRequestDto(
             form.getUsername(), form.getContent(), comment, post, passwordEncoder.encode(
