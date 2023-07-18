@@ -1,6 +1,6 @@
 package com.blog.service;
 
-import com.blog.domain.posts.Posts;
+import com.blog.domain.posts.Post;
 import com.blog.domain.posts.PostsRepository;
 import com.blog.exception.PostsNotFound;
 import com.blog.web.dto.PostsResponseDto;
@@ -36,9 +36,9 @@ public class PostsService {
 
     @Transactional(readOnly = true)
     public PostsResponseDto findById(Long id) {
-        Posts posts = postsRepository.findById(id)
+        Post post = postsRepository.findById(id)
             .orElseThrow(PostsNotFound::new);
-        return new PostsResponseDto(posts);
+        return new PostsResponseDto(post);
     }
 
     public PostsResponseWithCategoryDto findByIdWithCategory(Long id) {
@@ -46,14 +46,14 @@ public class PostsService {
     }
 
     @Transactional(readOnly = true)
-    public Page<PostsResponseWithoutCommentDto> getPostsList(Pageable pageable) {
-        return postsRepository.getPostsList(pageable);
+    public Page<PostsResponseWithoutCommentDto> getPosts(Pageable pageable) {
+        return postsRepository.getPosts(pageable);
     }
 
     @Transactional
     public void delete(Long id) {
-        Posts posts = postsRepository.findById(id).orElseThrow(PostsNotFound::new);
-        postsRepository.delete(posts);
+        Post post = postsRepository.findById(id).orElseThrow(PostsNotFound::new);
+        postsRepository.delete(post);
     }
 
     public Page<PostsResponseDto> getSearchedPostsListByKeyword(Pageable pageable,String q) {
@@ -66,8 +66,8 @@ public class PostsService {
     }
 
     public List<String> getTagsAsList(Long id) {
-        Posts posts = postsRepository.findById(id).orElseThrow(PostsNotFound::new);
-        String tags = posts.getTags();
+        Post post = postsRepository.findById(id).orElseThrow(PostsNotFound::new);
+        String tags = post.getTags();
         return Stream.of(tags.split(",", -1)).toList();
     }
 
@@ -77,9 +77,9 @@ public class PostsService {
 
     @Transactional
     public void addHit(Long id) {
-        Posts posts = postsRepository.findById(id).orElseThrow(PostsNotFound::new);
-        Long hit=posts.getHit()+1L;
-        posts.updateHit(hit);
+        Post post = postsRepository.findById(id).orElseThrow(PostsNotFound::new);
+        Long hit= post.getHit()+1L;
+        post.updateHit(hit);
     }
 
     public List<PostsResponseWithoutCommentDto> getPopularPosts() {

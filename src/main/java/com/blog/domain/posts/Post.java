@@ -46,7 +46,7 @@ public class Post extends BaseTimeEntity {
     @Column(nullable = false)
     private Long hit;
 
-    @OneToMany(orphanRemoval = true,mappedBy = "posts")
+    @OneToMany(orphanRemoval = true,mappedBy = "post")
     private List<Comment> comments=new ArrayList<>();
 
     @Builder

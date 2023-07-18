@@ -1,7 +1,7 @@
 package com.blog.domain.comments;
 
-import com.blog.domain.posts.BasetimeEntity;
-import com.blog.domain.posts.Posts;
+import com.blog.domain.posts.BaseTimeEntity;
+import com.blog.domain.posts.Post;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Entity
-public class Comment extends BasetimeEntity {
+public class Comment extends BaseTimeEntity {
 
     /**
      * username 과 password 입력 후 댓글 달 수 있도록
@@ -49,16 +49,16 @@ public class Comment extends BasetimeEntity {
     private List<Comment> child=new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id",referencedColumnName = "id")
-    private Posts posts;
+    @JoinColumn(name = "id")
+    private Post post;
 
 
     @Builder
-    public Comment(String username, String content, Comment parent, Posts posts, String password) {
+    public Comment(String username, String content, Comment parent, Post post, String password) {
         this.username = username;
         this.content = content;
         this.parent = parent;
-        this.posts = posts;
+        this.post = post;
         this.password=password;
     }
 

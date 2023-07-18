@@ -7,7 +7,7 @@ import com.blog.domain.category.Category;
 import com.blog.domain.category.CategoryRepository;
 import com.blog.domain.comments.Comment;
 import com.blog.domain.comments.CommentsRepository;
-import com.blog.domain.posts.Posts;
+import com.blog.domain.posts.Post;
 import com.blog.domain.posts.PostsRepository;
 import com.blog.exception.CommentNotFound;
 import com.blog.web.dto.CommentEditRequest;
@@ -48,7 +48,7 @@ class CommentServiceTest {
         Category category = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
 
         postsRepository.save(
-            Posts.builder().title("제목").content("내용").category(category).tags(tagData).hit(0L)
+            Post.builder().title("제목").content("내용").category(category).tags(tagData).hit(0L)
                 .build());
     }
 
@@ -61,12 +61,12 @@ class CommentServiceTest {
     @DisplayName("delete Comment")
     void delete() {
 
-        Posts posts = postsRepository.findById(1L).orElseThrow();
+        Post post = postsRepository.findById(1L).orElseThrow();
 
         Comment comment = Comment.builder()
             .username("kim")
             .content("gg")
-            .posts(posts)
+            .posts(post)
             .parent(null)
             .password("1234")
             .build();
@@ -86,12 +86,12 @@ class CommentServiceTest {
     @Test
     @DisplayName("edit comment")
     void edit() {
-        Posts posts = postsRepository.findById(1L).orElseThrow();
+        Post post = postsRepository.findById(1L).orElseThrow();
 
         Comment comment = Comment.builder()
             .username("kim")
             .content("gg")
-            .posts(posts)
+            .posts(post)
             .parent(null)
             .password("1234")
             .build();

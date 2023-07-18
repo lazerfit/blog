@@ -1,7 +1,7 @@
 package com.blog.web.dto;
 
 import com.blog.domain.category.Category;
-import com.blog.domain.posts.Posts;
+import com.blog.domain.posts.Post;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.constraints.NotBlank;
@@ -27,8 +27,8 @@ public class PostsSaveRequestDto {
 
     private final Long hit;
 
-    public Posts toEntity(){
-        return Posts.builder()
+    public Post toEntity(){
+        return Post.builder()
             .title(title)
             .content(content)
             .category(category)

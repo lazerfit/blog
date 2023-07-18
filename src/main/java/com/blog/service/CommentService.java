@@ -2,7 +2,7 @@ package com.blog.service;
 
 import com.blog.domain.comments.Comment;
 import com.blog.domain.comments.CommentsRepository;
-import com.blog.domain.posts.Posts;
+import com.blog.domain.posts.Post;
 import com.blog.domain.posts.PostsRepository;
 import com.blog.exception.CommentNotFound;
 import com.blog.exception.PostsNotFound;
@@ -29,7 +29,7 @@ public class CommentService {
 
     @Transactional
     public void save(Long postId,CommentForm form) {
-        Posts post = postsRepository.findById(postId).orElseThrow(PostsNotFound::new);
+        Post post = postsRepository.findById(postId).orElseThrow(PostsNotFound::new);
         Comment comment = commentsRepository.findById(form.getParentId()).orElse(null);
         CommentsSaveRequestDto request = new CommentsSaveRequestDto(
             form.getUsername(), form.getContent(), comment, post, passwordEncoder.encode(
@@ -50,7 +50,7 @@ public class CommentService {
     }
 
     public List<CommentsResponseDto> findByPostsId(Long postsId) {
-        return commentsRepository.findByPostsId(postsId);
+        return commentsRepository.findByPostId(postsId).stream().map(CommentsResponseDto::new).toList();
     }
 
     public void delete(Long commentId) {

@@ -1,7 +1,7 @@
 package com.blog.web.dto;
 
 import com.blog.domain.category.Category;
-import com.blog.domain.posts.Posts;
+import com.blog.domain.posts.Post;
 import com.querydsl.core.annotations.QueryProjection;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,15 +22,15 @@ public class PostsResponseDto {
     private List<CommentsResponseDto> comments;
 
 
-    public PostsResponseDto(Posts posts) {
-        this.id=posts.getId();
-        this.title=posts.getTitle();
-        this.content=posts.getContent();
-        this.createdDate=posts.getCreateDate();
-        this.category =posts.getCategory();
-        this.tags=posts.getTags();
-        this.hit=posts.getHit();
-        this.comments=posts.getComments().stream().map(CommentsResponseDto::new).toList();
+    public PostsResponseDto(Post post) {
+        this.id= post.getId();
+        this.title= post.getTitle();
+        this.content= post.getContent();
+        this.createdDate= post.getGenerationTimeStamp();
+        this.category = post.getCategory();
+        this.tags= post.getTags();
+        this.hit= post.getHit();
+        this.comments= post.getComments().stream().map(CommentsResponseDto::new).toList();
     }
 
     @QueryProjection

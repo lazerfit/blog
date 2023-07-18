@@ -1,7 +1,7 @@
 package com.blog.web.dto;
 
 import com.blog.domain.category.Category;
-import com.blog.domain.posts.Posts;
+import com.blog.domain.posts.Post;
 import com.querydsl.core.annotations.QueryProjection;
 import java.time.LocalDateTime;
 import lombok.Getter;
@@ -20,14 +20,14 @@ public class PostsResponseWithoutCommentDto {
     private final Long hit;
 
 
-    public PostsResponseWithoutCommentDto(Posts posts) {
-        this.id=posts.getId();
-        this.title=posts.getTitle();
-        this.content=posts.getContent();
-        this.createdDate=posts.getCreateDate();
-        this.category =posts.getCategory();
-        this.tags=posts.getTags();
-        this.hit=posts.getHit();
+    public PostsResponseWithoutCommentDto(Post post) {
+        this.id= post.getId();
+        this.title= post.getTitle();
+        this.content= post.getContent();
+        this.createdDate= post.getGenerationTimeStamp();
+        this.category = post.getCategory();
+        this.tags= post.getTags();
+        this.hit= post.getHit();
     }
 
     @QueryProjection

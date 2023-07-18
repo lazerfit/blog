@@ -12,7 +12,7 @@ import com.blog.domain.category.Category;
 import com.blog.domain.category.CategoryRepository;
 import com.blog.domain.comments.Comment;
 import com.blog.domain.comments.CommentsRepository;
-import com.blog.domain.posts.Posts;
+import com.blog.domain.posts.Post;
 import com.blog.domain.posts.PostsRepository;
 import com.blog.web.dto.PostsSaveRequestDto;
 import com.blog.web.dto.PostsSearchRequestDto;
@@ -38,7 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @AutoConfigureMockMvc
 @SpringBootTest
-class PostsControllerTest {
+class PostControllerTest {
 
     @Autowired
     private PostsRepository postsRepository;
@@ -71,7 +71,7 @@ class PostsControllerTest {
         Category category = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
 
         postsRepository.save(
-            Posts.builder().title("제목").content("내용").category(category).tags(tagData).hit(0L)
+            Post.builder().title("제목").content("내용").category(category).tags(tagData).hit(0L)
                 .build());
     }
 
@@ -84,24 +84,24 @@ class PostsControllerTest {
     @Test
     @DisplayName("글 단건 조회")
     void singleSearch() throws Exception {
-        Posts posts = postsRepository.save(Posts.builder()
+        Post post = postsRepository.save(Post.builder()
             .title("title")
             .content("content")
             .build());
 
-        mockMvc.perform(get("/posts/" + posts.getId())
+        mockMvc.perform(get("/posts/" + post.getId())
                 .accept(APPLICATION_JSON))
             .andDo(print())
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.title").value(posts.getTitle()))
-            .andExpect(jsonPath("$.content").value(posts.getContent()));
+            .andExpect(jsonPath("$.title").value(post.getTitle()))
+            .andExpect(jsonPath("$.content").value(post.getContent()));
     }
 
     @Test
     @DisplayName("글 다건 조회")
     void multipleSearch() throws Exception {
         IntStream.range(1, 30).forEach(
-            i -> postsRepository.save(Posts.builder()
+            i -> postsRepository.save(Post.builder()
                 .title("title" + i)
                 .content("content" + i)
                 .build())
@@ -123,7 +123,7 @@ class PostsControllerTest {
     @Test
     @DisplayName("업데이트")
     void update() throws Exception {
-        Posts posts = postsRepository.save(Posts.builder()
+        Post post = postsRepository.save(Post.builder()
             .title("title")
             .content("content")
             .build());
@@ -133,13 +133,13 @@ class PostsControllerTest {
             .content("modified content")
             .build();
 
-        mockMvc.perform(patch("/posts/{postsId}", posts.getId())
+        mockMvc.perform(patch("/posts/{postsId}", post.getId())
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updateRequestDto)))
             .andDo(print())
             .andExpect(status().isOk());
 
-        mockMvc.perform(get("/posts/{postsId}", posts.getId())
+        mockMvc.perform(get("/posts/{postsId}", post.getId())
                 .accept(APPLICATION_JSON))
             .andExpect(jsonPath("$.title").value("modified title"))
             .andExpect(jsonPath("$.content").value("modified content"));
@@ -148,12 +148,12 @@ class PostsControllerTest {
     @Test
     @DisplayName("삭제")
     void delete() throws Exception {
-        Posts posts = postsRepository.save(Posts.builder()
+        Post post = postsRepository.save(Post.builder()
             .title("title")
             .content("content")
             .build());
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/posts/{postId}", posts.getId())
+        mockMvc.perform(MockMvcRequestBuilders.delete("/posts/{postId}", post.getId())
                 .accept(APPLICATION_JSON))
             .andDo(print())
             .andExpect(status().isOk());
@@ -174,14 +174,14 @@ class PostsControllerTest {
     @DisplayName("글 저장 - 잘못된 요청")
     void submitWrongPosts() throws Exception {
 
-        Posts posts = postsRepository.save(Posts.builder()
+        Post post = postsRepository.save(Post.builder()
             .title("")
             .content("내용")
             .build());
 
         mockMvc.perform(post("/posts")
                 .contentType(APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(posts)))
+                .content(objectMapper.writeValueAsString(post)))
             .andDo(print())
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
@@ -199,13 +199,13 @@ class PostsControllerTest {
         categoryRepository.save(category1);
         categoryRepository.save(category2);
 
-        postsRepository.save(Posts.builder()
+        postsRepository.save(Post.builder()
             .title("제목1")
             .content("내용1")
             .category(category1)
             .build());
 
-        postsRepository.save(Posts.builder()
+        postsRepository.save(Post.builder()
             .title("제목2")
             .content("내용2")
             .category(category2)
@@ -224,7 +224,7 @@ class PostsControllerTest {
         Category foundCategory1 = categoryRepository.findCategoryByTitle("Java").orElseThrow();
         Category foundCategory2 = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
 
-        Posts posts = postsRepository.save(Posts.builder()
+        Post post = postsRepository.save(Post.builder()
             .title("제목1")
             .content("내용1")
             .category(foundCategory1)
@@ -232,7 +232,7 @@ class PostsControllerTest {
 
         EditPostsForm editPostsForm = new EditPostsForm("수정된 제목", "수정된 내용", "Spring");
 
-        mockMvc.perform(post("/posts/edit/{postId}", posts.getId())
+        mockMvc.perform(post("/posts/edit/{postId}", post.getId())
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(editPostsForm)))
             .andDo(print())
@@ -287,7 +287,7 @@ class PostsControllerTest {
     @Transactional
     void saveComment() throws Exception {
 
-        List<Posts> all = postsRepository.findAll();
+        List<Post> all = postsRepository.findAll();
 
         CommentForm commentForm = new CommentForm();
         commentForm.setUsername("sg");
@@ -307,7 +307,7 @@ class PostsControllerTest {
     @DisplayName("대댓글 저장")
     void saveSubComment() throws Exception {
 
-        List<Posts> all = postsRepository.findAll();
+        List<Post> all = postsRepository.findAll();
 
         commentsRepository.save(Comment.builder()
             .username("sg")
@@ -337,7 +337,7 @@ class PostsControllerTest {
     @Transactional
     void getPostsWithComment() throws Exception{
 
-        List<Posts> all = postsRepository.findAll();
+        List<Post> all = postsRepository.findAll();
 
         commentsRepository.save(Comment.builder()
             .username("sg")

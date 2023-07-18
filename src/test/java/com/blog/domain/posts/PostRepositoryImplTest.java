@@ -18,7 +18,7 @@ import org.springframework.data.domain.PageRequest;
 
 @DataJpaTest
 @Import(QdslConfig.class)
-class PostsRepositoryImplTest {
+class PostRepositoryImplTest {
 
     @Autowired
     private EntityManager em;
@@ -32,7 +32,7 @@ class PostsRepositoryImplTest {
     @BeforeEach
     void insertMockData() {
         IntStream.range(1,20).forEach(i ->
-            postsRepository.save(Posts.builder()
+            postsRepository.save(Post.builder()
                 .title("제목"+i)
                 .content("내용"+i)
                 .build()));
@@ -46,7 +46,7 @@ class PostsRepositoryImplTest {
 
     @Test
     void test1() {
-        postsRepository.save(Posts.builder()
+        postsRepository.save(Post.builder()
             .title("테스트용 제목입니다.")
             .content("내용입니다.")
             .build());

@@ -1,7 +1,7 @@
 package com.blog.web.dto;
 
 import com.blog.domain.comments.Comment;
-import com.blog.domain.posts.Posts;
+import com.blog.domain.posts.Post;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -12,7 +12,7 @@ public class CommentsSaveRequestDto {
     private final String username;
     private final String content;
     private final Comment parentComment;
-    private final Posts posts;
+    private final Post post;
     private final String password;
 
     public Comment toEntity() {
@@ -20,7 +20,7 @@ public class CommentsSaveRequestDto {
             .username(username)
             .content(content)
             .parent(parentComment)
-            .posts(posts)
+            .post(post)
             .password(password)
             .build();
     }

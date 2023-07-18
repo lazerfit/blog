@@ -25,9 +25,9 @@ public class HomeController {
 
     @GetMapping("/")
     public String index(Pageable pageable, Model model) {
-        Page<PostsResponseWithoutCommentDto> postsList = postsService.getPostsList(pageable);
-        model.addAttribute("postsList", postsList);
+        Page<PostsResponseWithoutCommentDto> posts = postsService.getPosts(pageable);
         List<PostsResponseWithoutCommentDto> popularPosts = postsService.getPopularPosts();
+        model.addAttribute("postsList", posts);
         model.addAttribute("popularPosts",popularPosts);
         return "index";
     }

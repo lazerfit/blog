@@ -21,7 +21,7 @@ public class CommentsResponseDto {
         this.id= comment.getId();
         this.username=comment.getUsername();
         this.content=comment.getContent();
-        this.createDate=comment.getCreateDate();
+        this.createDate=comment.getGenerationTimeStamp();
         this.parentId=comment.getParent() != null ? comment.getParent().getId():0L;
     }
 

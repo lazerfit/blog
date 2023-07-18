@@ -8,7 +8,7 @@ import com.blog.domain.category.Category;
 import com.blog.domain.category.CategoryRepository;
 import com.blog.domain.comments.Comment;
 import com.blog.domain.comments.CommentsRepository;
-import com.blog.domain.posts.Posts;
+import com.blog.domain.posts.Post;
 import com.blog.domain.posts.PostsRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
@@ -55,7 +55,7 @@ class CommentControllerTest {
         Category category = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
 
         postsRepository.save(
-            Posts.builder().title("제목").content("내용").category(category).tags(tagData).hit(0L)
+            Post.builder().title("제목").content("내용").category(category).tags(tagData).hit(0L)
                 .build());
     }
 
@@ -71,12 +71,12 @@ class CommentControllerTest {
     @Transactional
     void deleteComment() throws Exception {
 
-        Posts posts = postsRepository.findById(1L).orElseThrow();
+        Post post = postsRepository.findById(1L).orElseThrow();
 
         Comment comment = Comment.builder()
             .password("1234")
             .parent(null)
-            .posts(posts)
+            .posts(post)
             .username("s")
             .content("ss")
             .build();
@@ -94,12 +94,12 @@ class CommentControllerTest {
     @Transactional
     void editComment() throws Exception {
 
-        Posts posts = postsRepository.findById(1L).orElseThrow();
+        Post post = postsRepository.findById(1L).orElseThrow();
 
         Comment comment = Comment.builder()
             .password("1234")
             .parent(null)
-            .posts(posts)
+            .posts(post)
             .username("s")
             .content("ss")
             .build();
