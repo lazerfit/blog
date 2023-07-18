@@ -23,7 +23,7 @@ import org.hibernate.annotations.ColumnDefault;
 @Getter
 @NoArgsConstructor
 @Entity
-public class Posts extends BasetimeEntity{
+public class Post extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,7 +50,7 @@ public class Posts extends BasetimeEntity{
     private List<Comment> comments=new ArrayList<>();
 
     @Builder
-    public Posts(String title, String content, String tags, Category category, Long hit) {
+    public Post(String title, String content, String tags, Category category, Long hit) {
         this.title = title;
         this.content = content;
         this.tags = tags;
