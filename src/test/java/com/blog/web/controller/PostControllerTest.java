@@ -71,7 +71,7 @@ class PostControllerTest {
         Category category = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
 
         postsRepository.save(
-            Post.builder().title("제목").content("내용").category(category).tags(tagData).hit(0L)
+            Post.builder().title("제목").content("내용").category(category).tag(tagData).views(0L)
                 .build());
     }
 
@@ -313,7 +313,7 @@ class PostControllerTest {
             .username("sg")
             .content("정말 좋은 글이네요")
             .parent(null)
-            .posts(all.get(0))
+            .post(all.get(0))
             .build());
 
         List<Comment> allComments = commentsRepository.findAll();
@@ -343,7 +343,7 @@ class PostControllerTest {
             .username("sg")
             .content("정말 좋은 글이네요")
             .parent(null)
-            .posts(all.get(0))
+            .post(all.get(0))
             .password("1234")
             .build());
 

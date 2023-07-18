@@ -48,7 +48,7 @@ class CommentServiceTest {
         Category category = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
 
         postsRepository.save(
-            Post.builder().title("제목").content("내용").category(category).tags(tagData).hit(0L)
+            Post.builder().title("제목").content("내용").category(category).tag(tagData).views(0L)
                 .build());
     }
 
@@ -66,7 +66,7 @@ class CommentServiceTest {
         Comment comment = Comment.builder()
             .username("kim")
             .content("gg")
-            .posts(post)
+            .post(post)
             .parent(null)
             .password("1234")
             .build();
@@ -91,7 +91,7 @@ class CommentServiceTest {
         Comment comment = Comment.builder()
             .username("kim")
             .content("gg")
-            .posts(post)
+            .post(post)
             .parent(null)
             .password("1234")
             .build();

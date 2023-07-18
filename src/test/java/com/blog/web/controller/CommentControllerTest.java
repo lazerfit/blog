@@ -55,7 +55,7 @@ class CommentControllerTest {
         Category category = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
 
         postsRepository.save(
-            Post.builder().title("제목").content("내용").category(category).tags(tagData).hit(0L)
+            Post.builder().title("제목").content("내용").category(category).tag(tagData).views(0L)
                 .build());
     }
 
@@ -76,7 +76,7 @@ class CommentControllerTest {
         Comment comment = Comment.builder()
             .password("1234")
             .parent(null)
-            .posts(post)
+            .post(post)
             .username("s")
             .content("ss")
             .build();
@@ -99,7 +99,7 @@ class CommentControllerTest {
         Comment comment = Comment.builder()
             .password("1234")
             .parent(null)
-            .posts(post)
+            .post(post)
             .username("s")
             .content("ss")
             .build();

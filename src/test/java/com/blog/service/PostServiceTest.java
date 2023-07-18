@@ -61,7 +61,7 @@ class PostServiceTest {
         Category category = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
 
         postsRepository.save(
-            Post.builder().title("제목").content("내용").category(category).tags(tagData).hit(0L)
+            Post.builder().title("제목").content("내용").category(category).tag(tagData).views(0L)
                 .build());
 
     }
@@ -253,14 +253,14 @@ class PostServiceTest {
         Category category = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
 
         postsRepository.save(
-            Post.builder().title("제목").content("내용").category(category).tags(tagData).hit(0L)
+            Post.builder().title("제목").content("내용").category(category).tag(tagData).views(0L)
                 .build());
 
         List<Post> posts = postsRepository.findAll();
 
         Long hit = posts.get(0).getViews() + 1L;
 
-        posts.get(0).addView(hit);
+        posts.get(0).addViews(hit);
 
         Post post1 = postsRepository.findById(posts.get(0).getId()).orElseThrow();
 

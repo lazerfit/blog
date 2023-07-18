@@ -79,7 +79,7 @@ public class PostsService {
     public void addHit(Long id) {
         Post post = postsRepository.findById(id).orElseThrow(PostsNotFound::new);
         Long hit= post.getViews()+1L;
-        post.addView(hit);
+        post.addViews(hit);
     }
 
     public List<PostsResponseWithoutCommentDto> getPopularPosts() {
