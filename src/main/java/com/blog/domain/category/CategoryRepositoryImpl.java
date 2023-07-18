@@ -1,7 +1,7 @@
 package com.blog.domain.category;
 
 import static com.blog.domain.category.QCategory.category;
-import static com.blog.domain.posts.QPosts.posts;
+import static com.blog.domain.posts.QPost.post;
 
 import com.blog.web.dto.PostsResponseDto;
 import com.querydsl.core.types.Projections;
@@ -21,15 +21,15 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom{
     @Override
     public Page<PostsResponseDto> getCategorizedPostsList(Pageable pageable,String q) {
         List<PostsResponseDto> categorizedPostsList = jpaQueryFactory.select(
-                Projections.constructor(PostsResponseDto.class,posts.id,posts.title,posts.content,posts.createDate))
-            .from(posts)
+                Projections.constructor(PostsResponseDto.class,post.id,post.title,post.content,post.generationTimeStamp))
+            .from(post)
             .where(category.title.eq(q))
             .limit(pageable.getPageSize())
             .offset(pageable.getOffset())
-            .orderBy(posts.id.desc())
+            .orderBy(post.id.desc())
             .fetch();
 
-        long totalCount=jpaQueryFactory.selectFrom(posts)
+        long totalCount=jpaQueryFactory.selectFrom(post)
             .where(QCategory.category.title.eq(q)).fetch().size();
 
         return new PageImpl<>(categorizedPostsList, pageable, totalCount);

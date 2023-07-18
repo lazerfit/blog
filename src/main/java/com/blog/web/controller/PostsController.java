@@ -2,6 +2,7 @@ package com.blog.web.controller;
 
 import com.blog.domain.category.Category;
 import com.blog.service.CategoryService;
+import com.blog.service.CommentService;
 import com.blog.service.PostsService;
 import com.blog.web.dto.PostsResponseDto;
 import com.blog.web.dto.PostsResponseWithCategoryDto;
@@ -35,13 +36,15 @@ public class PostsController {
 
     private final CategoryService categoryService;
 
-    @GetMapping("/posts/new")
+    private final CommentService commentService;
+
+    @GetMapping("/post/new")
     public String createPostsForm(Model model) {
         model.addAttribute("createPostsForm", new CreatePostsForm());
         return "form/createPostsForm";
     }
 
-    @PostMapping("/posts/new")
+    @PostMapping("/post/new")
     public String save(@Valid CreatePostsForm form) {
         Category getCategoryByTitle = categoryService.getCategoryByTitle(form.getCategoryTitle());
         PostsSaveRequestDto request = new PostsSaveRequestDto(form.getTitle(), form.getContent(),
@@ -50,7 +53,7 @@ public class PostsController {
         return "redirect:/";
     }
 
-    @GetMapping("/posts/edit/{postId}")
+    @GetMapping("/post/edit/{postId}")
     public String editForm(@PathVariable Long postId, Model model) {
         PostsResponseWithCategoryDto originalPosts = postsService.findByIdWithCategory(postId);
         EditPostsForm editPostsForm = new EditPostsForm(originalPosts.getTitle(),
@@ -60,7 +63,7 @@ public class PostsController {
     }
 
 
-    @PostMapping("/posts/edit/{postId}")
+    @PostMapping("/post/edit/{postId}")
     public String edit(@PathVariable Long postId, @Valid EditPostsForm form) {
         Category categoryByTitle = categoryService.getCategoryByTitle(form.getCategoryTitle());
         PostsUpdateRequestDto request = new PostsUpdateRequestDto(form.getTitle(),
@@ -69,13 +72,15 @@ public class PostsController {
         return "redirect:/posts/{postId}";
     }
 
-    @GetMapping("/posts/{postId}")
+    @GetMapping("/post/{postId}")
     public String findById(@PathVariable Long postId, Model model) {
         postsService.addHit(postId);
         PostsResponseDto postsResponseDto = postsService.getPostsById(postId);
         List<String> tagList = postsService.getTagsAsList(postId);
         var anotherCategory = postsService.getCategorizedPostsNotContainPage(
             postsResponseDto.getCategory().getTitle());
+        int totalCommentSize = commentService.findByPostsId(postId).size();
+        model.addAttribute("commentSize", totalCommentSize);
         model.addAttribute("commentForm", new CommentForm());
         model.addAttribute("passwordForm", new CommentPasswordCheckForm());
         model.addAttribute("postFindById", postsResponseDto);
@@ -84,13 +89,13 @@ public class PostsController {
         return "posts";
     }
 
-    @PostMapping("/posts/delete/{postId}")
+    @PostMapping("/post/delete/{postId}")
     public String delete(@PathVariable Long postId) {
         postsService.delete(postId);
         return "redirect:/";
     }
 
-    @GetMapping("/posts/search")
+    @GetMapping("/post/search")
     public String searchPostsByKeyword(Pageable pageable, Model model
         , @RequestParam String q) {
         Page<PostsResponseDto> searchedPostsListByKeyword = postsService.getSearchedPostsListByKeyword(
@@ -99,7 +104,7 @@ public class PostsController {
         return "index";
     }
 
-    @GetMapping("/posts/category")
+    @GetMapping("/post/category")
     public String getCategorizedPosts(Pageable pageable, @RequestParam String q,
         Model model) {
         Page<PostsResponseWithCategoryDto> categorizedPosts = postsService.getCategorizedPosts(

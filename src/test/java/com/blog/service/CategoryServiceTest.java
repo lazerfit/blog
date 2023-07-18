@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.blog.domain.category.Category;
 import com.blog.domain.category.CategoryRepository;
-import com.blog.domain.posts.Posts;
+import com.blog.domain.posts.Post;
 import com.blog.domain.posts.PostsRepository;
 import com.blog.exception.CategoryNotFound;
 import com.blog.web.dto.PostsResponseDto;
@@ -53,12 +53,12 @@ class CategoryServiceTest {
         categoryRepository.save(category1);
         categoryRepository.save(category2);
 
-        postsRepository.save(Posts.builder()
+        postsRepository.save(Post.builder()
             .title("제목1")
             .content("내용1")
             .category(category1)
             .build());
-        postsRepository.save(Posts.builder()
+        postsRepository.save(Post.builder()
             .title("제목2")
             .content("내용2")
             .category(category2)

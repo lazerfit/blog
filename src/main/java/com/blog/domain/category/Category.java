@@ -1,6 +1,6 @@
 package com.blog.domain.category;
 
-import com.blog.domain.posts.Posts;
+import com.blog.domain.posts.Post;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,7 +26,7 @@ public class Category {
     private String title;
 
     @OneToMany(mappedBy = "category")
-    private List<Posts> posts = new ArrayList<>();
+    private List<Post> posts = new ArrayList<>();
 
     @Column
     private Integer listOrder;

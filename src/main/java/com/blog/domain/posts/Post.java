@@ -36,7 +36,7 @@ public class Post extends BaseTimeEntity {
     private String content;
 
     @Column(length = 500, nullable = false)
-    private String tags;
+    private String tag;
 
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
     @JoinColumn(name = "category_id",referencedColumnName = "id")
@@ -44,21 +44,21 @@ public class Post extends BaseTimeEntity {
 
     @ColumnDefault("0")
     @Column(nullable = false)
-    private Long hit;
+    private Long views;
 
     @OneToMany(orphanRemoval = true,mappedBy = "post")
     private List<Comment> comments=new ArrayList<>();
 
     @Builder
-    public Post(String title, String content, String tags, Category category, Long hit) {
+    public Post(String title, String content, String tag, Category category, Long views) {
         this.title = title;
         this.content = content;
-        this.tags = tags;
+        this.tag = tag;
         this.category = category;
-        this.hit = hit;
+        this.views = views;
     }
 
-    public void updateHit(Long hit) {
-        this.hit=hit;
+    public void addView(Long hit) {
+        this.views =hit;
     }
 }

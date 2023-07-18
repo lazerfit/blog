@@ -67,7 +67,7 @@ public class PostsService {
 
     public List<String> getTagsAsList(Long id) {
         Post post = postsRepository.findById(id).orElseThrow(PostsNotFound::new);
-        String tags = post.getTags();
+        String tags = post.getTag();
         return Stream.of(tags.split(",", -1)).toList();
     }
 
@@ -78,8 +78,8 @@ public class PostsService {
     @Transactional
     public void addHit(Long id) {
         Post post = postsRepository.findById(id).orElseThrow(PostsNotFound::new);
-        Long hit= post.getHit()+1L;
-        post.updateHit(hit);
+        Long hit= post.getViews()+1L;
+        post.addView(hit);
     }
 
     public List<PostsResponseWithoutCommentDto> getPopularPosts() {

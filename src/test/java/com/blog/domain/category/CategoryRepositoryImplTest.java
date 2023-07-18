@@ -1,7 +1,7 @@
 package com.blog.domain.category;
 
 import com.blog.config.QdslConfig;
-import com.blog.domain.posts.Posts;
+import com.blog.domain.posts.Post;
 import com.blog.domain.posts.PostsRepository;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
@@ -40,13 +40,13 @@ class CategoryRepositoryImplTest {
         em.flush();
         em.clear();
 
-        Posts posts = postsRepository.save(Posts.builder()
+        Post post = postsRepository.save(Post.builder()
             .title("제목1")
             .content("내용1")
             .category(categoryRepository.findCategoryByTitle("Java").get())
             .build());
 
-        Assertions.assertThat(posts.getCategory().getTitle()).isEqualTo("Java");
+        Assertions.assertThat(post.getCategory().getTitle()).isEqualTo("Java");
     }
 
 }

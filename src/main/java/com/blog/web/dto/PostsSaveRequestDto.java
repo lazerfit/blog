@@ -32,8 +32,8 @@ public class PostsSaveRequestDto {
             .title(title)
             .content(content)
             .category(category)
-            .tags(this.nullCheckAndSetDefaultValue(tags))
-            .hit(hit)
+            .tag(this.nullCheckAndSetDefaultValue(tags))
+            .views(hit)
             .build();
     }
 

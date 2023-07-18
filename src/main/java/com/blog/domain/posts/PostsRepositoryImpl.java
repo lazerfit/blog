@@ -31,7 +31,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     public Page<PostsResponseWithoutCommentDto> getPosts(Pageable pageable) {
         List<PostsResponseWithoutCommentDto> postsList = jpaQueryFactory
             .select(new QPostsResponseWithoutCommentDto(post.id, post.title, post.content,
-                post.generationTimeStamp, post.category, post.tags, post.hit))
+                post.generationTimeStamp, post.category, post.tag, post.views))
             .from(post)
             .limit(pageable.getPageSize())
             .offset(pageable.getOffset())
@@ -47,7 +47,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     @Override
     public Page<PostsResponseDto> getPostsListByKeyword(Pageable pageable, String keyword) {
         List<PostsResponseDto> postsList = jpaQueryFactory.select(
-                new QPostsResponseDto(post.id, post.title,post.content,post.generationTimeStamp,post.category,post.tags,post.hit))
+                new QPostsResponseDto(post.id, post.title,post.content,post.generationTimeStamp,post.category,post.tag,post.views))
             .from(post)
             .where(post.title.contains(keyword))
             .limit(pageable.getPageSize())
@@ -64,7 +64,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     public PostsResponseWithCategoryDto findByIdContainCategory(Long id) {
         List<PostsResponseWithCategoryDto> response = jpaQueryFactory.select(
                 Projections.constructor(PostsResponseWithCategoryDto.class, post.id,
-                    post.title, post.content, post.generationTimeStamp, post.category.title,post.tags,post.hit))
+                    post.title, post.content, post.generationTimeStamp, post.category.title,post.tag,post.views))
             .from(post)
             .where(post.id.eq(id))
             .fetch();
@@ -77,7 +77,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
         String q) {
         List<PostsResponseWithCategoryDto> postsList = jpaQueryFactory.select(
                 Projections.constructor(PostsResponseWithCategoryDto.class, post.id, post.title,
-                    post.content, post.generationTimeStamp, post.category.title,post.tags,post.hit))
+                    post.content, post.generationTimeStamp, post.category.title,post.tag,post.views))
             .from(post)
             .where(post.category.title.eq(q))
             .limit(pageable.getPageSize())
@@ -105,15 +105,15 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     public Page<PostsResponseWithCategoryDto> getPostsByTags(Pageable pageable, String tag) {
         List<PostsResponseWithCategoryDto> response = jpaQueryFactory.select(
                 Projections.constructor(PostsResponseWithCategoryDto.class, post.id, post.title,
-                    post.content, post.generationTimeStamp, post.category.title, post.tags,post.hit))
+                    post.content, post.generationTimeStamp, post.category.title, post.tag,post.views))
             .from(post)
-            .where(post.tags.contains(tag))
+            .where(post.tag.contains(tag))
             .limit(pageable.getPageSize())
             .offset(pageable.getOffset())
             .orderBy(post.id.desc())
             .fetch();
 
-        long totalCount=jpaQueryFactory.selectFrom(post).where(post.tags.contains(tag)).fetch().size();
+        long totalCount=jpaQueryFactory.selectFrom(post).where(post.tag.contains(tag)).fetch().size();
 
         return new PageImpl<>(response, pageable, totalCount);
     }
@@ -121,9 +121,9 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     @Override
     public List<PostsResponseWithoutCommentDto> getPopularPosts() {
         return jpaQueryFactory.select(new QPostsResponseWithoutCommentDto(post.id, post.title, post.content,
-                post.generationTimeStamp, post.category, post.tags, post.hit))
+                post.generationTimeStamp, post.category, post.tag, post.views))
             .from(post)
-            .orderBy(post.hit.desc())
+            .orderBy(post.views.desc())
             .limit(3)
             .fetch();
     }
@@ -136,8 +136,9 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
                 post.content,
                 post.generationTimeStamp,
                 post.category,
-                post.tags,
-                post.hit))
+                post.tag,
+                post.views
+            ))
             .from(post)
             .where(post.category.title.eq(q))
             .orderBy(post.generationTimeStamp.desc())
@@ -154,8 +155,8 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
                 post.content,
                 post.generationTimeStamp,
                 post.category,
-                post.tags,
-                post.hit))
+                post.tag,
+                post.views))
             .from(post)
             .where(post.id.eq(postId))
             .fetchOne();

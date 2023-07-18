@@ -26,8 +26,8 @@ public class PostsResponseWithoutCommentDto {
         this.content= post.getContent();
         this.createdDate= post.getGenerationTimeStamp();
         this.category = post.getCategory();
-        this.tags= post.getTags();
-        this.hit= post.getHit();
+        this.tags= post.getTag();
+        this.hit= post.getViews();
     }
 
     @QueryProjection
