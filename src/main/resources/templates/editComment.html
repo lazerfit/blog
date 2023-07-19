@@ -67,7 +67,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form id="deleteForm" th:object="${passwordForm}" method="post" th:action="@{/posts/comment/manage/delete}">
+      <form id="deleteForm" th:object="${passwordForm}" method="post" th:action="@{/post/comment/manage/delete}">
       <div class="modal-body">
         <input type="hidden" id="comment-id" value="" th:field="*{commentId}"/>
         <div class="modal-body">

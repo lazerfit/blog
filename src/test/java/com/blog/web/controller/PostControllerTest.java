@@ -230,7 +230,7 @@ class PostControllerTest {
             .category(foundCategory1)
             .build());
 
-        EditPostsForm editPostsForm = new EditPostsForm("수정된 제목", "수정된 내용", foundCategory1);
+        EditPostsForm editPostsForm = new EditPostsForm("수정된 제목", "수정된 내용", foundCategory1.getTitle());
 
         mockMvc.perform(post("/posts/edit/{postId}", post.getId())
                 .contentType(APPLICATION_JSON)

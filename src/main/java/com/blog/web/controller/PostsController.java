@@ -22,7 +22,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,78 +37,111 @@ public class PostsController {
 
     private final CommentService commentService;
 
+    @GetMapping("/post/{postId}")
+    public String findById(@PathVariable Long postId, Model model) {
+
+        postsService.addViews(postId);
+
+        PostsResponse postsResponse = postsService.getPostsById(postId);
+        model.addAttribute("postFindById", postsResponse);
+
+        addCommentFormAndPasswordForm(model);
+
+        // 카테고리의 다른 글
+        addAnotherCategories(model, postsResponse);
+
+        addCommentCount(postId, model);
+        addTags(postId, model);
+        addCategoriesAttributes(model);
+        addPopularPostsAttributes(model);
+        return "posts";
+    }
+
+    // Create
     @GetMapping("/post/new")
     public String createPostsForm(Model model) {
+
         model.addAttribute("createPostsForm", new CreatePostsForm());
+
+        addCategoriesAttributes(model);
+        addPopularPostsAttributes(model);
+
         return "form/createPostsForm";
     }
 
     @PostMapping("/post/new")
     public String save(@Valid CreatePostsForm form) {
-        Category getCategoryByTitle = categoryService.getCategoryByTitle(form.getCategoryTitle());
-        PostsSaveRequestDto request = new PostsSaveRequestDto(form.getTitle(), form.getContent(),
-            getCategoryByTitle, form.getTags(),0L);
-        postsService.save(request);
+
+        PostsSaveRequestDto saveRequest = createSaveRequest(form);
+
+        postsService.save(saveRequest);
+
         return "redirect:/";
     }
 
+    // Edit
     @GetMapping("/post/edit/{postId}")
     public String editForm(@PathVariable Long postId, Model model) {
-        PostsResponse originalPosts = postsService.getPostById(postId);
-        EditPostsForm editPostsForm = new EditPostsForm(originalPosts.getTitle(),
-            originalPosts.getContent(), originalPosts.getCategoryTitle());
+
+        EditPostsForm editPostsForm = createEditPostsForm(postId);
+
         model.addAttribute("editPostsForm", editPostsForm);
+
+        addCategoriesAttributes(model);
+        addPopularPostsAttributes(model);
+
         return "form/editPostsForm";
     }
 
-
     @PostMapping("/post/edit/{postId}")
     public String edit(@PathVariable Long postId, @Valid EditPostsForm form) {
+
+        // Consider refactoring the logic for dirty checking
+
         Category categoryByTitle = categoryService.getCategoryByTitle(form.getCategoryTitle());
+
         PostsUpdateRequestDto request = new PostsUpdateRequestDto(form.getTitle(),
             form.getContent(), categoryByTitle);
+
         postsService.edit(postId, request);
+
         return "redirect:/post/{postId}";
     }
 
-    @GetMapping("/post/{postId}")
-    public String findById(@PathVariable Long postId, Model model) {
-        postsService.addViews(postId);
-        PostsResponse postsResponse = postsService.getPostsById(postId);
-        List<String> tagList = postsService.getTagsAsList(postId);
-        var anotherCategory = postsService.getCategorizedPostsNotContainPage(
-            postsResponse.getCategoryTitle());
-        int totalCommentSize = commentService.findByPostsId(postId).size();
-        model.addAttribute("commentSize", totalCommentSize);
-        model.addAttribute("commentForm", new CommentForm());
-        model.addAttribute("passwordForm", new CommentPasswordCheckForm());
-        model.addAttribute("postFindById", postsResponse);
-        model.addAttribute("tagList", tagList);
-        model.addAttribute("anotherCategory",anotherCategory);
-        return "posts";
-    }
 
+    // Delete
     @PostMapping("/post/delete/{postId}")
     public String delete(@PathVariable Long postId) {
+
         postsService.delete(postId);
+
         return "redirect:/";
     }
 
     @GetMapping("/post/search")
     public String searchPostsByKeyword(Pageable pageable, Model model
         , @RequestParam String q) {
+
         Page<PostsResponse> searchedPostsListByKeyword = postsService.getSearchedPostsListByKeyword(
             pageable, q);
         model.addAttribute("postsList", searchedPostsListByKeyword);
+
+        addKeywordAttributes(model, q);
+        addCategoriesAttributes(model);
+        addPopularPostsAttributes(model);
+
         return "index";
     }
 
     @GetMapping("/post/category")
     public String getCategorizedPosts(Pageable pageable, @RequestParam String q,
         Model model) {
+
         Page<PostsResponseWithCategoryDto> categorizedPosts = postsService.getCategorizedPosts(
             pageable, q);
         model.addAttribute("categorizedPosts", categorizedPosts);
+
+        addKeywordAttributes(model, q);
 
         return "categorizedPosts";
     }
@@ -117,17 +149,68 @@ public class PostsController {
     @GetMapping("/tag")
     public String getPostsClassifiedByTags(Pageable pageable
         , @RequestParam String q, Model model) {
+
         Page<PostsResponseWithCategoryDto> postsByTags = postsService.getPostsByTags(pageable, q);
         model.addAttribute("postsByTags", postsByTags);
+
+        addKeywordAttributes(model, q);
+
         return "postsByTags";
     }
 
-    @ModelAttribute
-    public void commonLayoutAttribute(Model model, String q) {
+
+    // Method
+    private void addCategoriesAttributes(Model model) {
+
         List<Category> allCategory = categoryService.findAllCategory();
         model.addAttribute("allCategorizedPosts", allCategory);
+    }
+
+    private void addPopularPostsAttributes(Model model) {
         List<PostsResponseWithoutCommentDto> popularPosts = postsService.getPopularPosts();
         model.addAttribute("popularPosts",popularPosts);
+    }
+
+    private void addKeywordAttributes(Model model, String q) {
         model.addAttribute("keyword", q);
+    }
+
+    private void addAnotherCategories(Model model, PostsResponse postsResponse) {
+        var anotherCategory = postsService.getCategorizedPostsNotContainPage(
+            postsResponse.getCategoryTitle());
+        model.addAttribute("anotherCategory",anotherCategory);
+    }
+
+    private void addTags(Long postId, Model model) {
+        List<String> tagList = postsService.getTagsAsList(postId);
+        model.addAttribute("tagList", tagList);
+    }
+
+    private void addCommentCount(Long postId, Model model) {
+        int totalCommentSize = commentService.findByPostsId(postId).size();
+        model.addAttribute("commentSize", totalCommentSize);
+    }
+
+    private void addCommentFormAndPasswordForm(Model model) {
+        model.addAttribute("commentForm", new CommentForm());
+        model.addAttribute("passwordForm", new CommentPasswordCheckForm());
+    }
+
+    private EditPostsForm createEditPostsForm(Long postId) {
+
+        PostsResponse originalPost = postsService.getPostsById(postId);
+        String title=originalPost.getTitle();
+        String content=originalPost.getContent();
+        String categoryTitle=originalPost.getCategoryTitle();
+
+        return new EditPostsForm(title, content, categoryTitle);
+    }
+
+    private PostsSaveRequestDto createSaveRequest(CreatePostsForm form) {
+
+        Category category = categoryService.getCategoryByTitle(form.getCategoryTitle());
+
+        return new PostsSaveRequestDto(
+            form.getTitle(),form.getContent(),category,form.getTags(),0L);
     }
 }
