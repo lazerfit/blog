@@ -5,12 +5,12 @@ import static com.blog.domain.posts.QPost.post;
 
 import com.blog.exception.PostNotFound;
 import com.blog.web.dto.CommentsResponseDto;
-import com.blog.web.dto.PostsResponseDto;
+import com.blog.web.dto.PostsResponse;
 import com.blog.web.dto.PostsResponseWithCategoryDto;
 import com.blog.web.dto.PostsResponseWithoutCommentDto;
 import com.blog.web.dto.PostsUpdateRequestDto;
 import com.blog.web.dto.QCommentsResponseDto;
-import com.blog.web.dto.QPostsResponseDto;
+import com.blog.web.dto.QPostsResponse;
 import com.blog.web.dto.QPostsResponseWithoutCommentDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -45,9 +45,9 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     }
 
     @Override
-    public Page<PostsResponseDto> getPostsListByKeyword(Pageable pageable, String keyword) {
-        List<PostsResponseDto> postsList = jpaQueryFactory.select(
-                new QPostsResponseDto(post.id, post.title,post.content,post.generationTimeStamp,post.category,post.tag,post.views))
+    public Page<PostsResponse> getPostsListByKeyword(Pageable pageable, String keyword) {
+        List<PostsResponse> postsList = jpaQueryFactory.select(
+                new QPostsResponse(post.id, post.title,post.content,post.generationTimeStamp,post.category.title,post.tag,post.views))
             .from(post)
             .where(post.title.contains(keyword))
             .limit(pageable.getPageSize())
@@ -129,13 +129,13 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     }
 
     @Override
-    public List<PostsResponseDto> getCategorizedPostsNotContainPage(String q) {
-        return jpaQueryFactory.select(new QPostsResponseDto(
+    public List<PostsResponse> getCategorizedPostsNotContainPage(String q) {
+        return jpaQueryFactory.select(new QPostsResponse(
                 post.id,
                 post.title,
                 post.content,
                 post.generationTimeStamp,
-                post.category,
+                post.category.title,
                 post.tag,
                 post.views
             ))
@@ -147,14 +147,14 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     }
 
     @Override
-    public PostsResponseDto findByIdWithQdsl(Long postId) {
-        PostsResponseDto postsResponseDto = jpaQueryFactory
-            .select(new QPostsResponseDto(
+    public PostsResponse findByIdWithQdsl(Long postId) {
+        PostsResponse postsResponse = jpaQueryFactory
+            .select(new QPostsResponse(
                 post.id,
                 post.title,
                 post.content,
                 post.generationTimeStamp,
-                post.category,
+                post.category.title,
                 post.tag,
                 post.views))
             .from(post)
@@ -187,13 +187,13 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
 
         parentComment.forEach(p-> p.insertChildComment(childComment.stream().filter(c->c.getParentId().equals(p.getId())).toList()));
 
-        if (postsResponseDto == null) {
+        if (postsResponse == null) {
             throw new PostNotFound();
         }
 
-        postsResponseDto.insertComment(parentComment);
+        postsResponse.insertComment(parentComment);
 
-        return postsResponseDto;
+        return postsResponse;
     }
 
 }

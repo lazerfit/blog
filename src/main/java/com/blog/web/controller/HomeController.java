@@ -25,7 +25,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String index(Pageable pageable, Model model) {
-        Page<PostsResponseWithoutCommentDto> posts = postsService.getPosts(pageable);
+        Page<PostsResponseWithoutCommentDto> posts = postsService.getPostsWithPaging(pageable);
         model.addAttribute("postsList", posts);
 
         // 조회수 상위 3개 게시물 가져오기

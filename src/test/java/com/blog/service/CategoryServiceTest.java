@@ -7,7 +7,7 @@ import com.blog.domain.category.CategoryRepository;
 import com.blog.domain.posts.Post;
 import com.blog.domain.posts.PostsRepository;
 import com.blog.exception.CategoryNotFound;
-import com.blog.web.dto.PostsResponseDto;
+import com.blog.web.dto.PostsResponse;
 import com.blog.web.form.CategoryEditForm;
 import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
@@ -66,9 +66,9 @@ class CategoryServiceTest {
 
         PageRequest pageRequest = PageRequest.of(0, 6);
 
-        Page<PostsResponseDto> categorizedByTitleOfSpring = categoryService.getCategorizedPosts(
+        Page<PostsResponse> categorizedByTitleOfSpring = categoryService.getCategorizedPosts(
             pageRequest, "Spring");
-        Page<PostsResponseDto> categorizedByTitleOfJava = categoryService.getCategorizedPosts(
+        Page<PostsResponse> categorizedByTitleOfJava = categoryService.getCategorizedPosts(
             pageRequest, "Java");
 
         assertThat(categorizedByTitleOfSpring.stream().toList().get(0).getTitle()).isEqualTo("제목1");

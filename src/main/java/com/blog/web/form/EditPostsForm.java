@@ -15,6 +15,6 @@ public class EditPostsForm {
     public EditPostsForm(String title, String content,String categoryTitle) {
         this.title = title;
         this.content = content;
-        this.categoryTitle=categoryTitle;
+        this.categoryTitle = categoryTitle;
     }
 }

@@ -5,7 +5,7 @@ import com.blog.domain.category.CategoryRepository;
 import com.blog.exception.CategoryNotFound;
 import com.blog.web.dto.CategoryCreateRequestDto;
 import com.blog.web.dto.CategoryEditRequestDto;
-import com.blog.web.dto.PostsResponseDto;
+import com.blog.web.dto.PostsResponse;
 import com.blog.web.form.CategoryEditForm;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    public Page<PostsResponseDto> getCategorizedPosts(Pageable pageable,String q) {
+    public Page<PostsResponse> getCategorizedPosts(Pageable pageable,String q) {
         return categoryRepository.getCategorizedPostsList(pageable,q);
     }
 

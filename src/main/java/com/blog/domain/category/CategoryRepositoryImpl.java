@@ -3,7 +3,7 @@ package com.blog.domain.category;
 import static com.blog.domain.category.QCategory.category;
 import static com.blog.domain.posts.QPost.post;
 
-import com.blog.web.dto.PostsResponseDto;
+import com.blog.web.dto.PostsResponse;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -19,9 +19,9 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom{
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<PostsResponseDto> getCategorizedPostsList(Pageable pageable,String q) {
-        List<PostsResponseDto> categorizedPostsList = jpaQueryFactory.select(
-                Projections.constructor(PostsResponseDto.class,post.id,post.title,post.content,post.generationTimeStamp))
+    public Page<PostsResponse> getCategorizedPostsList(Pageable pageable,String q) {
+        List<PostsResponse> categorizedPostsList = jpaQueryFactory.select(
+                Projections.constructor(PostsResponse.class,post.id,post.title,post.content,post.generationTimeStamp))
             .from(post)
             .where(category.title.eq(q))
             .limit(pageable.getPageSize())

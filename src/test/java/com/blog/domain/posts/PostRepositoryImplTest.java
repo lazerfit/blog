@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.blog.config.QdslConfig;
 import com.blog.domain.category.CategoryRepository;
-import com.blog.web.dto.PostsResponseDto;
+import com.blog.web.dto.PostsResponse;
 import jakarta.persistence.EntityManager;
 import java.util.stream.IntStream;
 import org.junit.jupiter.api.AfterEach;
@@ -51,7 +51,7 @@ class PostRepositoryImplTest {
             .content("내용입니다.")
             .build());
         PageRequest pageRequest = PageRequest.of(0, 6);
-        Page<PostsResponseDto> searchedPosts = postsRepository.getPostsListByKeyword(pageRequest, "테스트");
+        Page<PostsResponse> searchedPosts = postsRepository.getPostsListByKeyword(pageRequest, "테스트");
 
         assertThat(searchedPosts.stream().toList()).hasSize(1);
         assertThat(searchedPosts.stream().toList().get(0).getTitle()).isEqualTo("테스트용 제목입니다.");

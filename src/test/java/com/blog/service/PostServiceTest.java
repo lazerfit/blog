@@ -12,7 +12,7 @@ import com.blog.domain.posts.PostsRepository;
 import com.blog.exception.CommentNotFound;
 import com.blog.exception.PostNotFound;
 import com.blog.web.dto.CommentsSaveRequestDto;
-import com.blog.web.dto.PostsResponseDto;
+import com.blog.web.dto.PostsResponse;
 import com.blog.web.dto.PostsResponseWithCategoryDto;
 import com.blog.web.dto.PostsResponseWithoutCommentDto;
 import com.blog.web.dto.PostsSaveRequestDto;
@@ -297,7 +297,7 @@ class PostServiceTest {
 
         commentsRepository.save(sbuRequest.toEntity());
 
-        PostsResponseDto responseDto = postsRepository.findByIdWithQdsl(post.getId());
+        PostsResponse responseDto = postsRepository.findByIdWithQdsl(post.getId());
 
         assertThat(responseDto.getComments().get(0).getContent()).isEqualTo("정말 좋은 글이네요");
         assertThat(responseDto.getComments().get(0).getChild().get(0).getContent()).isEqualTo(

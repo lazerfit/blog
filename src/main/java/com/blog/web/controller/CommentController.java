@@ -5,7 +5,7 @@ import com.blog.service.PostsService;
 import com.blog.web.dto.CommentEditRequest;
 import com.blog.web.dto.CommentPassword;
 import com.blog.web.dto.CommentsResponseDto;
-import com.blog.web.dto.PostsResponseDto;
+import com.blog.web.dto.PostsResponse;
 import com.blog.web.form.CommentEditForm;
 import com.blog.web.form.CommentForm;
 import com.blog.web.form.CommentPasswordCheckForm;
@@ -40,7 +40,7 @@ public class CommentController {
         Model model) {
 
         commentService.save(form.getPostId(), form);
-        PostsResponseDto response = postsService.getPostsById(form.getPostId());
+        PostsResponse response = postsService.getPostsById(form.getPostId());
         model.addAttribute("postFindById", response);
 
         return REPLACE_COMMENT_LIST;
@@ -49,7 +49,7 @@ public class CommentController {
     @PostMapping("/posts/admin/comment/delete")
     public String delete(@RequestParam Long commentId, @RequestParam Long postId, Model model) {
         commentService.delete(commentId);
-        PostsResponseDto response = postsService.getPostsById(postId);
+        PostsResponse response = postsService.getPostsById(postId);
         model.addAttribute("postFindById", response);
 
         return REPLACE_COMMENT_LIST;

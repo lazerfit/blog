@@ -19,7 +19,7 @@
           </div>
           <div class="content-inner">
             <div class="post-item" th:each="post:${categorizedPosts}">
-              <a href="#" th:href="@{/posts/{id}(id=${post.getId()})}">
+              <a href="#" th:href="@{/post/{id}(id=${post.getId()})}">
                 <span class="title" th:text="${post.getTitle()}"></span>
                 <span class="excerpt" th:utext="${post.getContent()}"></span>
                 <span class="meta" th:text="${#temporals.format(post.getCreatedDate(),'yyyy-MM-dd')}"></span>
@@ -38,15 +38,15 @@
           totalPage=${categorizedPosts.getTotalPages()},
           endPage=(${startPage + pageSize - 1 < totalPage ? startPage + pageSize - 1 : totalPage})">
         <li class="page-item" th:classappend="${categorizedPosts.hasPrevious()} ? '#':'disabled'">
-          <a class="page-link" th:href="@{/posts/category(q=${keyword},page=${pageNumber})}">&laquo;</a>
+          <a class="page-link" th:href="@{/post/category(q=${keyword},page=${pageNumber})}">&laquo;</a>
         </li>
         <li class="page-item"
             th:each="page:${#numbers.sequence(startPage,endPage)}"
             th:classappend="${page==pageNumber+1} ? 'active'">
-          <a th:text="${page}" class="page-link" th:href="@{/posts/category(q=${keyword},page=${page})}">1</a>
+          <a th:text="${page}" class="page-link" th:href="@{/post/category(q=${keyword},page=${page})}">1</a>
         </li>
         <li class="page-item" th:classappend="${categorizedPosts.hasNext()} ? '#':'disabled'">
-          <a class="page-link" th:href="@{/posts/category(q=${keyword},page=${pageNumber+2})}">&raquo;</a>
+          <a class="page-link" th:href="@{/post/category(q=${keyword},page=${pageNumber+2})}">&raquo;</a>
         </li> <!-- ${postsList.hasNext()} ? -->
       </ul>
     </div> <!-- /pagination -->

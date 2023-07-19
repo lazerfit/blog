@@ -230,7 +230,7 @@ class PostControllerTest {
             .category(foundCategory1)
             .build());
 
-        EditPostsForm editPostsForm = new EditPostsForm("수정된 제목", "수정된 내용", "Spring");
+        EditPostsForm editPostsForm = new EditPostsForm("수정된 제목", "수정된 내용", foundCategory1);
 
         mockMvc.perform(post("/posts/edit/{postId}", post.getId())
                 .contentType(APPLICATION_JSON)
@@ -335,7 +335,7 @@ class PostControllerTest {
     @Test
     @DisplayName("게시글 가져오기 - 댓글 포함")
     @Transactional
-    void getPostsWithComment() throws Exception{
+    void getPostsWithComment() throws Exception {
 
         List<Post> all = postsRepository.findAll();
 
@@ -350,5 +350,19 @@ class PostControllerTest {
         mockMvc.perform(get("/posts/1"))
             .andDo(print())
             .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("게시글 수정 - 수정 폼")
+    @WithMockUser(roles = "ADMIN")
+    @Transactional
+    void editForm() throws Exception{
+
+        // 수정 폼에 원래 게시글 정보 전달
+
+        mockMvc.perform(get("/post/edit/1"))
+            .andDo(print())
+            .andExpect(status().isOk());
+
     }
 }

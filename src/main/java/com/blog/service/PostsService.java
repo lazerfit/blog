@@ -3,7 +3,7 @@ package com.blog.service;
 import com.blog.domain.posts.Post;
 import com.blog.domain.posts.PostsRepository;
 import com.blog.exception.PostNotFound;
-import com.blog.web.dto.PostsResponseDto;
+import com.blog.web.dto.PostsResponse;
 import com.blog.web.dto.PostsResponseWithCategoryDto;
 import com.blog.web.dto.PostsResponseWithoutCommentDto;
 import com.blog.web.dto.PostsSaveRequestDto;
@@ -49,7 +49,7 @@ public class PostsService {
         postsRepository.delete(post);
     }
 
-    public Page<PostsResponseDto> getSearchedPostsListByKeyword(Pageable pageable,String q) {
+    public Page<PostsResponse> getSearchedPostsListByKeyword(Pageable pageable,String q) {
         return postsRepository.getPostsListByKeyword(pageable, q);
     }
 
@@ -79,14 +79,20 @@ public class PostsService {
         return postsRepository.getPopularPosts();
     }
 
-    public List<PostsResponseDto> getCategorizedPostsNotContainPage(String q) {
+    public List<PostsResponse> getCategorizedPostsNotContainPage(String q) {
         return postsRepository.getCategorizedPostsNotContainPage(
             q);
     }
 
     @Transactional(readOnly = true)
-    public PostsResponseDto getPostsById(Long id) {
+    public PostsResponse getPostsById(Long id) {
         return postsRepository.findByIdWithQdsl(id);
+    }
+
+    @Transactional(readOnly = true)
+    public PostsResponse getPostById(Long postId) {
+        Post post = postsRepository.getPostById(postId).orElseThrow(PostNotFound::new);
+        return new PostsResponse(post);
     }
 }
 

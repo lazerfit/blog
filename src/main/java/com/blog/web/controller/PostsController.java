@@ -4,7 +4,7 @@ import com.blog.domain.category.Category;
 import com.blog.service.CategoryService;
 import com.blog.service.CommentService;
 import com.blog.service.PostsService;
-import com.blog.web.dto.PostsResponseDto;
+import com.blog.web.dto.PostsResponse;
 import com.blog.web.dto.PostsResponseWithCategoryDto;
 import com.blog.web.dto.PostsResponseWithoutCommentDto;
 import com.blog.web.dto.PostsSaveRequestDto;
@@ -55,7 +55,7 @@ public class PostsController {
 
     @GetMapping("/post/edit/{postId}")
     public String editForm(@PathVariable Long postId, Model model) {
-        PostsResponseWithCategoryDto originalPosts = postsService.findByIdWithCategory(postId);
+        PostsResponse originalPosts = postsService.getPostById(postId);
         EditPostsForm editPostsForm = new EditPostsForm(originalPosts.getTitle(),
             originalPosts.getContent(), originalPosts.getCategoryTitle());
         model.addAttribute("editPostsForm", editPostsForm);
@@ -69,21 +69,21 @@ public class PostsController {
         PostsUpdateRequestDto request = new PostsUpdateRequestDto(form.getTitle(),
             form.getContent(), categoryByTitle);
         postsService.edit(postId, request);
-        return "redirect:/posts/{postId}";
+        return "redirect:/post/{postId}";
     }
 
     @GetMapping("/post/{postId}")
     public String findById(@PathVariable Long postId, Model model) {
         postsService.addViews(postId);
-        PostsResponseDto postsResponseDto = postsService.getPostsById(postId);
+        PostsResponse postsResponse = postsService.getPostsById(postId);
         List<String> tagList = postsService.getTagsAsList(postId);
         var anotherCategory = postsService.getCategorizedPostsNotContainPage(
-            postsResponseDto.getCategory().getTitle());
+            postsResponse.getCategoryTitle());
         int totalCommentSize = commentService.findByPostsId(postId).size();
         model.addAttribute("commentSize", totalCommentSize);
         model.addAttribute("commentForm", new CommentForm());
         model.addAttribute("passwordForm", new CommentPasswordCheckForm());
-        model.addAttribute("postFindById", postsResponseDto);
+        model.addAttribute("postFindById", postsResponse);
         model.addAttribute("tagList", tagList);
         model.addAttribute("anotherCategory",anotherCategory);
         return "posts";
@@ -98,7 +98,7 @@ public class PostsController {
     @GetMapping("/post/search")
     public String searchPostsByKeyword(Pageable pageable, Model model
         , @RequestParam String q) {
-        Page<PostsResponseDto> searchedPostsListByKeyword = postsService.getSearchedPostsListByKeyword(
+        Page<PostsResponse> searchedPostsListByKeyword = postsService.getSearchedPostsListByKeyword(
             pageable, q);
         model.addAttribute("postsList", searchedPostsListByKeyword);
         return "index";
