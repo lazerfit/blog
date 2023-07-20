@@ -51,6 +51,9 @@ lazerfit 의 개인 blog 프로젝트입니다.
 ***
 
 ## *개발 일지*
+- ### [230720] controller 리팩토링 완료
+  - 메서드 추출, 메서드 네이밍 변경
+- ### [230719] postController Refactoring
 - ### [230717] 대댓글 기능 구현 완료
   - 깊이 1단계
 - ### [230714] 대댓글 기능 구현 필요
@@ -149,7 +152,7 @@ lazerfit 의 개인 blog 프로젝트입니다.
   - Pagination 구현
    
 - ### [230608] Home 화면에 최근 게시글 게시 
-  - ~~"/" 로 진입시 "/posts" 로 redirect 하면서 page 와 size parameter 넘김~~   
+  - ~~"/" 로 진입시 "/post" 로 redirect 하면서 page 와 size parameter 넘김~~   
     - Pageable 글로벌 세팅 통해 첫 화면 url query parameter 넘기지 않아도 페이징 가능   
   - ~~첫 화면의 url 은 깔끔하게 유지하고 싶었으나 parameter 정보가 붙음~~
    
