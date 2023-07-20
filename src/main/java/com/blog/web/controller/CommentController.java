@@ -16,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,32 +34,37 @@ public class CommentController {
 
     private static final String REPLACE_COMMENT_LIST = "posts :: commentList";
 
-    @PostMapping("/posts/comment/new")
-    public String insertComment(@RequestBody @Valid CommentForm form,
+    @PostMapping("/post/comment/new")
+    public String saveComment(@RequestBody @Valid CommentForm form,
         Model model) {
 
+        addPasswordCheckForm(model);
+
         commentService.save(form.getPostId(), form);
-        PostsResponse response = postsService.getPostsById(form.getPostId());
+
+        PostsResponse response = postsService.getPostsByIdWithComments(form.getPostId());
         model.addAttribute("postFindById", response);
 
         return REPLACE_COMMENT_LIST;
     }
 
-    @PostMapping("/posts/admin/comment/delete")
+    @PostMapping("/post/admin/comment/delete")
     public String delete(@RequestParam Long commentId, @RequestParam Long postId, Model model) {
         commentService.delete(commentId);
-        PostsResponse response = postsService.getPostsById(postId);
+        PostsResponse response = postsService.getPostsByIdWithComments(postId);
         model.addAttribute("postFindById", response);
 
         return REPLACE_COMMENT_LIST;
     }
 
-    @PostMapping("/posts/comment/manage")
-    public String test(CommentPasswordCheckForm form,Model model) {
-        model.addAttribute("commentEdit",new CommentEditForm());
-        CommentPassword password = commentService.findPassword(form.getCommentId());
+    @PostMapping("/post/comment/manage")
+    public String test(CommentPasswordCheckForm form, Model model) {
 
-        if (passwordEncoder.matches(form.getPassword(), password.password())) {
+        model.addAttribute("commentEdit", new CommentEditForm());
+
+        addPasswordCheckForm(model);
+
+        if (passwordCheck(form)) {
             CommentsResponseDto responseDto = commentService.findById(form.getCommentId());
             model.addAttribute("comment", responseDto);
             return "editComment";
@@ -68,21 +72,31 @@ public class CommentController {
         return "/error/403";
     }
 
-    @PostMapping("/posts/comment/manage/delete")
+    private Boolean passwordCheck(CommentPasswordCheckForm form) {
+        CommentPassword encodedPassword = getEncodedPassword(form);
+        return passwordEncoder.matches(form.getPassword(), encodedPassword.password());
+    }
+
+    private CommentPassword getEncodedPassword(CommentPasswordCheckForm form) {
+        return commentService.findPassword(form.getCommentId());
+    }
+
+    @PostMapping("/post/comment/manage/delete")
     @ResponseBody
     public String userDelete(CommentPasswordCheckForm form) {
-        CommentPassword password = commentService.findPassword(form.getCommentId());
 
-        if (passwordEncoder.matches(form.getPassword(), password.password())) {
+        if (passwordCheck(form)) {
             commentService.delete(form.getCommentId());
             return "성공";
         }
         return "비밀번호를 확인해주세요";
     }
 
-    @PostMapping("/posts/comment/manage/edit")
+    @PostMapping("/post/comment/manage/edit")
     @ResponseBody
     public String userEdit(CommentEditForm form,Model model){
+
+        addPasswordCheckForm(model);
 
         CommentPassword password = commentService.findPassword(form.getId());
 
@@ -94,7 +108,7 @@ public class CommentController {
         return "비밀번호를 확인해주세요";
     }
 
-    @GetMapping("/posts/comment/subcomment/new")
+    @GetMapping("/post/comment/subComment/new")
     public String subComment(@RequestParam Long commentId,@RequestParam Long postId ,Model model) {
 
         model.addAttribute("parentId", commentId);
@@ -103,17 +117,17 @@ public class CommentController {
         return "subComment";
     }
 
-    @PostMapping("/posts/comment/subcomment/new")
+    @PostMapping("/post/comment/subComment/new")
     @ResponseBody
     public String subComment(@RequestBody CommentForm form) {
-        log.debug("form={}",form.toString());
+
         commentService.save(form.getPostId(),form);
 
         return "";
     }
 
-    @ModelAttribute
-    void pwd(Model model) {
+
+    private void addPasswordCheckForm(Model model) {
         model.addAttribute("passwordForm", new CommentPasswordCheckForm());
     }
 }

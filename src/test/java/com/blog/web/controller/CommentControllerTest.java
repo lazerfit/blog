@@ -81,7 +81,7 @@ class CommentControllerTest {
             .content("ss")
             .build();
 
-        mockMvc.perform(post("/posts/comment/delete")
+        mockMvc.perform(post("/post/comment/delete")
                 .param("commentId", "1")
                 .param("postId", "1"))
             .andDo(print())
@@ -104,7 +104,7 @@ class CommentControllerTest {
             .content("ss")
             .build();
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/posts/comment/manage/edit")
+        mockMvc.perform(MockMvcRequestBuilders.post("/post/comment/manage/edit")
                 .param("id","1")
                 .param("password","1234")
                 .param("content","멍"))
