@@ -14,7 +14,6 @@ public class ErrorController {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-
     public ErrorResponseDto handleValidationExceptions(
         MethodArgumentNotValidException ex) {
 
