@@ -14,7 +14,7 @@ function userDeleteComment(elem) {
   const password=document.getElementById('comment-pwd').value;
 
   $.ajax({
-    url: "/posts/comment/manage/delete",
+    url: "/post/comment/manage/delete",
     type: "POST",
     data: {
       "commentId": id,

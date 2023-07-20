@@ -1,6 +1,6 @@
 // Create Comment
 $('.reply-btn').on('click',function (){
-  const postId=document.getElementById("get-postId").value
+  const postId=document.getElementById("inputInfo").querySelector(".postId").value
   const username=document.getElementById("inputInfo").querySelector(".username").value
   const password=document.getElementById("inputInfo").querySelector(".password").value
   const content=document.getElementById("inputComment").querySelector("#comment").value
@@ -20,13 +20,14 @@ $('.reply-btn').on('click',function (){
   };
 
   $.ajax({
-    url:"/posts/comment/new",
+    url:"/post/comment/new",
     type: "POST",
     data: JSON.stringify(comment),
+    dataType:"html",
     contentType: "application/json; charset=utf-8"
   })
-  .done(function (fragment) {
-    $('#comment-table').replaceWith(fragment);
+  .done(function (result) {
+    $('#comment-table').replaceWith(result);
   })
 });
 
@@ -42,7 +43,7 @@ function deleteComment() {
   console.log(postId);
 
   $.ajax({
-    url:"/posts/admin/comment/delete",
+    url:"/post/admin/comment/delete",
     type:"POST",
     data:{
       "commentId":commentId,
@@ -61,7 +62,7 @@ function userDelete() {
   const commentId=document.getElementById('deleteCommentId').value;
 
   $.ajax({
-    url: "/posts/comment/manage/delete",
+    url: "/post/comment/manage/delete",
     type: "POST"
   })
 

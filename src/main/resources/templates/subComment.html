@@ -48,8 +48,10 @@
       "password":password
     }
 
+    console.log(data)
+
   $.ajax({
-    url:"/posts/comment/subcomment/new",
+    url:"/post/comment/subComment/new",
     type:"POST",
     data:JSON.stringify(data),
     contentType:"application/json; charset=utf-8"

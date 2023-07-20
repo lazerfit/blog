@@ -8,7 +8,7 @@ function userEditComment() {
   const password=document.getElementById('edit-password').value;
 
   $.ajax({
-    url: "/posts/comment/manage/edit",
+    url: "/post/comment/manage/edit",
     type: "POST",
     data:{
       "id":id,
