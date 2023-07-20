@@ -58,34 +58,27 @@ public class CommentController {
     }
 
     @PostMapping("/post/comment/manage")
-    public String test(CommentPasswordCheckForm form, Model model) {
-
-        model.addAttribute("commentEdit", new CommentEditForm());
+    public String manageComment(CommentPasswordCheckForm form, Model model) {
 
         addPasswordCheckForm(model);
 
-        if (passwordCheck(form)) {
-            CommentsResponseDto responseDto = commentService.findById(form.getCommentId());
+        if (isPasswordValid(form)) {
+
+            CommentsResponseDto responseDto = findCommentById(form.getCommentId());
+
             model.addAttribute("comment", responseDto);
+            model.addAttribute("commentEdit", new CommentEditForm());
+
             return "editComment";
         }
         return "/error/403";
     }
 
-    private Boolean passwordCheck(CommentPasswordCheckForm form) {
-        CommentPassword encodedPassword = getEncodedPassword(form);
-        return passwordEncoder.matches(form.getPassword(), encodedPassword.password());
-    }
-
-    private CommentPassword getEncodedPassword(CommentPasswordCheckForm form) {
-        return commentService.findPassword(form.getCommentId());
-    }
-
     @PostMapping("/post/comment/manage/delete")
     @ResponseBody
-    public String userDelete(CommentPasswordCheckForm form) {
+    public String userDeleteComment(CommentPasswordCheckForm form) {
 
-        if (passwordCheck(form)) {
+        if (isPasswordValid(form)) {
             commentService.delete(form.getCommentId());
             return "성공";
         }
@@ -94,13 +87,11 @@ public class CommentController {
 
     @PostMapping("/post/comment/manage/edit")
     @ResponseBody
-    public String userEdit(CommentEditForm form,Model model){
+    public String userEditComment(CommentEditForm form,Model model){
 
         addPasswordCheckForm(model);
 
-        CommentPassword password = commentService.findPassword(form.getId());
-
-        if (passwordEncoder.matches(form.getPassword(), password.password())) {
+        if (isPasswordValid(form)) {
             CommentEditRequest response = new CommentEditRequest(form.getId(),form.getContent());
             commentService.edit(response);
             return "성공";
@@ -129,5 +120,23 @@ public class CommentController {
 
     private void addPasswordCheckForm(Model model) {
         model.addAttribute("passwordForm", new CommentPasswordCheckForm());
+    }
+
+    private CommentsResponseDto findCommentById(Long commentId) {
+        return commentService.findById(commentId);
+    }
+
+    private boolean isPasswordValid(CommentEditForm form) {
+        CommentPassword encodedPassword = findEncodedPassword(form.getId());
+        return passwordEncoder.matches(form.getPassword(), encodedPassword.password());
+    }
+
+    private boolean isPasswordValid(CommentPasswordCheckForm form) {
+        CommentPassword encodedPassword = findEncodedPassword(form.getCommentId());
+        return passwordEncoder.matches(form.getPassword(), encodedPassword.password());
+    }
+
+    private CommentPassword findEncodedPassword(Long commentId) {
+        return commentService.findPassword(commentId);
     }
 }

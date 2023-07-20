@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class CommentEditForm {
 
-    @NotNull(message = "게시글 ID는 필수입니다.")
+    @NotNull(message = "댓글 ID는 필수입니다.")
     private Long id;
     @NotBlank(message = "내용은 필수입니다.")
     private String content;
