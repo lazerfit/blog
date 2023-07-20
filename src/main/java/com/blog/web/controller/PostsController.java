@@ -37,6 +37,19 @@ public class PostsController {
 
     private final CommentService commentService;
 
+    @GetMapping("/")
+    public String index(Pageable pageable, Model model) {
+        Page<PostsResponseWithoutCommentDto> posts = postsService.getPostsWithPaging(pageable);
+        model.addAttribute("postsList", posts);
+
+        addCategoriesAttributes(model);
+        addPopularPostsAttributes(model);
+
+        return "index";
+    }
+
+
+
     @GetMapping("/post/{postId}")
     public String findById(@PathVariable Long postId, Model model) {
 
@@ -48,7 +61,7 @@ public class PostsController {
         addCommentFormAndPasswordForm(model);
 
         // 카테고리의 다른 글
-        addAnotherCategories(model, postsResponse);
+        addAnotherCategories(postsResponse,model);
 
         addCommentCount(postId, model);
         addTags(postId, model);
@@ -126,7 +139,7 @@ public class PostsController {
             pageable, q);
         model.addAttribute("postsList", searchedPostsListByKeyword);
 
-        addKeywordAttributes(model, q);
+        addKeywordAttributes(q,model);
         addCategoriesAttributes(model);
         addPopularPostsAttributes(model);
 
@@ -141,7 +154,7 @@ public class PostsController {
             pageable, q);
         model.addAttribute("categorizedPosts", categorizedPosts);
 
-        addKeywordAttributes(model, q);
+        addKeywordAttributes(q,model);
 
         return "categorizedPosts";
     }
@@ -153,7 +166,7 @@ public class PostsController {
         Page<PostsResponseWithCategoryDto> postsByTags = postsService.getPostsByTags(pageable, q);
         model.addAttribute("postsByTags", postsByTags);
 
-        addKeywordAttributes(model, q);
+        addKeywordAttributes(q,model);
 
         return "postsByTags";
     }
@@ -171,11 +184,11 @@ public class PostsController {
         model.addAttribute("popularPosts",popularPosts);
     }
 
-    private void addKeywordAttributes(Model model, String q) {
+    private void addKeywordAttributes(String q,Model model) {
         model.addAttribute("keyword", q);
     }
 
-    private void addAnotherCategories(Model model, PostsResponse postsResponse) {
+    private void addAnotherCategories(PostsResponse postsResponse,Model model) {
         var anotherCategory = postsService.getCategorizedPostsNotContainPage(
             postsResponse.getCategoryTitle());
         model.addAttribute("anotherCategory",anotherCategory);
