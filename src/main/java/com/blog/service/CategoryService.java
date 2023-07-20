@@ -3,7 +3,7 @@ package com.blog.service;
 import com.blog.domain.category.Category;
 import com.blog.domain.category.CategoryRepository;
 import com.blog.exception.CategoryNotFound;
-import com.blog.web.dto.CategoryCreateRequestDto;
+import com.blog.web.dto.CategorySaveRequest;
 import com.blog.web.dto.CategoryEditRequestDto;
 import com.blog.web.dto.PostsResponse;
 import com.blog.web.form.CategoryEditForm;
@@ -26,7 +26,7 @@ public class CategoryService {
     }
 
     @Transactional
-    public void save(CategoryCreateRequestDto requestDto) {
+    public void save(CategorySaveRequest requestDto) {
         categoryRepository.save(requestDto.toEntity());
     }
 

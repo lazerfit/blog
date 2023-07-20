@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class CategoryCreateRequestDto {
+public class CategorySaveRequest {
 
     private final String title;
     private final Integer listOrder;

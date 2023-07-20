@@ -225,23 +225,6 @@
                         삭제(관리자)
                       </a>
                     </div>
-                  <script>
-                    function openDeleteCommentModal(element) {
-                      const commentId = $(element).closest('.dropdown-content').attr(
-                          'data-commentId');
-                      const dropdownContent = document.querySelector(".comment-dropdown[data-commentId='" + commentId + "']");
-                      const postId = element.getAttribute('data-postId');
-                      dropdownContent.style.display="none"
-
-                      const inputCommentId = document.getElementById('deleteCommentId');
-                      const inputPostId = document.getElementById('deletePostId');
-                      inputCommentId.value=commentId;
-                      inputPostId.value=postId;
-
-                      $('#deleteCommentId').val(commentId);
-                      $('#deleteCommentModal').modal('show');
-                    }
-                  </script>
                   <script src="/js/manageCommentDropdown.js"></script>
                   <script src="/js/openCommentManageModal.js"></script>
                 </div>
@@ -259,14 +242,14 @@
           function openSubComment(elem) {
             const id=$(elem).closest('.comment-id').attr('data-commentId')
             const postId=document.getElementById('commentContent').getAttribute('data-postId')
-            window.open('/post/comment/subcomment/new?commentId='+id+'&postId='+postId,'대댓글','width=500,height=500')
+            window.open('/post/comment/subComment/new?commentId='+id+'&postId='+postId,'대댓글','width=500,height=500')
           }
         </script>
       </div>
       <form id="submit-commentForm">
         <div class="comment-form">
           <div class="input-info" id="inputInfo">
-            <input type="hidden" name="postId" class="postId" id="get-postId" th:value="${postId}">
+            <input type="hidden" name="postId" class="postId" id="get-postId" th:value="${postFindById.getId()}">
             <input type="text" name="username" class="username" placeholder="닉네임">
             <input type="password" name="password" class="password" placeholder="비밀번호">
           </div>
