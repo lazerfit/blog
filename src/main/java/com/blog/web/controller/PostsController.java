@@ -49,13 +49,12 @@ public class PostsController {
     }
 
 
-
     @GetMapping("/post/{postId}")
-    public String findById(@PathVariable Long postId, Model model) {
+    public String getPostDetail(@PathVariable Long postId, Model model) {
 
         postsService.addViews(postId);
 
-        PostsResponse postsResponse = postsService.getPostsById(postId);
+        PostsResponse postsResponse = postsService.getPostsByIdWithComments(postId);
         model.addAttribute("postFindById", postsResponse);
 
         addCommentFormAndPasswordForm(model);
@@ -83,7 +82,7 @@ public class PostsController {
     }
 
     @PostMapping("/post/new")
-    public String save(@Valid CreatePostsForm form) {
+    public String savePost(@Valid CreatePostsForm form) {
 
         PostsSaveRequestDto saveRequest = createSaveRequest(form);
 
@@ -94,7 +93,7 @@ public class PostsController {
 
     // Edit
     @GetMapping("/post/edit/{postId}")
-    public String editForm(@PathVariable Long postId, Model model) {
+    public String createEditForm(@PathVariable Long postId, Model model) {
 
         EditPostsForm editPostsForm = createEditPostsForm(postId);
 
@@ -107,7 +106,7 @@ public class PostsController {
     }
 
     @PostMapping("/post/edit/{postId}")
-    public String edit(@PathVariable Long postId, @Valid EditPostsForm form) {
+    public String editPost(@PathVariable Long postId, @Valid EditPostsForm form) {
 
         // Consider refactoring the logic for dirty checking
 
@@ -124,7 +123,7 @@ public class PostsController {
 
     // Delete
     @PostMapping("/post/delete/{postId}")
-    public String delete(@PathVariable Long postId) {
+    public String deletePost(@PathVariable Long postId) {
 
         postsService.delete(postId);
 
@@ -132,7 +131,7 @@ public class PostsController {
     }
 
     @GetMapping("/post/search")
-    public String searchPostsByKeyword(Pageable pageable, Model model
+    public String getPostsClassifiedByKeyword(Pageable pageable, Model model
         , @RequestParam String q) {
 
         Page<PostsResponse> searchedPostsListByKeyword = postsService.getSearchedPostsListByKeyword(
@@ -147,7 +146,7 @@ public class PostsController {
     }
 
     @GetMapping("/post/category")
-    public String getCategorizedPosts(Pageable pageable, @RequestParam String q,
+    public String getPostsClassifiedByCategory(Pageable pageable, @RequestParam String q,
         Model model) {
 
         Page<PostsResponseWithCategoryDto> categorizedPosts = postsService.getCategorizedPosts(
@@ -211,7 +210,7 @@ public class PostsController {
 
     private EditPostsForm createEditPostsForm(Long postId) {
 
-        PostsResponse originalPost = postsService.getPostsById(postId);
+        PostsResponse originalPost = postsService.getPostsByIdWithComments(postId);
         String title=originalPost.getTitle();
         String content=originalPost.getContent();
         String categoryTitle=originalPost.getCategoryTitle();

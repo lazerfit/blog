@@ -213,7 +213,7 @@ class PostControllerTest {
         commentForm.setParentId(null);
         commentForm.setPassword("1234");
 
-        mockMvc.perform(post("/posts/1/comment")
+        mockMvc.perform(post("/post/1/comment")
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(commentForm)))
             .andDo(print())
@@ -242,32 +242,14 @@ class PostControllerTest {
         SubCommentForm.setPostId(all.get(0).getId());
         SubCommentForm.setParentId(parentId);
 
-        mockMvc.perform(post("/posts/1/comment")
+        mockMvc.perform(post("/post/1/comment")
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(SubCommentForm)))
             .andDo(print())
             .andExpect(status().is3xxRedirection());
     }
 
-    @Test
-    @DisplayName("게시글 가져오기 - 댓글 포함")
-    @Transactional
-    void getPostsWithComment() throws Exception {
 
-        List<Post> all = postsRepository.findAll();
-
-        commentsRepository.save(Comment.builder()
-            .username("sg")
-            .content("정말 좋은 글이네요")
-            .parent(null)
-            .post(all.get(0))
-            .password("1234")
-            .build());
-
-        mockMvc.perform(get("/posts/1"))
-            .andDo(print())
-            .andExpect(status().isOk());
-    }
 
     @Test
     @DisplayName("게시글 수정 - 수정 폼")

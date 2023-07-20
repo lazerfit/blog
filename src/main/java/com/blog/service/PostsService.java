@@ -85,7 +85,7 @@ public class PostsService {
     }
 
     @Transactional(readOnly = true)
-    public PostsResponse getPostsById(Long id) {
+    public PostsResponse getPostsByIdWithComments(Long id) {
         return postsRepository.findByIdWithQdsl(id);
     }
 
