@@ -11,10 +11,11 @@ import com.blog.web.dto.PostsResponseWithoutComment;
 import com.blog.web.dto.PostsUpdateRequestDto;
 import com.blog.web.dto.QCommentsResponseDto;
 import com.blog.web.dto.QPostsResponse;
-import com.blog.web.dto.QPostsResponseWithoutCommentDto;
+import com.blog.web.dto.QPostsResponseWithoutComment;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -28,9 +29,9 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<PostsResponseWithoutComment> getPostsExcludingComment(Pageable pageable) {
+    public Page<PostsResponseWithoutComment> fetchPostsExcludingComment(Pageable pageable) {
         List<PostsResponseWithoutComment> postsList = jpaQueryFactory
-            .select(new QPostsResponseWithoutCommentDto(post.id, post.title, post.content,
+            .select(new QPostsResponseWithoutComment(post.id, post.title, post.content,
                 post.generationTimeStamp, post.category, post.tag, post.views))
             .from(post)
             .limit(pageable.getPageSize())
@@ -45,7 +46,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     }
 
     @Override
-    public Page<PostsResponse> getPostsListByKeyword(Pageable pageable, String keyword) {
+    public Page<PostsResponse> findPostsByKeyword(Pageable pageable, String keyword) {
         List<PostsResponse> postsList = jpaQueryFactory.select(
                 new QPostsResponse(post.id, post.title,post.content,post.generationTimeStamp,post.category.title,post.tag,post.views))
             .from(post)
@@ -73,7 +74,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     }
 
     @Override
-    public Page<PostsResponseWithCategoryDto> getCategorizedPosts(Pageable pageable,
+    public Page<PostsResponseWithCategoryDto> fetchPostsSortedByCategory(Pageable pageable,
         String q) {
         List<PostsResponseWithCategoryDto> postsList = jpaQueryFactory.select(
                 Projections.constructor(PostsResponseWithCategoryDto.class, post.id, post.title,
@@ -120,7 +121,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
 
     @Override
     public List<PostsResponseWithoutComment> getPopularPosts() {
-        return jpaQueryFactory.select(new QPostsResponseWithoutCommentDto(post.id, post.title, post.content,
+        return jpaQueryFactory.select(new QPostsResponseWithoutComment(post.id, post.title, post.content,
                 post.generationTimeStamp, post.category, post.tag, post.views))
             .from(post)
             .orderBy(post.views.desc())
@@ -129,7 +130,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     }
 
     @Override
-    public List<PostsResponse> getCategorizedPostsNotContainPage(String q) {
+    public List<PostsResponse> fetchPostsSortedByCategory(String q) {
         return jpaQueryFactory.select(new QPostsResponse(
                 post.id,
                 post.title,
@@ -196,4 +197,22 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
         return postsResponse;
     }
 
+    @Override
+    public Optional<PostsResponse> findPostsById(Long id) {
+        PostsResponse response = jpaQueryFactory.select(
+                new QPostsResponse(
+                    post.id,
+                    post.title,
+                    post.content,
+                    post.generationTimeStamp,
+                    post.category.title,
+                    post.tag,
+                    post.views
+                ))
+            .from(post)
+            .where(post.id.eq(id))
+            .fetchOne();
+
+        return Optional.ofNullable(response);
+    }
 }

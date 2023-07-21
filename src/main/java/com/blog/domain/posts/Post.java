@@ -59,6 +59,6 @@ public class Post extends BaseTimeEntity {
     }
 
     public void addViews(Long hit) {
-        this.views =hit;
+        this.views +=hit;
     }
 }

@@ -41,7 +41,7 @@ public class PostsController {
     @GetMapping("/")
     public String index(Pageable pageable, Model model) {
 
-        Page<PostsResponseWithoutComment> posts = postsService.getPostsExcludingComment(pageable);
+        Page<PostsResponseWithoutComment> posts = postsService.fetchPostsExcludingComment(pageable);
         model.addAttribute("postsList", posts);
 
         populateRelatedSidebar(model);
@@ -147,7 +147,7 @@ public class PostsController {
     public String getPostsClassifiedByCategory(Pageable pageable, @RequestParam String q,
         Model model) {
 
-        Page<PostsResponseWithCategoryDto> categorizedPosts = postsService.getCategorizedPosts(
+        Page<PostsResponseWithCategoryDto> categorizedPosts = postsService.fetchPostsSortedByCategory(
             pageable, q);
         model.addAttribute("categorizedPosts", categorizedPosts);
 
@@ -185,14 +185,14 @@ public class PostsController {
         model.addAttribute("keyword", q);
     }
 
-    private void addAnotherCategories(PostsResponse postsResponse,Model model) {
-        var anotherCategory = postsService.getCategorizedPostsNotContainPage(
-            postsResponse.getCategoryTitle());
+    private void addAnotherCategories(String categoryTitle,Model model) {
+        var anotherCategory = postsService.fetchPostsSortedByCategory(
+            categoryTitle);
         model.addAttribute("anotherCategory",anotherCategory);
     }
 
     private void addTags(Long postId, Model model) {
-        List<String> tagList = postsService.getTags(postId);
+        List<String> tagList = postsService.fetchTags(postId);
         model.addAttribute("tagList", tagList);
     }
 
@@ -207,7 +207,7 @@ public class PostsController {
     }
 
     private void populateRelatedDetails(Long postId, Model model, PostsResponse postsResponse) {
-        addAnotherCategories(postsResponse, model);
+        addAnotherCategories(postsResponse.getCategoryTitle(), model);
         addCommentCount(postId, model);
         addTags(postId, model);
     }

@@ -128,7 +128,7 @@ class PostServiceTest {
 
         PageRequest request = PageRequest.of(0, 6);
 
-        List<PostsResponseWithoutComment> postsList = postsRepository.getPostsExcludingComment(request)
+        List<PostsResponseWithoutComment> postsList = postsRepository.fetchPostsExcludingComment(request)
             .stream().toList();
 
         assertThat(postsList.get(0).getTitle()).isEqualTo("제목10");
@@ -139,7 +139,7 @@ class PostServiceTest {
     @DisplayName("삭제")
     void delete() {
 
-        Post post = postsRepository.getPostById(1L).orElseThrow(PostNotFound::new);
+        PostsResponse post = postsRepository.getPostById(1L).orElseThrow(PostNotFound::new);
         postsRepository.delete(post);
 
         Optional<Post> searchedPost = postsRepository.getPostById(1L);
@@ -170,7 +170,7 @@ class PostServiceTest {
 
         PageRequest pageRequest = PageRequest.of(0, 6);
 
-        Page<PostsResponseWithCategoryDto> categorizedPosts = postsRepository.getCategorizedPosts(
+        Page<PostsResponseWithCategoryDto> categorizedPosts = postsRepository.fetchPostsSortedByCategory(
             pageRequest,
             "Spring");
 
@@ -310,7 +310,7 @@ class PostServiceTest {
 
         PageRequest pageRequest = PageRequest.of(0, 6);
 
-        Page<PostsResponseWithoutComment> postsWithPaging = postsRepository.getPostsExcludingComment(
+        Page<PostsResponseWithoutComment> postsWithPaging = postsRepository.fetchPostsExcludingComment(
             pageRequest);
 
         System.out.println("======"+postsWithPaging.stream().toList().get(0));

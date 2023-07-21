@@ -34,31 +34,33 @@ public class PostsService {
         postsRepository.edit(id,request);
     }
 
-    public PostsResponseWithCategoryDto findByIdWithCategory(Long id) {
-        return postsRepository.findByIdContainCategory(id);
-    }
-
     @Transactional(readOnly = true)
-    public Page<PostsResponseWithoutComment> getPostsExcludingComment(Pageable pageable) {
-        return postsRepository.getPostsExcludingComment(pageable);
+    public Page<PostsResponseWithoutComment> fetchPostsExcludingComment(Pageable pageable) {
+        return postsRepository.fetchPostsExcludingComment(pageable);
     }
 
     @Transactional
     public void delete(Long postId) {
-        Post post = postsRepository.getPostById(postId).orElseThrow(PostNotFound::new);
-        postsRepository.delete(post);
+        PostsResponse post = postsRepository.findPostsById(postId).orElseThrow(PostNotFound::new);
+        postsRepository.deleteById(post.getId());
     }
 
     public Page<PostsResponse> findPostsByKeyword(Pageable pageable,String q) {
-        return postsRepository.getPostsListByKeyword(pageable, q);
+        return postsRepository.findPostsByKeyword(pageable, q);
     }
 
-    public Page<PostsResponseWithCategoryDto> getCategorizedPosts(Pageable pageable,
-        String q) {
-        return postsRepository.getCategorizedPosts(pageable, q);
+    // Sorted By CategoryTitle
+    public Page<PostsResponseWithCategoryDto> fetchPostsSortedByCategory(Pageable pageable,
+        String categoryTitle) {
+        return postsRepository.fetchPostsSortedByCategory(pageable, categoryTitle);
     }
 
-    public List<String> getTags(Long id) {
+    public List<PostsResponse> fetchPostsSortedByCategory(String categoryTitle) {
+        return postsRepository.fetchPostsSortedByCategory(
+            categoryTitle);
+    }
+
+    public List<String> fetchTags(Long id) {
         Post post = postsRepository.findById(id).orElseThrow(PostNotFound::new);
         String tags = post.getTag();
         return Stream.of(tags.split(",", -1)).toList();
@@ -71,28 +73,16 @@ public class PostsService {
     @Transactional
     public void addViews(Long id) {
         Post post = postsRepository.findById(id).orElseThrow(PostNotFound::new);
-        Long hit= post.getViews()+1L;
-        post.addViews(hit);
+        post.addViews(1L);
     }
 
     public List<PostsResponseWithoutComment> getPopularPosts() {
         return postsRepository.getPopularPosts();
     }
 
-    public List<PostsResponse> getCategorizedPostsNotContainPage(String q) {
-        return postsRepository.getCategorizedPostsNotContainPage(
-            q);
-    }
-
     @Transactional(readOnly = true)
     public PostsResponse findPostsByIdIncludingComments(Long id) {
         return postsRepository.findByIdWithQdsl(id);
-    }
-
-    @Transactional(readOnly = true)
-    public PostsResponse getPostById(Long postId) {
-        Post post = postsRepository.getPostById(postId).orElseThrow(PostNotFound::new);
-        return new PostsResponse(post);
     }
 }
 
