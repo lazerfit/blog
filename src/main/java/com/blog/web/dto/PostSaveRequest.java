@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
-public class PostsSaveRequestDto {
+public class PostSaveRequest {
 
     @NotBlank(message = "제목은 필수입니다.")
     private final String title;

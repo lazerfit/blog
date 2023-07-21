@@ -5,8 +5,8 @@ import com.blog.domain.posts.PostsRepository;
 import com.blog.exception.PostNotFound;
 import com.blog.web.dto.PostsResponse;
 import com.blog.web.dto.PostsResponseWithCategoryDto;
-import com.blog.web.dto.PostsResponseWithoutCommentDto;
-import com.blog.web.dto.PostsSaveRequestDto;
+import com.blog.web.dto.PostsResponseWithoutComment;
+import com.blog.web.dto.PostSaveRequest;
 import com.blog.web.dto.PostsUpdateRequestDto;
 import java.util.List;
 import java.util.stream.Stream;
@@ -25,7 +25,7 @@ public class PostsService {
     private final PostsRepository postsRepository;
 
     @Transactional
-    public void save(PostsSaveRequestDto request) {
+    public void save(PostSaveRequest request) {
         postsRepository.save(request.toEntity());
     }
 
@@ -39,8 +39,8 @@ public class PostsService {
     }
 
     @Transactional(readOnly = true)
-    public Page<PostsResponseWithoutCommentDto> getPostsWithPaging(Pageable pageable) {
-        return postsRepository.getPostsWithPaging(pageable);
+    public Page<PostsResponseWithoutComment> getPostsExcludingComment(Pageable pageable) {
+        return postsRepository.getPostsExcludingComment(pageable);
     }
 
     @Transactional
@@ -49,7 +49,7 @@ public class PostsService {
         postsRepository.delete(post);
     }
 
-    public Page<PostsResponse> getSearchedPostsListByKeyword(Pageable pageable,String q) {
+    public Page<PostsResponse> findPostsByKeyword(Pageable pageable,String q) {
         return postsRepository.getPostsListByKeyword(pageable, q);
     }
 
@@ -58,7 +58,7 @@ public class PostsService {
         return postsRepository.getCategorizedPosts(pageable, q);
     }
 
-    public List<String> getTagsAsList(Long id) {
+    public List<String> getTags(Long id) {
         Post post = postsRepository.findById(id).orElseThrow(PostNotFound::new);
         String tags = post.getTag();
         return Stream.of(tags.split(",", -1)).toList();
@@ -75,7 +75,7 @@ public class PostsService {
         post.addViews(hit);
     }
 
-    public List<PostsResponseWithoutCommentDto> getPopularPosts() {
+    public List<PostsResponseWithoutComment> getPopularPosts() {
         return postsRepository.getPopularPosts();
     }
 
@@ -85,7 +85,7 @@ public class PostsService {
     }
 
     @Transactional(readOnly = true)
-    public PostsResponse getPostsByIdWithComments(Long id) {
+    public PostsResponse findPostsByIdIncludingComments(Long id) {
         return postsRepository.findByIdWithQdsl(id);
     }
 

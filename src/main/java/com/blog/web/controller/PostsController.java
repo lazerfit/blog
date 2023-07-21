@@ -6,13 +6,13 @@ import com.blog.service.CommentService;
 import com.blog.service.PostsService;
 import com.blog.web.dto.PostsResponse;
 import com.blog.web.dto.PostsResponseWithCategoryDto;
-import com.blog.web.dto.PostsResponseWithoutCommentDto;
-import com.blog.web.dto.PostsSaveRequestDto;
+import com.blog.web.dto.PostsResponseWithoutComment;
+import com.blog.web.dto.PostSaveRequest;
 import com.blog.web.dto.PostsUpdateRequestDto;
 import com.blog.web.form.CommentForm;
 import com.blog.web.form.CommentPasswordCheckForm;
 import com.blog.web.form.CreatePostsForm;
-import com.blog.web.form.EditPostsForm;
+import com.blog.web.form.EditPostForm;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -39,11 +39,11 @@ public class PostsController {
 
     @GetMapping("/")
     public String index(Pageable pageable, Model model) {
-        Page<PostsResponseWithoutCommentDto> posts = postsService.getPostsWithPaging(pageable);
+
+        Page<PostsResponseWithoutComment> posts = postsService.getPostsExcludingComment(pageable);
         model.addAttribute("postsList", posts);
 
-        addCategoriesAttributes(model);
-        addPopularPostsAttributes(model);
+        populateRelatedSidebar(model);
 
         return "index";
     }
@@ -54,18 +54,17 @@ public class PostsController {
 
         postsService.addViews(postId);
 
-        PostsResponse postsResponse = postsService.getPostsByIdWithComments(postId);
+        PostsResponse postsResponse = postsService.findPostsByIdIncludingComments(postId);
         model.addAttribute("postFindById", postsResponse);
 
         addCommentFormAndPasswordForm(model);
 
-        // 카테고리의 다른 글
-        addAnotherCategories(postsResponse,model);
+        // Add attributes about category, popular post
+        populateRelatedSidebar(model);
 
-        addCommentCount(postId, model);
-        addTags(postId, model);
-        addCategoriesAttributes(model);
-        addPopularPostsAttributes(model);
+        // Add details about related categories, comments, tags
+        populateRelatedDetails(postId, model, postsResponse);
+
         return "posts";
     }
 
@@ -75,8 +74,7 @@ public class PostsController {
 
         model.addAttribute("createPostsForm", new CreatePostsForm());
 
-        addCategoriesAttributes(model);
-        addPopularPostsAttributes(model);
+        populateRelatedSidebar(model);
 
         return "form/createPostsForm";
     }
@@ -84,7 +82,7 @@ public class PostsController {
     @PostMapping("/post/new")
     public String savePost(@Valid CreatePostsForm form) {
 
-        PostsSaveRequestDto saveRequest = createSaveRequest(form);
+        PostSaveRequest saveRequest = createSaveRequest(form);
 
         postsService.save(saveRequest);
 
@@ -95,18 +93,17 @@ public class PostsController {
     @GetMapping("/post/edit/{postId}")
     public String createEditForm(@PathVariable Long postId, Model model) {
 
-        EditPostsForm editPostsForm = createEditPostsForm(postId);
+        EditPostForm editPostForm = createEditPostForm(postId);
 
-        model.addAttribute("editPostsForm", editPostsForm);
+        model.addAttribute("editPostsForm", editPostForm);
 
-        addCategoriesAttributes(model);
-        addPopularPostsAttributes(model);
+        populateRelatedSidebar(model);
 
         return "form/editPostsForm";
     }
 
     @PostMapping("/post/edit/{postId}")
-    public String editPost(@PathVariable Long postId, @Valid EditPostsForm form) {
+    public String editPost(@PathVariable Long postId, @Valid EditPostForm form) {
 
         // Consider refactoring the logic for dirty checking
 
@@ -134,13 +131,12 @@ public class PostsController {
     public String getPostsClassifiedByKeyword(Pageable pageable, Model model
         , @RequestParam String q) {
 
-        Page<PostsResponse> searchedPostsListByKeyword = postsService.getSearchedPostsListByKeyword(
+        Page<PostsResponse> searchedPostsByKeyword = postsService.findPostsByKeyword(
             pageable, q);
-        model.addAttribute("postsList", searchedPostsListByKeyword);
+        model.addAttribute("postsList", searchedPostsByKeyword);
 
         addKeywordAttributes(q,model);
-        addCategoriesAttributes(model);
-        addPopularPostsAttributes(model);
+        populateRelatedSidebar(model);
 
         return "index";
     }
@@ -179,7 +175,7 @@ public class PostsController {
     }
 
     private void addPopularPostsAttributes(Model model) {
-        List<PostsResponseWithoutCommentDto> popularPosts = postsService.getPopularPosts();
+        List<PostsResponseWithoutComment> popularPosts = postsService.getPopularPosts();
         model.addAttribute("popularPosts",popularPosts);
     }
 
@@ -194,7 +190,7 @@ public class PostsController {
     }
 
     private void addTags(Long postId, Model model) {
-        List<String> tagList = postsService.getTagsAsList(postId);
+        List<String> tagList = postsService.getTags(postId);
         model.addAttribute("tagList", tagList);
     }
 
@@ -208,21 +204,32 @@ public class PostsController {
         model.addAttribute("passwordForm", new CommentPasswordCheckForm());
     }
 
-    private EditPostsForm createEditPostsForm(Long postId) {
+    private EditPostForm createEditPostForm(Long postId) {
 
-        PostsResponse originalPost = postsService.getPostsByIdWithComments(postId);
+        PostsResponse originalPost = postsService.findPostsByIdIncludingComments(postId);
         String title=originalPost.getTitle();
         String content=originalPost.getContent();
         String categoryTitle=originalPost.getCategoryTitle();
 
-        return new EditPostsForm(title, content, categoryTitle);
+        return new EditPostForm(title, content, categoryTitle);
     }
 
-    private PostsSaveRequestDto createSaveRequest(CreatePostsForm form) {
+    private PostSaveRequest createSaveRequest(CreatePostsForm form) {
 
         Category category = categoryService.getCategoryByTitle(form.getCategoryTitle());
 
-        return new PostsSaveRequestDto(
+        return new PostSaveRequest(
             form.getTitle(),form.getContent(),category,form.getTags(),0L);
+    }
+
+    private void populateRelatedSidebar(Model model) {
+        addCategoriesAttributes(model);
+        addPopularPostsAttributes(model);
+    }
+
+    private void populateRelatedDetails(Long postId, Model model, PostsResponse postsResponse) {
+        addAnotherCategories(postsResponse, model);
+        addCommentCount(postId, model);
+        addTags(postId, model);
     }
 }

@@ -9,7 +9,7 @@ import lombok.ToString;
 
 @ToString
 @Getter
-public class PostsResponseWithoutCommentDto {
+public class PostsResponseWithoutComment {
 
     private final Long id;
     private final String title;
@@ -20,7 +20,7 @@ public class PostsResponseWithoutCommentDto {
     private final Long hit;
 
 
-    public PostsResponseWithoutCommentDto(Post post) {
+    public PostsResponseWithoutComment(Post post) {
         this.id= post.getId();
         this.title= post.getTitle();
         this.content= post.getContent();
@@ -31,7 +31,7 @@ public class PostsResponseWithoutCommentDto {
     }
 
     @QueryProjection
-    public PostsResponseWithoutCommentDto(Long id, String title, String content, LocalDateTime createdDate,
+    public PostsResponseWithoutComment(Long id, String title, String content, LocalDateTime createdDate,
         Category category, String tags, Long hit) {
         this.id = id;
         this.title = title;

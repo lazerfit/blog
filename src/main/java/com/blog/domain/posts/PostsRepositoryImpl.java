@@ -7,7 +7,7 @@ import com.blog.exception.PostNotFound;
 import com.blog.web.dto.CommentsResponseDto;
 import com.blog.web.dto.PostsResponse;
 import com.blog.web.dto.PostsResponseWithCategoryDto;
-import com.blog.web.dto.PostsResponseWithoutCommentDto;
+import com.blog.web.dto.PostsResponseWithoutComment;
 import com.blog.web.dto.PostsUpdateRequestDto;
 import com.blog.web.dto.QCommentsResponseDto;
 import com.blog.web.dto.QPostsResponse;
@@ -28,8 +28,8 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<PostsResponseWithoutCommentDto> getPostsWithPaging(Pageable pageable) {
-        List<PostsResponseWithoutCommentDto> postsList = jpaQueryFactory
+    public Page<PostsResponseWithoutComment> getPostsExcludingComment(Pageable pageable) {
+        List<PostsResponseWithoutComment> postsList = jpaQueryFactory
             .select(new QPostsResponseWithoutCommentDto(post.id, post.title, post.content,
                 post.generationTimeStamp, post.category, post.tag, post.views))
             .from(post)
@@ -119,7 +119,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     }
 
     @Override
-    public List<PostsResponseWithoutCommentDto> getPopularPosts() {
+    public List<PostsResponseWithoutComment> getPopularPosts() {
         return jpaQueryFactory.select(new QPostsResponseWithoutCommentDto(post.id, post.title, post.content,
                 post.generationTimeStamp, post.category, post.tag, post.views))
             .from(post)

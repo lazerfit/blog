@@ -14,8 +14,8 @@ import com.blog.exception.PostNotFound;
 import com.blog.web.dto.CommentsSaveRequestDto;
 import com.blog.web.dto.PostsResponse;
 import com.blog.web.dto.PostsResponseWithCategoryDto;
-import com.blog.web.dto.PostsResponseWithoutCommentDto;
-import com.blog.web.dto.PostsSaveRequestDto;
+import com.blog.web.dto.PostsResponseWithoutComment;
+import com.blog.web.dto.PostSaveRequest;
 import com.blog.web.dto.PostsUpdateRequestDto;
 import jakarta.persistence.EntityManager;
 import java.util.List;
@@ -128,7 +128,7 @@ class PostServiceTest {
 
         PageRequest request = PageRequest.of(0, 6);
 
-        List<PostsResponseWithoutCommentDto> postsList = postsRepository.getPostsWithPaging(request)
+        List<PostsResponseWithoutComment> postsList = postsRepository.getPostsExcludingComment(request)
             .stream().toList();
 
         assertThat(postsList.get(0).getTitle()).isEqualTo("제목10");
@@ -185,10 +185,10 @@ class PostServiceTest {
 
         Category category = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
 
-        PostsSaveRequestDto postsSaveRequestDto = new PostsSaveRequestDto("제목", "내용", category,
+        PostSaveRequest postSaveRequest = new PostSaveRequest("제목", "내용", category,
             tagData, 0L);
 
-        postsRepository.save(postsSaveRequestDto.toEntity());
+        postsRepository.save(postSaveRequest.toEntity());
 
         List<Post> all = postsRepository.findAll();
 
@@ -202,10 +202,10 @@ class PostServiceTest {
 
         Category category = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
 
-        PostsSaveRequestDto postsSaveRequestDto = new PostsSaveRequestDto("제목", "내용", category,
+        PostSaveRequest postSaveRequest = new PostSaveRequest("제목", "내용", category,
             tagData, 0L);
 
-        postsRepository.save(postsSaveRequestDto.toEntity());
+        postsRepository.save(postSaveRequest.toEntity());
 
         List<Post> all = postsRepository.findAll();
 
@@ -226,7 +226,7 @@ class PostServiceTest {
         Category category = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
 
         IntStream.range(1, 30).forEach(i -> postsRepository.save(
-            new PostsSaveRequestDto("제목" + i, "내용" + i, category, tagData, 0L).toEntity()));
+            new PostSaveRequest("제목" + i, "내용" + i, category, tagData, 0L).toEntity()));
 
 //        postsRepository.save(postsSaveRequestDto.toEntity());
 
@@ -310,7 +310,7 @@ class PostServiceTest {
 
         PageRequest pageRequest = PageRequest.of(0, 6);
 
-        Page<PostsResponseWithoutCommentDto> postsWithPaging = postsRepository.getPostsWithPaging(
+        Page<PostsResponseWithoutComment> postsWithPaging = postsRepository.getPostsExcludingComment(
             pageRequest);
 
         System.out.println("======"+postsWithPaging.stream().toList().get(0));
