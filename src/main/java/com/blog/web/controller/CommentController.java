@@ -9,6 +9,7 @@ import com.blog.web.dto.PostsResponse;
 import com.blog.web.form.CommentEditForm;
 import com.blog.web.form.CommentForm;
 import com.blog.web.form.CommentPasswordCheckForm;
+import com.blog.web.form.FormHandler;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,22 +28,23 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class CommentController {
 
     private final CommentService commentService;
-
     private final PostsService postsService;
-
     private final PasswordEncoder passwordEncoder;
+    private final FormHandler formHandler;
 
     private static final String REPLACE_COMMENT_LIST = "posts :: commentList";
+    private static final String SUCCESS = "성공";
+    private static final String CHECK_PASSWORD = "비밀번호를 확인해 주세요";
 
     @PostMapping("/post/comment/new")
     public String saveComment(@RequestBody @Valid CommentForm form,
         Model model) {
 
-        addPasswordCheckForm(model);
+        formHandler.addCommentPasswordCheckForm(model);
 
         commentService.save(form.getPostId(), form);
 
-        PostsResponse response = postsService.getPostsByIdWithComments(form.getPostId());
+        PostsResponse response = postsService.findPostsByIdIncludingComments(form.getPostId());
         model.addAttribute("postFindById", response);
 
         return REPLACE_COMMENT_LIST;
@@ -51,7 +53,7 @@ public class CommentController {
     @PostMapping("/post/admin/comment/delete")
     public String delete(@RequestParam Long commentId, @RequestParam Long postId, Model model) {
         commentService.delete(commentId);
-        PostsResponse response = postsService.getPostsByIdWithComments(postId);
+        PostsResponse response = postsService.findPostsByIdIncludingComments(postId);
         model.addAttribute("postFindById", response);
 
         return REPLACE_COMMENT_LIST;
@@ -60,14 +62,14 @@ public class CommentController {
     @PostMapping("/post/comment/manage")
     public String manageComment(CommentPasswordCheckForm form, Model model) {
 
-        addPasswordCheckForm(model);
+        formHandler.addCommentPasswordCheckForm(model);
 
         if (isPasswordValid(form)) {
 
             CommentsResponseDto responseDto = findCommentById(form.getCommentId());
 
             model.addAttribute("comment", responseDto);
-            model.addAttribute("commentEdit", new CommentEditForm());
+            formHandler.addCommentEditForm(model);
 
             return "editComment";
         }
@@ -80,23 +82,23 @@ public class CommentController {
 
         if (isPasswordValid(form)) {
             commentService.delete(form.getCommentId());
-            return "성공";
+            return SUCCESS;
         }
-        return "비밀번호를 확인해주세요";
+        return CHECK_PASSWORD;
     }
 
     @PostMapping("/post/comment/manage/edit")
     @ResponseBody
     public String userEditComment(CommentEditForm form,Model model){
 
-        addPasswordCheckForm(model);
+        formHandler.addCommentPasswordCheckForm(model);
 
         if (isPasswordValid(form)) {
             CommentEditRequest response = new CommentEditRequest(form.getId(),form.getContent());
             commentService.edit(response);
-            return "성공";
+            return SUCCESS;
         }
-        return "비밀번호를 확인해주세요";
+        return CHECK_PASSWORD;
     }
 
     @GetMapping("/post/comment/subComment/new")
@@ -114,14 +116,11 @@ public class CommentController {
 
         commentService.save(form.getPostId(),form);
 
-        return "";
+        return SUCCESS;
     }
 
 
-    private void addPasswordCheckForm(Model model) {
-        model.addAttribute("passwordForm", new CommentPasswordCheckForm());
-    }
-
+    //Method
     private CommentsResponseDto findCommentById(Long commentId) {
         return commentService.findById(commentId);
     }
