@@ -4,15 +4,14 @@ import com.blog.domain.category.Category;
 import com.blog.service.CategoryService;
 import com.blog.service.CommentService;
 import com.blog.service.PostsService;
+import com.blog.web.dto.PostSaveRequest;
 import com.blog.web.dto.PostsResponse;
 import com.blog.web.dto.PostsResponseWithCategoryDto;
 import com.blog.web.dto.PostsResponseWithoutComment;
-import com.blog.web.dto.PostSaveRequest;
 import com.blog.web.dto.PostsUpdateRequestDto;
-import com.blog.web.form.CommentForm;
-import com.blog.web.form.CommentPasswordCheckForm;
-import com.blog.web.form.CreatePostsForm;
-import com.blog.web.form.EditPostForm;
+import com.blog.web.form.PostCreateForm;
+import com.blog.web.form.PostEditForm;
+import com.blog.web.form.FormHandler;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +36,8 @@ public class PostsController {
 
     private final CommentService commentService;
 
+    private final FormHandler formHandler;
+
     @GetMapping("/")
     public String index(Pageable pageable, Model model) {
 
@@ -57,7 +58,8 @@ public class PostsController {
         PostsResponse postsResponse = postsService.findPostsByIdIncludingComments(postId);
         model.addAttribute("postFindById", postsResponse);
 
-        addCommentFormAndPasswordForm(model);
+        formHandler.addCommentForm(model);
+        formHandler.addCommentPasswordCheckForm(model);
 
         // Add attributes about category, popular post
         populateRelatedSidebar(model);
@@ -72,7 +74,7 @@ public class PostsController {
     @GetMapping("/post/new")
     public String createPostsForm(Model model) {
 
-        model.addAttribute("createPostsForm", new CreatePostsForm());
+        formHandler.addPostCreateForm(model);
 
         populateRelatedSidebar(model);
 
@@ -80,9 +82,9 @@ public class PostsController {
     }
 
     @PostMapping("/post/new")
-    public String savePost(@Valid CreatePostsForm form) {
+    public String savePost(@Valid PostCreateForm form) {
 
-        PostSaveRequest saveRequest = createSaveRequest(form);
+        PostSaveRequest saveRequest = formHandler.createSaveRequest(form);
 
         postsService.save(saveRequest);
 
@@ -93,9 +95,9 @@ public class PostsController {
     @GetMapping("/post/edit/{postId}")
     public String createEditForm(@PathVariable Long postId, Model model) {
 
-        EditPostForm editPostForm = createEditPostForm(postId);
+        PostEditForm postEditForm = formHandler.createEditPostForm(postId);
 
-        model.addAttribute("editPostsForm", editPostForm);
+        model.addAttribute("editPostsForm", postEditForm);
 
         populateRelatedSidebar(model);
 
@@ -103,7 +105,7 @@ public class PostsController {
     }
 
     @PostMapping("/post/edit/{postId}")
-    public String editPost(@PathVariable Long postId, @Valid EditPostForm form) {
+    public String editPost(@PathVariable Long postId, @Valid PostEditForm form) {
 
         // Consider refactoring the logic for dirty checking
 
@@ -197,29 +199,6 @@ public class PostsController {
     private void addCommentCount(Long postId, Model model) {
         int totalCommentSize = commentService.findByPostsId(postId).size();
         model.addAttribute("commentSize", totalCommentSize);
-    }
-
-    private void addCommentFormAndPasswordForm(Model model) {
-        model.addAttribute("commentForm", new CommentForm());
-        model.addAttribute("passwordForm", new CommentPasswordCheckForm());
-    }
-
-    private EditPostForm createEditPostForm(Long postId) {
-
-        PostsResponse originalPost = postsService.findPostsByIdIncludingComments(postId);
-        String title=originalPost.getTitle();
-        String content=originalPost.getContent();
-        String categoryTitle=originalPost.getCategoryTitle();
-
-        return new EditPostForm(title, content, categoryTitle);
-    }
-
-    private PostSaveRequest createSaveRequest(CreatePostsForm form) {
-
-        Category category = categoryService.getCategoryByTitle(form.getCategoryTitle());
-
-        return new PostSaveRequest(
-            form.getTitle(),form.getContent(),category,form.getTags(),0L);
     }
 
     private void populateRelatedSidebar(Model model) {
