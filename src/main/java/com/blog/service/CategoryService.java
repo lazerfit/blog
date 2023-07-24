@@ -3,14 +3,11 @@ package com.blog.service;
 import com.blog.domain.category.Category;
 import com.blog.domain.category.CategoryRepository;
 import com.blog.exception.CategoryNotFound;
-import com.blog.web.dto.CategorySaveRequest;
-import com.blog.web.dto.CategoryEditRequestDto;
-import com.blog.web.dto.PostsResponse;
+import com.blog.web.dto.category.CategoryEditRequestDto;
+import com.blog.web.dto.category.CategorySaveRequest;
 import com.blog.web.form.CategoryEditForm;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,18 +18,16 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    public Page<PostsResponse> getCategorizedPosts(Pageable pageable,String q) {
-        return categoryRepository.getCategorizedPostsList(pageable,q);
-    }
-
     @Transactional
     public void save(CategorySaveRequest requestDto) {
         categoryRepository.save(requestDto.toEntity());
     }
 
-    public Category getCategoryByTitle(String title) {
+    public Category findCategoryByTitle(String title) {
         return categoryRepository.findCategoryByTitle(title).orElseThrow(CategoryNotFound::new);
     }
+
+    // findAllCategory 빼고 나머지는 다 필요 없어 보임
 
     public List<Category> findAllCategory() {
         return categoryRepository.findAll(Sort.by(Sort.DEFAULT_DIRECTION,"listOrder"));
@@ -49,7 +44,6 @@ public class CategoryService {
             .title(form.getTitle()).listOrder(form.getListOrder()).build();
         Category category = categoryRepository.findById(categoryId)
             .orElseThrow(CategoryNotFound::new);
-
         category.edit(request.getTitle(), request.getListOrder());
     }
 }

@@ -3,7 +3,7 @@ package com.blog.domain.category;
 import static com.blog.domain.category.QCategory.category;
 import static com.blog.domain.posts.QPost.post;
 
-import com.blog.web.dto.PostsResponse;
+import com.blog.web.dto.posts.PostsResponse;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;

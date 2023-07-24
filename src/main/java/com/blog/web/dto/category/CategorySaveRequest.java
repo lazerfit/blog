@@ -1,4 +1,4 @@
-package com.blog.web.dto;
+package com.blog.web.dto.category;
 
 import com.blog.domain.category.Category;
 import lombok.Getter;
