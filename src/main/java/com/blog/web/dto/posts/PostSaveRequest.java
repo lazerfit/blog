@@ -16,15 +16,11 @@ public class PostSaveRequest {
 
     @NotBlank(message = "제목은 필수입니다.")
     private final String title;
-
     @NotBlank(message = "내용은 필수입니다.")
     private final String content;
-
     @NotBlank(message = "카테고리 선택은 필수입니다.")
     private final Category category;
-
     private final String tags;
-
     private final Long hit;
 
     public Post toEntity(){
@@ -48,19 +44,13 @@ public class PostSaveRequest {
         ObjectMapper objectMapper = new ObjectMapper();
         List<String> tagList=new ArrayList<>();
         try{JsonNode rootNode = objectMapper.readTree(tags);
-
             for (JsonNode node : rootNode) {
                 String value = node.get("value").asText();
                 tagList.add(value);
             }
-
-
         } catch(Exception e) {
             log.info(String.valueOf(e));
         }
-
         return String.join(",", tagList);
-
-
     }
 }

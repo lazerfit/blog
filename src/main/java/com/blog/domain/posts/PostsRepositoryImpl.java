@@ -7,7 +7,6 @@ import com.blog.exception.PostNotFound;
 import com.blog.web.dto.comments.CommentsResponse;
 import com.blog.web.dto.comments.QCommentsResponse;
 import com.blog.web.dto.posts.PostsResponse;
-import com.blog.web.dto.posts.PostsUpdateRequest;
 import com.blog.web.dto.posts.QPostsResponse;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -88,16 +87,6 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     }
 
     @Override
-    public void edit(Long id, PostsUpdateRequest requestDto) {
-        jpaQueryFactory.update(post)
-            .where(post.id.eq(id))
-            .set(post.title, requestDto.title())
-            .set(post.content,requestDto.content())
-            .set(post.category,requestDto.category())
-            .execute();
-    }
-
-    @Override
     public Page<PostsResponse> findPostsByTag(Pageable pageable, String tag) {
         List<PostsResponse> response = jpaQueryFactory
             .select(
@@ -116,9 +105,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
             .offset(pageable.getOffset())
             .orderBy(post.id.desc())
             .fetch();
-
         long totalCount=jpaQueryFactory.selectFrom(post).where(post.tag.contains(tag)).fetch().size();
-
         return new PageImpl<>(response, pageable, totalCount);
     }
 
@@ -199,13 +186,10 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
             .fetch();
 
         parentComment.forEach(p-> p.insertChildComment(childComment.stream().filter(c->c.getParentId().equals(p.getId())).toList()));
-
         if (postsResponse == null) {
             throw new PostNotFound();
         }
-
         postsResponse.insertComment(parentComment);
-
         return postsResponse;
     }
 
@@ -224,7 +208,6 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
             .from(post)
             .where(post.id.eq(id))
             .fetchOne();
-
         return Optional.ofNullable(response);
     }
 }

@@ -2,6 +2,7 @@ package com.blog.domain.posts;
 
 import com.blog.domain.category.Category;
 import com.blog.domain.comments.Comment;
+import com.blog.web.dto.posts.PostsUpdateRequest;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -60,5 +61,12 @@ public class Post extends BaseTimeEntity {
 
     public void addViews(Long hit) {
         this.views +=hit;
+    }
+
+    public void edit(PostsUpdateRequest request) {
+        this.title=request.getTitle();
+        this.content=request.getContent();
+        this.tag=request.getTag();
+        this.category=request.getCategory();
     }
 }

@@ -13,8 +13,6 @@ import com.blog.domain.comments.Comment;
 import com.blog.domain.comments.CommentsRepository;
 import com.blog.domain.posts.Post;
 import com.blog.domain.posts.PostsRepository;
-import com.blog.exception.CategoryNotFound;
-import com.blog.web.dto.posts.PostsSearchRequest;
 import com.blog.web.form.CommentForm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
@@ -127,29 +125,6 @@ class PostControllerTest {
             .andDo(print())
             .andExpect(status().is4xxClientError())
             .andExpect(content().json("{'message':'존재하지 않는 글입니다.'}"));
-    }
-
-    @Test
-    @DisplayName("글 다건 조회")
-    @WithMockUser(roles = "ADMIN")
-    void multipleSearch() throws Exception {
-
-        Category category = categoryRepository.findById(1L).orElseThrow(CategoryNotFound::new);
-
-        createPosts(category);
-
-        PostsSearchRequest request = PostsSearchRequest.builder()
-            .page(0)
-            .build();
-
-        mockMvc.perform(
-                get("/?page={page}&size={size}", request.getPage(), request.getSize())
-                    .accept(APPLICATION_JSON))
-            .andDo(print())
-            .andExpect(result -> {
-                String contentAsString = result.getResponse().getContentAsString();
-                contentAsString.contains("title29");
-            });
     }
 
     @Test

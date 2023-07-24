@@ -28,8 +28,9 @@ public class PostsService {
     }
 
     @Transactional
-    public void edit(Long id, PostsUpdateRequest request) {
-        postsRepository.edit(id,request);
+    public void edit(Long postId, PostsUpdateRequest request) {
+        Post post = postsRepository.findById(postId).orElseThrow(PostNotFound::new);
+        post.edit(request);
     }
 
     @Transactional(readOnly = true)

@@ -29,101 +29,77 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class PostsController {
 
     private final PostsService postsService;
-
     private final CategoryService categoryService;
-
     private final CommentService commentService;
-
     private final FormHandler formHandler;
 
     @GetMapping("/")
     public String index(Pageable pageable, Model model) {
-
         Page<PostsResponse> posts = postsService.fetchPostsExcludingComment(pageable);
         model.addAttribute("postsList", posts);
-
         populateRelatedSidebar(model);
-
         return "index";
     }
 
-
     @GetMapping("/post/{postId}")
     public String getPostDetail(@PathVariable Long postId, Model model) {
-
         postsService.addViews(postId);
-
         PostsResponse postsResponse = postsService.findPostsByIdIncludingComments(postId);
         model.addAttribute("postFindById", postsResponse);
-
-        formHandler.addCommentForm(model);
-        formHandler.addCommentPasswordCheckForm(model);
-
         // Add attributes about category, popular post
         populateRelatedSidebar(model);
-
         // Add details about related categories, comments, tags
         populateRelatedDetails(postId, model, postsResponse);
-
+        formHandler.addCommentForm(model);
+        formHandler.addCommentPasswordCheckForm(model);
         return "posts";
     }
 
     // Create
     @GetMapping("/post/new")
     public String createPostsForm(Model model) {
-
         formHandler.addPostCreateForm(model);
-
         populateRelatedSidebar(model);
-
         return "form/createPostsForm";
     }
 
     @PostMapping("/post/new")
     public String savePost(@Valid PostCreateForm form) {
-
         PostSaveRequest saveRequest = createPostSaveRequest(form);
-
         postsService.save(saveRequest);
-
         return "redirect:/";
     }
 
     // Edit
     @GetMapping("/post/edit/{postId}")
     public String createEditForm(@PathVariable Long postId, Model model) {
-
         PostEditForm postEditForm = formHandler.createEditPostForm(postId);
-
         model.addAttribute("editPostsForm", postEditForm);
-
         populateRelatedSidebar(model);
-
         return "form/editPostsForm";
     }
 
     @PostMapping("/post/edit/{postId}")
     public String editPost(@PathVariable Long postId, @Valid PostEditForm form) {
-
-        // Consider refactoring the logic for dirty checking
-
-        Category categoryByTitle = categoryService.findCategoryByTitle(form.getCategoryTitle());
-
-        PostsUpdateRequest request = new PostsUpdateRequest(form.getTitle(),
-            form.getContent(), categoryByTitle);
-
+        PostsUpdateRequest request = createPostEditRequest(form);
         postsService.edit(postId, request);
-
         return "redirect:/post/{postId}";
     }
 
+    private PostsUpdateRequest createPostEditRequest(PostEditForm form) {
+        Category category = categoryService.findCategoryByTitle(form.getCategoryTitle());
+        return PostsUpdateRequest.builder()
+            .title(form.getTitle())
+            .content(form.getContent())
+            .tag(form.getTag())
+            .category(category)
+            .build();
+    }
 
     // Delete
     @PostMapping("/post/delete/{postId}")
     public String deletePost(@PathVariable Long postId) {
-
         postsService.delete(postId);
-
         return "redirect:/";
     }
 
@@ -135,7 +111,6 @@ public class PostsController {
         model.addAttribute("postsList", searchedPostsByKeyword);
         addKeywordAttributes(q,model);
         populateRelatedSidebar(model);
-
         return "index";
     }
 
@@ -153,15 +128,11 @@ public class PostsController {
     @GetMapping("/tag")
     public String getPostsClassifiedByTags(Pageable pageable
         , @RequestParam String q, Model model) {
-
         Page<PostsResponse> postsByTags = postsService.findPostsByTag(pageable, q);
         model.addAttribute("postsByTags", postsByTags);
-
         addKeywordAttributes(q,model);
-
         return "postsByTags";
     }
-
 
     // Method
     private void populateRelatedSidebar(Model model) {
