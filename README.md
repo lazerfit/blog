@@ -51,11 +51,14 @@ lazerfit 의 개인 blog 프로젝트입니다.
 ***
 
 ## *개발 일지*
+- ### [230724] Comment, Category controller & service refactoring
+  - 메서드 추출, 네이밍 변경
 - ### [230721] FormHandler 추가
   - Controller 에서 Form 생성 등 Form 관련 클래스 사용 시 FormHandler 통해 사용하도록 함
 - ### [230720] controller 리팩토링 완료
   - 메서드 추출, 메서드 네이밍 변경
 - ### [230719] postController Refactoring
+  - Post edit Dirty Checking 로 변경
 - ### [230717] 대댓글 기능 구현 완료
   - 깊이 1단계
 - ### [230714] 대댓글 기능 구현 필요
