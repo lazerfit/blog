@@ -1,6 +1,7 @@
-package com.blog.web.dto;
+package com.blog.web.dto.posts;
 
 import com.blog.domain.posts.Post;
+import com.blog.web.dto.comments.CommentsResponse;
 import com.querydsl.core.annotations.QueryProjection;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,8 +19,7 @@ public class PostsResponse {
     private final String categoryTitle;
     private final String tag;
     private final Long views;
-    private List<CommentsResponseDto> comments;
-
+    private List<CommentsResponse> comments;
 
     public PostsResponse(Post post) {
         this.id= post.getId();
@@ -29,7 +29,7 @@ public class PostsResponse {
         this.categoryTitle = post.getCategory().getTitle();
         this.tag = post.getTag();
         this.views = post.getViews();
-        this.comments= post.getComments().stream().map(CommentsResponseDto::new).toList();
+        this.comments= post.getComments().stream().map(CommentsResponse::new).toList();
     }
 
     @QueryProjection
@@ -44,7 +44,7 @@ public class PostsResponse {
         this.views = views;
     }
 
-    public void insertComment(List<CommentsResponseDto> responseDto) {
+    public void insertComment(List<CommentsResponse> responseDto) {
         this.comments=responseDto;
     }
 }

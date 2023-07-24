@@ -14,7 +14,7 @@ import com.blog.domain.comments.CommentsRepository;
 import com.blog.domain.posts.Post;
 import com.blog.domain.posts.PostsRepository;
 import com.blog.exception.CategoryNotFound;
-import com.blog.web.dto.PostsSearchRequestDto;
+import com.blog.web.dto.posts.PostsSearchRequest;
 import com.blog.web.form.CommentForm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
@@ -138,7 +138,7 @@ class PostControllerTest {
 
         createPosts(category);
 
-        PostsSearchRequestDto request = PostsSearchRequestDto.builder()
+        PostsSearchRequest request = PostsSearchRequest.builder()
             .page(0)
             .build();
 

@@ -2,7 +2,7 @@ package com.blog.web.controller;
 
 import com.blog.domain.category.Category;
 import com.blog.service.CategoryService;
-import com.blog.web.dto.CategorySaveRequest;
+import com.blog.web.dto.category.CategorySaveRequest;
 import com.blog.web.form.CategoryEditForm;
 import com.blog.web.form.CategoryForm;
 import jakarta.validation.Valid;

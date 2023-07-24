@@ -4,14 +4,12 @@ import com.blog.domain.category.Category;
 import com.blog.service.CategoryService;
 import com.blog.service.CommentService;
 import com.blog.service.PostsService;
-import com.blog.web.dto.PostSaveRequest;
-import com.blog.web.dto.PostsResponse;
-import com.blog.web.dto.PostsResponseWithCategoryDto;
-import com.blog.web.dto.PostsResponseWithoutComment;
-import com.blog.web.dto.PostsUpdateRequestDto;
+import com.blog.web.dto.posts.PostSaveRequest;
+import com.blog.web.dto.posts.PostsResponse;
+import com.blog.web.dto.posts.PostsUpdateRequest;
+import com.blog.web.form.FormHandler;
 import com.blog.web.form.PostCreateForm;
 import com.blog.web.form.PostEditForm;
-import com.blog.web.form.FormHandler;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +39,7 @@ public class PostsController {
     @GetMapping("/")
     public String index(Pageable pageable, Model model) {
 
-        Page<PostsResponseWithoutComment> posts = postsService.fetchPostsExcludingComment(pageable);
+        Page<PostsResponse> posts = postsService.fetchPostsExcludingComment(pageable);
         model.addAttribute("postsList", posts);
 
         populateRelatedSidebar(model);
@@ -84,7 +82,7 @@ public class PostsController {
     @PostMapping("/post/new")
     public String savePost(@Valid PostCreateForm form) {
 
-        PostSaveRequest saveRequest = formHandler.createSaveRequest(form);
+        PostSaveRequest saveRequest = createPostSaveRequest(form);
 
         postsService.save(saveRequest);
 
@@ -109,9 +107,9 @@ public class PostsController {
 
         // Consider refactoring the logic for dirty checking
 
-        Category categoryByTitle = categoryService.getCategoryByTitle(form.getCategoryTitle());
+        Category categoryByTitle = categoryService.findCategoryByTitle(form.getCategoryTitle());
 
-        PostsUpdateRequestDto request = new PostsUpdateRequestDto(form.getTitle(),
+        PostsUpdateRequest request = new PostsUpdateRequest(form.getTitle(),
             form.getContent(), categoryByTitle);
 
         postsService.edit(postId, request);
@@ -132,11 +130,9 @@ public class PostsController {
     @GetMapping("/post/search")
     public String getPostsClassifiedByKeyword(Pageable pageable, Model model
         , @RequestParam String q) {
-
         Page<PostsResponse> searchedPostsByKeyword = postsService.findPostsByKeyword(
             pageable, q);
         model.addAttribute("postsList", searchedPostsByKeyword);
-
         addKeywordAttributes(q,model);
         populateRelatedSidebar(model);
 
@@ -146,13 +142,11 @@ public class PostsController {
     @GetMapping("/post/category")
     public String getPostsClassifiedByCategory(Pageable pageable, @RequestParam String q,
         Model model) {
-
-        Page<PostsResponseWithCategoryDto> categorizedPosts = postsService.fetchPostsSortedByCategory(
+        Page<PostsResponse> categorizedPosts = postsService.fetchPostsSortedByCategory(
             pageable, q);
         model.addAttribute("categorizedPosts", categorizedPosts);
-
         addKeywordAttributes(q,model);
-
+        populateRelatedSidebar(model);
         return "categorizedPosts";
     }
 
@@ -160,7 +154,7 @@ public class PostsController {
     public String getPostsClassifiedByTags(Pageable pageable
         , @RequestParam String q, Model model) {
 
-        Page<PostsResponseWithCategoryDto> postsByTags = postsService.getPostsByTags(pageable, q);
+        Page<PostsResponse> postsByTags = postsService.findPostsByTag(pageable, q);
         model.addAttribute("postsByTags", postsByTags);
 
         addKeywordAttributes(q,model);
@@ -170,19 +164,25 @@ public class PostsController {
 
 
     // Method
-    private void addCategoriesAttributes(Model model) {
+    private void populateRelatedSidebar(Model model) {
+        addCategoriesAttributes(model);
+        addPopularPostsAttributes(model);
+    }
 
+    private void addCategoriesAttributes(Model model) {
         List<Category> allCategory = categoryService.findAllCategory();
         model.addAttribute("allCategorizedPosts", allCategory);
     }
 
     private void addPopularPostsAttributes(Model model) {
-        List<PostsResponseWithoutComment> popularPosts = postsService.getPopularPosts();
+        List<PostsResponse> popularPosts = postsService.getPopularPosts();
         model.addAttribute("popularPosts",popularPosts);
     }
 
-    private void addKeywordAttributes(String q,Model model) {
-        model.addAttribute("keyword", q);
+    private void populateRelatedDetails(Long postId, Model model, PostsResponse postsResponse) {
+        addAnotherCategories(postsResponse.getCategoryTitle(), model);
+        addCommentCount(postId, model);
+        addTags(postId, model);
     }
 
     private void addAnotherCategories(String categoryTitle,Model model) {
@@ -191,24 +191,23 @@ public class PostsController {
         model.addAttribute("anotherCategory",anotherCategory);
     }
 
+    private void addCommentCount(Long postId, Model model) {
+        int totalCommentSize = commentService.findByPostId(postId).size();
+        model.addAttribute("commentSize", totalCommentSize);
+    }
+
     private void addTags(Long postId, Model model) {
         List<String> tagList = postsService.fetchTags(postId);
         model.addAttribute("tagList", tagList);
     }
 
-    private void addCommentCount(Long postId, Model model) {
-        int totalCommentSize = commentService.findByPostsId(postId).size();
-        model.addAttribute("commentSize", totalCommentSize);
+    private void addKeywordAttributes(String q,Model model) {
+        model.addAttribute("keyword", q);
     }
 
-    private void populateRelatedSidebar(Model model) {
-        addCategoriesAttributes(model);
-        addPopularPostsAttributes(model);
-    }
-
-    private void populateRelatedDetails(Long postId, Model model, PostsResponse postsResponse) {
-        addAnotherCategories(postsResponse.getCategoryTitle(), model);
-        addCommentCount(postId, model);
-        addTags(postId, model);
+    public PostSaveRequest createPostSaveRequest(PostCreateForm form) {
+        Category category = categoryService.findCategoryByTitle(form.getCategoryTitle());
+        return new PostSaveRequest(
+            form.getTitle(),form.getContent(),category,form.getTags(),0L);
     }
 }

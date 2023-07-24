@@ -3,11 +3,9 @@ package com.blog.service;
 import com.blog.domain.posts.Post;
 import com.blog.domain.posts.PostsRepository;
 import com.blog.exception.PostNotFound;
-import com.blog.web.dto.PostsResponse;
-import com.blog.web.dto.PostsResponseWithCategoryDto;
-import com.blog.web.dto.PostsResponseWithoutComment;
-import com.blog.web.dto.PostSaveRequest;
-import com.blog.web.dto.PostsUpdateRequestDto;
+import com.blog.web.dto.posts.PostSaveRequest;
+import com.blog.web.dto.posts.PostsResponse;
+import com.blog.web.dto.posts.PostsUpdateRequest;
 import java.util.List;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
@@ -30,12 +28,12 @@ public class PostsService {
     }
 
     @Transactional
-    public void edit(Long id, PostsUpdateRequestDto request) {
+    public void edit(Long id, PostsUpdateRequest request) {
         postsRepository.edit(id,request);
     }
 
     @Transactional(readOnly = true)
-    public Page<PostsResponseWithoutComment> fetchPostsExcludingComment(Pageable pageable) {
+    public Page<PostsResponse> fetchPostsExcludingComment(Pageable pageable) {
         return postsRepository.fetchPostsExcludingComment(pageable);
     }
 
@@ -50,7 +48,7 @@ public class PostsService {
     }
 
     // Sorted By CategoryTitle
-    public Page<PostsResponseWithCategoryDto> fetchPostsSortedByCategory(Pageable pageable,
+    public Page<PostsResponse> fetchPostsSortedByCategory(Pageable pageable,
         String categoryTitle) {
         return postsRepository.fetchPostsSortedByCategory(pageable, categoryTitle);
     }
@@ -66,8 +64,8 @@ public class PostsService {
         return Stream.of(tags.split(",", -1)).toList();
     }
 
-    public Page<PostsResponseWithCategoryDto> getPostsByTags(Pageable pageable, String q) {
-        return postsRepository.getPostsByTags(pageable,q);
+    public Page<PostsResponse> findPostsByTag(Pageable pageable, String tagTitle) {
+        return postsRepository.findPostsByTag(pageable,tagTitle);
     }
 
     @Transactional
@@ -76,13 +74,13 @@ public class PostsService {
         post.addViews(1L);
     }
 
-    public List<PostsResponseWithoutComment> getPopularPosts() {
+    public List<PostsResponse> getPopularPosts() {
         return postsRepository.getPopularPosts();
     }
 
     @Transactional(readOnly = true)
     public PostsResponse findPostsByIdIncludingComments(Long id) {
-        return postsRepository.findByIdWithQdsl(id);
+        return postsRepository.findPostsByIdIncludingComments(id);
     }
 }
 

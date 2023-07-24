@@ -11,12 +11,10 @@ import com.blog.domain.posts.Post;
 import com.blog.domain.posts.PostsRepository;
 import com.blog.exception.CommentNotFound;
 import com.blog.exception.PostNotFound;
-import com.blog.web.dto.CommentsSaveRequestDto;
-import com.blog.web.dto.PostsResponse;
-import com.blog.web.dto.PostsResponseWithCategoryDto;
-import com.blog.web.dto.PostsResponseWithoutComment;
-import com.blog.web.dto.PostSaveRequest;
-import com.blog.web.dto.PostsUpdateRequestDto;
+import com.blog.web.dto.comments.CommentsSaveRequest;
+import com.blog.web.dto.posts.PostSaveRequest;
+import com.blog.web.dto.posts.PostsResponse;
+import com.blog.web.dto.posts.PostsUpdateRequest;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
@@ -103,7 +101,7 @@ class PostServiceTest {
         em.flush();
         em.clear();
 
-        PostsUpdateRequestDto request = PostsUpdateRequestDto.builder()
+        PostsUpdateRequest request = PostsUpdateRequest.builder()
             .title("수정된 제목")
             .content("수정된 내용")
             .category(category2)
@@ -128,7 +126,7 @@ class PostServiceTest {
 
         PageRequest request = PageRequest.of(0, 6);
 
-        List<PostsResponseWithoutComment> postsList = postsRepository.fetchPostsExcludingComment(request)
+        List<PostsResponse> postsList = postsRepository.fetchPostsExcludingComment(request)
             .stream().toList();
 
         assertThat(postsList.get(0).getTitle()).isEqualTo("제목10");
@@ -139,10 +137,10 @@ class PostServiceTest {
     @DisplayName("삭제")
     void delete() {
 
-        PostsResponse post = postsRepository.getPostById(1L).orElseThrow(PostNotFound::new);
-        postsRepository.delete(post);
+        PostsResponse post = postsRepository.findPostsById(1L).orElseThrow(PostNotFound::new);
+        postsRepository.deleteById(post.getId());
 
-        Optional<Post> searchedPost = postsRepository.getPostById(1L);
+        Optional<PostsResponse> searchedPost = postsRepository.findPostsById(1L);
 
         Assertions.assertThrows(PostNotFound.class, () ->
             searchedPost.orElseThrow(PostNotFound::new));
@@ -170,7 +168,7 @@ class PostServiceTest {
 
         PageRequest pageRequest = PageRequest.of(0, 6);
 
-        Page<PostsResponseWithCategoryDto> categorizedPosts = postsRepository.fetchPostsSortedByCategory(
+        Page<PostsResponse> categorizedPosts = postsRepository.fetchPostsSortedByCategory(
             pageRequest,
             "Spring");
 
@@ -232,11 +230,11 @@ class PostServiceTest {
 
         PageRequest pageRequest = PageRequest.of(0, 6);
 
-        Page<PostsResponseWithCategoryDto> postsByTags = postsRepository.getPostsByTags(pageRequest,
+        Page<PostsResponse> postsByTags = postsRepository.findPostsByTag(pageRequest,
             "Spring");
 
         assertThat(postsByTags.stream().toList().get(0).getTitle()).isEqualTo("제목29");
-        assertThat(postsByTags.stream().toList().get(0).getTags()).isEqualTo("Spring,Java");
+        assertThat(postsByTags.stream().toList().get(0).getTag()).isEqualTo("Spring,Java");
     }
 
     @Test
@@ -266,7 +264,7 @@ class PostServiceTest {
     void treeEntity() {
         Post post = postsRepository.findById(1L).orElseThrow();
 
-        CommentsSaveRequestDto request = new CommentsSaveRequestDto("ddodi",
+        CommentsSaveRequest request = new CommentsSaveRequest("ddodi",
             "정말 좋은 글이네요", null, post, "1234");
 
         commentsRepository.save(request.toEntity());
@@ -286,18 +284,18 @@ class PostServiceTest {
 
         Post post = postsRepository.findById(1L).orElseThrow();
 
-        CommentsSaveRequestDto request = new CommentsSaveRequestDto("ddodi",
+        CommentsSaveRequest request = new CommentsSaveRequest("ddodi",
             "정말 좋은 글이네요", null, post, "1234");
 
         commentsRepository.save(request.toEntity());
         Comment savedComment = commentsRepository.findById(1L).orElseThrow(CommentNotFound::new);
 
-        CommentsSaveRequestDto sbuRequest = new CommentsSaveRequestDto("kim",
+        CommentsSaveRequest sbuRequest = new CommentsSaveRequest("kim",
             "감사합니다.", savedComment, post, "1234");
 
         commentsRepository.save(sbuRequest.toEntity());
 
-        PostsResponse responseDto = postsRepository.findByIdWithQdsl(post.getId());
+        PostsResponse responseDto = postsRepository.findPostsByIdIncludingComments(post.getId());
 
         assertThat(responseDto.getComments().get(0).getContent()).isEqualTo("정말 좋은 글이네요");
         assertThat(responseDto.getComments().get(0).getChild().get(0).getContent()).isEqualTo(
@@ -310,7 +308,7 @@ class PostServiceTest {
 
         PageRequest pageRequest = PageRequest.of(0, 6);
 
-        Page<PostsResponseWithoutComment> postsWithPaging = postsRepository.fetchPostsExcludingComment(
+        Page<PostsResponse> postsWithPaging = postsRepository.fetchPostsExcludingComment(
             pageRequest);
 
         System.out.println("======"+postsWithPaging.stream().toList().get(0));

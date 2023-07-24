@@ -4,15 +4,11 @@ import static com.blog.domain.comments.QComment.comment;
 import static com.blog.domain.posts.QPost.post;
 
 import com.blog.exception.PostNotFound;
-import com.blog.web.dto.CommentsResponseDto;
-import com.blog.web.dto.PostsResponse;
-import com.blog.web.dto.PostsResponseWithCategoryDto;
-import com.blog.web.dto.PostsResponseWithoutComment;
-import com.blog.web.dto.PostsUpdateRequestDto;
-import com.blog.web.dto.QCommentsResponseDto;
-import com.blog.web.dto.QPostsResponse;
-import com.blog.web.dto.QPostsResponseWithoutComment;
-import com.querydsl.core.types.Projections;
+import com.blog.web.dto.comments.CommentsResponse;
+import com.blog.web.dto.comments.QCommentsResponse;
+import com.blog.web.dto.posts.PostsResponse;
+import com.blog.web.dto.posts.PostsUpdateRequest;
+import com.blog.web.dto.posts.QPostsResponse;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import java.util.Optional;
@@ -29,10 +25,18 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<PostsResponseWithoutComment> fetchPostsExcludingComment(Pageable pageable) {
-        List<PostsResponseWithoutComment> postsList = jpaQueryFactory
-            .select(new QPostsResponseWithoutComment(post.id, post.title, post.content,
-                post.generationTimeStamp, post.category, post.tag, post.views))
+    public Page<PostsResponse> fetchPostsExcludingComment(Pageable pageable) {
+        List<PostsResponse> postsList = jpaQueryFactory
+            .select(
+                new QPostsResponse(
+                    post.id,
+                    post.title,
+                    post.content,
+                    post.generationTimeStamp,
+                    post.category.title,
+                    post.tag,
+                    post.views
+                ))
             .from(post)
             .limit(pageable.getPageSize())
             .offset(pageable.getOffset())
@@ -40,8 +44,6 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
             .fetch();
         long totalCount = jpaQueryFactory.selectFrom(post)
             .fetch().size();
-
-
         return new PageImpl<>(postsList,pageable,totalCount);
     }
 
@@ -57,43 +59,36 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
             .fetch();
         long totalCount=jpaQueryFactory.selectFrom(post)
             .where(post.title.contains(keyword)).fetch().size();
-
         return new PageImpl<>(postsList,pageable,totalCount);
     }
 
     @Override
-    public PostsResponseWithCategoryDto findByIdContainCategory(Long id) {
-        List<PostsResponseWithCategoryDto> response = jpaQueryFactory.select(
-                Projections.constructor(PostsResponseWithCategoryDto.class, post.id,
-                    post.title, post.content, post.generationTimeStamp, post.category.title,post.tag,post.views))
-            .from(post)
-            .where(post.id.eq(id))
-            .fetch();
-
-        return response.get(0);
-    }
-
-    @Override
-    public Page<PostsResponseWithCategoryDto> fetchPostsSortedByCategory(Pageable pageable,
+    public Page<PostsResponse> fetchPostsSortedByCategory(Pageable pageable,
         String q) {
-        List<PostsResponseWithCategoryDto> postsList = jpaQueryFactory.select(
-                Projections.constructor(PostsResponseWithCategoryDto.class, post.id, post.title,
-                    post.content, post.generationTimeStamp, post.category.title,post.tag,post.views))
+        List<PostsResponse> postsList = jpaQueryFactory
+            .select(
+                new QPostsResponse(
+                    post.id,
+                    post.title,
+                    post.content,
+                    post.generationTimeStamp,
+                    post.category.title,
+                    post.tag,
+                    post.views
+                ))
             .from(post)
             .where(post.category.title.eq(q))
             .limit(pageable.getPageSize())
             .offset(pageable.getOffset())
             .orderBy(post.id.desc())
             .fetch();
-
         long totalCount=jpaQueryFactory.selectFrom(post)
             .where(post.category.title.eq(q)).fetch().size();
-
         return new PageImpl<>(postsList,pageable,totalCount);
     }
 
     @Override
-    public void edit(Long id, PostsUpdateRequestDto requestDto) {
+    public void edit(Long id, PostsUpdateRequest requestDto) {
         jpaQueryFactory.update(post)
             .where(post.id.eq(id))
             .set(post.title, requestDto.title())
@@ -103,10 +98,18 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     }
 
     @Override
-    public Page<PostsResponseWithCategoryDto> getPostsByTags(Pageable pageable, String tag) {
-        List<PostsResponseWithCategoryDto> response = jpaQueryFactory.select(
-                Projections.constructor(PostsResponseWithCategoryDto.class, post.id, post.title,
-                    post.content, post.generationTimeStamp, post.category.title, post.tag,post.views))
+    public Page<PostsResponse> findPostsByTag(Pageable pageable, String tag) {
+        List<PostsResponse> response = jpaQueryFactory
+            .select(
+                new QPostsResponse(
+                    post.id,
+                    post.title,
+                    post.content,
+                    post.generationTimeStamp,
+                    post.category.title,
+                    post.tag,
+                    post.views
+                ))
             .from(post)
             .where(post.tag.contains(tag))
             .limit(pageable.getPageSize())
@@ -120,9 +123,18 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     }
 
     @Override
-    public List<PostsResponseWithoutComment> getPopularPosts() {
-        return jpaQueryFactory.select(new QPostsResponseWithoutComment(post.id, post.title, post.content,
-                post.generationTimeStamp, post.category, post.tag, post.views))
+    public List<PostsResponse> getPopularPosts() {
+        return jpaQueryFactory
+            .select(
+                new QPostsResponse(
+                    post.id,
+                    post.title,
+                    post.content,
+                    post.generationTimeStamp,
+                    post.category.title,
+                    post.tag,
+                    post.views
+                ))
             .from(post)
             .orderBy(post.views.desc())
             .limit(3)
@@ -148,7 +160,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     }
 
     @Override
-    public PostsResponse findByIdWithQdsl(Long postId) {
+    public PostsResponse findPostsByIdIncludingComments(Long postId) {
         PostsResponse postsResponse = jpaQueryFactory
             .select(new QPostsResponse(
                 post.id,
@@ -162,8 +174,8 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
             .where(post.id.eq(postId))
             .fetchOne();
 
-        List<CommentsResponseDto> parentComment = jpaQueryFactory
-            .select(new QCommentsResponseDto(
+        List<CommentsResponse> parentComment = jpaQueryFactory
+            .select(new QCommentsResponse(
                 comment.id,
                 comment.username,
                 comment.content,
@@ -174,8 +186,8 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
             .orderBy(comment.id.asc())
             .fetch();
 
-        List<CommentsResponseDto> childComment = jpaQueryFactory
-            .select(new QCommentsResponseDto(
+        List<CommentsResponse> childComment = jpaQueryFactory
+            .select(new QCommentsResponse(
                 comment.id,
                 comment.username,
                 comment.content,

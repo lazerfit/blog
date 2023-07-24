@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.blog.config.QdslConfig;
 import com.blog.domain.category.CategoryRepository;
-import com.blog.web.dto.PostsResponse;
+import com.blog.web.dto.posts.PostsResponse;
 import jakarta.persistence.EntityManager;
 import java.util.stream.IntStream;
 import org.junit.jupiter.api.AfterEach;

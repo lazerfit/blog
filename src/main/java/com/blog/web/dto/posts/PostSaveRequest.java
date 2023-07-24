@@ -1,4 +1,4 @@
-package com.blog.web.dto;
+package com.blog.web.dto.posts;
 
 import com.blog.domain.category.Category;
 import com.blog.domain.posts.Post;
