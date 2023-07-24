@@ -6,10 +6,10 @@ import com.blog.domain.posts.Post;
 import com.blog.domain.posts.PostsRepository;
 import com.blog.exception.CommentNotFound;
 import com.blog.exception.PostNotFound;
-import com.blog.web.dto.CommentEditRequest;
-import com.blog.web.dto.CommentPassword;
-import com.blog.web.dto.CommentsResponseDto;
-import com.blog.web.dto.CommentsSaveRequestDto;
+import com.blog.web.dto.comments.CommentEditRequest;
+import com.blog.web.dto.comments.CommentPassword;
+import com.blog.web.dto.comments.CommentsResponse;
+import com.blog.web.dto.comments.CommentsSaveRequest;
 import com.blog.web.form.CommentForm;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -22,26 +22,20 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommentService {
 
     private final CommentsRepository commentsRepository;
-
     private final PostsRepository postsRepository;
-
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public void save(Long postId,CommentForm form) {
-        Post post = postsRepository.findById(postId).orElseThrow(PostNotFound::new);
-        Comment comment = commentsRepository.findById(form.getParentId()).orElse(null);
-        CommentsSaveRequestDto request = new CommentsSaveRequestDto(
-            form.getUsername(), form.getContent(), comment, post, passwordEncoder.encode(
-            form.getPassword()));
+        CommentsSaveRequest request = createCommentSaveRequest(postId, form);
         commentsRepository.save(request.toEntity());
     }
 
-    public CommentsResponseDto findById(Long id) {
+    public CommentsResponse findById(Long id) {
 
         Comment comment = commentsRepository.findById(id).orElseThrow(CommentNotFound::new);
 
-        return new CommentsResponseDto(comment);
+        return new CommentsResponse(comment);
     }
 
     public CommentPassword findPassword(Long id) {
@@ -49,10 +43,11 @@ public class CommentService {
         return new CommentPassword(comment.getPassword());
     }
 
-    public List<CommentsResponseDto> findByPostsId(Long postsId) {
-        return commentsRepository.findByPostId(postsId).stream().map(CommentsResponseDto::new).toList();
+    public List<CommentsResponse> findByPostId(Long postId) {
+        return commentsRepository.findByPostId(postId).stream().map(CommentsResponse::new).toList();
     }
 
+    @Transactional
     public void delete(Long commentId) {
         Comment comment = commentsRepository.findById(commentId).orElseThrow(CommentNotFound::new);
         commentsRepository.delete(comment);
@@ -62,5 +57,18 @@ public class CommentService {
     public void edit(CommentEditRequest request) {
         Comment comment = commentsRepository.findById(request.getId()).orElseThrow(CommentNotFound::new);
         comment.edit(request.getContent());
+    }
+
+    //Method
+    private CommentsSaveRequest createCommentSaveRequest(Long postId, CommentForm form) {
+        Post post = postsRepository.findById(postId).orElseThrow(PostNotFound::new);
+        Comment comment = commentsRepository.findById(form.getParentId()).orElse(null);
+        return CommentsSaveRequest.builder()
+            .username(form.getUsername())
+            .content(form.getContent())
+            .parentComment(comment)
+            .post(post)
+            .password(passwordEncoder.encode(form.getPassword()))
+            .build();
     }
 }

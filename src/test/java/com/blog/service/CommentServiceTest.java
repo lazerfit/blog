@@ -10,7 +10,7 @@ import com.blog.domain.comments.CommentsRepository;
 import com.blog.domain.posts.Post;
 import com.blog.domain.posts.PostsRepository;
 import com.blog.exception.CommentNotFound;
-import com.blog.web.dto.CommentEditRequest;
+import com.blog.web.dto.comments.CommentEditRequest;
 import com.blog.web.form.CommentEditForm;
 import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;

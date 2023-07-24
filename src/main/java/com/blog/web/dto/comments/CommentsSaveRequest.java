@@ -1,13 +1,12 @@
-package com.blog.web.dto;
+package com.blog.web.dto.comments;
 
 import com.blog.domain.comments.Comment;
 import com.blog.domain.posts.Post;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
-public class CommentsSaveRequestDto {
+public class CommentsSaveRequest {
 
     private final String username;
     private final String content;
@@ -25,4 +24,13 @@ public class CommentsSaveRequestDto {
             .build();
     }
 
+    @Builder
+    public CommentsSaveRequest(String username, String content, Comment parentComment, Post post,
+        String password) {
+        this.username = username;
+        this.content = content;
+        this.parentComment = parentComment;
+        this.post = post;
+        this.password = password;
+    }
 }

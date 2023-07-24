@@ -10,6 +10,7 @@ import com.blog.domain.comments.Comment;
 import com.blog.domain.comments.CommentsRepository;
 import com.blog.domain.posts.Post;
 import com.blog.domain.posts.PostsRepository;
+import com.blog.web.form.CommentForm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -64,6 +66,29 @@ class CommentControllerTest {
         postsRepository.deleteAll();
         categoryRepository.deleteAll();
     }
+
+    @Test
+    @DisplayName("Comment save")
+    @WithMockUser(roles = "ADMIN")
+    @Transactional
+    void saveComment() throws Exception {
+
+        Post post = postsRepository.findById(1L).orElseThrow();
+
+        CommentForm commentForm = new CommentForm();
+        commentForm.setUsername("s");
+        commentForm.setContent("ss");
+        commentForm.setParentId(null);
+        commentForm.setPostId(1L);
+        commentForm.setPassword("1234");
+
+        mockMvc.perform(post("/post/comment/new")
+                .content(objectMapper.writeValueAsString(commentForm))
+                .contentType(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andExpect(status().isOk());
+    }
+
 
     @Test
     @DisplayName("Comment Delete")

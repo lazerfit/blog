@@ -1,4 +1,4 @@
-package com.blog.web.dto;
+package com.blog.web.dto.comments;
 
 import com.blog.web.form.CommentEditForm;
 import lombok.Getter;

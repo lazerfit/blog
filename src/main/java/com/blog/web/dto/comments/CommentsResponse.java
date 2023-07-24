@@ -1,4 +1,4 @@
-package com.blog.web.dto;
+package com.blog.web.dto.comments;
 
 import com.blog.domain.comments.Comment;
 import com.querydsl.core.annotations.QueryProjection;
@@ -8,16 +8,16 @@ import java.util.List;
 import lombok.Getter;
 
 @Getter
-public class CommentsResponseDto {
+public class CommentsResponse {
 
     private final Long id;
     private final String username;
     private final String content;
     private final LocalDateTime generationTimeStamp;
     private final Long parentId;
-    private List<CommentsResponseDto> child=new ArrayList<>();
+    private List<CommentsResponse> child=new ArrayList<>();
 
-    public CommentsResponseDto(Comment comment) {
+    public CommentsResponse(Comment comment) {
         this.id= comment.getId();
         this.username=comment.getUsername();
         this.content=comment.getContent();
@@ -30,7 +30,7 @@ public class CommentsResponseDto {
     }
 
     @QueryProjection
-    public CommentsResponseDto(Long id, String username, String content, LocalDateTime generationTimeStamp,
+    public CommentsResponse(Long id, String username, String content, LocalDateTime generationTimeStamp,
         Long parentId) {
         this.id = id;
         this.username = username;
@@ -39,7 +39,7 @@ public class CommentsResponseDto {
         this.parentId = parentId;
     }
 
-    public void insertChildComment(List<CommentsResponseDto> child) {
+    public void insertChildComment(List<CommentsResponse> child) {
         this.child=child;
     }
 }

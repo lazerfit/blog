@@ -2,10 +2,10 @@ package com.blog.web.controller;
 
 import com.blog.service.CommentService;
 import com.blog.service.PostsService;
-import com.blog.web.dto.CommentEditRequest;
-import com.blog.web.dto.CommentPassword;
-import com.blog.web.dto.CommentsResponseDto;
-import com.blog.web.dto.PostsResponse;
+import com.blog.web.dto.comments.CommentEditRequest;
+import com.blog.web.dto.comments.CommentPassword;
+import com.blog.web.dto.comments.CommentsResponse;
+import com.blog.web.dto.posts.PostsResponse;
 import com.blog.web.form.CommentEditForm;
 import com.blog.web.form.CommentForm;
 import com.blog.web.form.CommentPasswordCheckForm;
@@ -44,8 +44,7 @@ public class CommentController {
 
         commentService.save(form.getPostId(), form);
 
-        PostsResponse response = postsService.findPostsByIdIncludingComments(form.getPostId());
-        model.addAttribute("postFindById", response);
+        addAsynchronousAttributes(form.getPostId(), model);
 
         return REPLACE_COMMENT_LIST;
     }
@@ -53,22 +52,22 @@ public class CommentController {
     @PostMapping("/post/admin/comment/delete")
     public String delete(@RequestParam Long commentId, @RequestParam Long postId, Model model) {
         commentService.delete(commentId);
-        PostsResponse response = postsService.findPostsByIdIncludingComments(postId);
-        model.addAttribute("postFindById", response);
+
+        addAsynchronousAttributes(postId, model);
 
         return REPLACE_COMMENT_LIST;
     }
 
     @PostMapping("/post/comment/manage")
-    public String manageComment(CommentPasswordCheckForm form, Model model) {
+    public String manageComment(@Valid CommentPasswordCheckForm form, Model model) {
 
         formHandler.addCommentPasswordCheckForm(model);
 
         if (isPasswordValid(form)) {
 
-            CommentsResponseDto responseDto = findCommentById(form.getCommentId());
+            CommentsResponse response = findCommentById(form.getCommentId());
 
-            model.addAttribute("comment", responseDto);
+            model.addAttribute("comment", response);
             formHandler.addCommentEditForm(model);
 
             return "editComment";
@@ -78,7 +77,7 @@ public class CommentController {
 
     @PostMapping("/post/comment/manage/delete")
     @ResponseBody
-    public String userDeleteComment(CommentPasswordCheckForm form) {
+    public String userDeleteComment(@Valid CommentPasswordCheckForm form) {
 
         if (isPasswordValid(form)) {
             commentService.delete(form.getCommentId());
@@ -89,13 +88,13 @@ public class CommentController {
 
     @PostMapping("/post/comment/manage/edit")
     @ResponseBody
-    public String userEditComment(CommentEditForm form,Model model){
+    public String userEditComment(@Valid CommentEditForm form,Model model){
 
         formHandler.addCommentPasswordCheckForm(model);
 
         if (isPasswordValid(form)) {
-            CommentEditRequest response = new CommentEditRequest(form.getId(),form.getContent());
-            commentService.edit(response);
+            CommentEditRequest request = new CommentEditRequest(form.getId(),form.getContent());
+            commentService.edit(request);
             return SUCCESS;
         }
         return CHECK_PASSWORD;
@@ -112,7 +111,7 @@ public class CommentController {
 
     @PostMapping("/post/comment/subComment/new")
     @ResponseBody
-    public String subComment(@RequestBody CommentForm form) {
+    public String subComment(@RequestBody @Valid CommentForm form) {
 
         commentService.save(form.getPostId(),form);
 
@@ -121,7 +120,7 @@ public class CommentController {
 
 
     //Method
-    private CommentsResponseDto findCommentById(Long commentId) {
+    private CommentsResponse findCommentById(Long commentId) {
         return commentService.findById(commentId);
     }
 
@@ -137,5 +136,10 @@ public class CommentController {
 
     private CommentPassword findEncodedPassword(Long commentId) {
         return commentService.findPassword(commentId);
+    }
+
+    private void addAsynchronousAttributes(Long postId, Model model) {
+        PostsResponse response = postsService.findPostsByIdIncludingComments(postId);
+        model.addAttribute("postFindById", response);
     }
 }
