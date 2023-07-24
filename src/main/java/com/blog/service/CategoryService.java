@@ -3,9 +3,8 @@ package com.blog.service;
 import com.blog.domain.category.Category;
 import com.blog.domain.category.CategoryRepository;
 import com.blog.exception.CategoryNotFound;
-import com.blog.web.dto.category.CategoryEditRequestDto;
+import com.blog.web.dto.category.CategoryEditRequest;
 import com.blog.web.dto.category.CategorySaveRequest;
-import com.blog.web.form.CategoryEditForm;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -39,11 +38,9 @@ public class CategoryService {
     }
 
     @Transactional
-    public void edit(Long categoryId, CategoryEditForm form) {
-        CategoryEditRequestDto request = CategoryEditRequestDto.builder()
-            .title(form.getTitle()).listOrder(form.getListOrder()).build();
+    public void edit(Long categoryId, CategoryEditRequest form) {
         Category category = categoryRepository.findById(categoryId)
             .orElseThrow(CategoryNotFound::new);
-        category.edit(request.getTitle(), request.getListOrder());
+        category.edit(form.getTitle(), form.getListOrder());
     }
 }

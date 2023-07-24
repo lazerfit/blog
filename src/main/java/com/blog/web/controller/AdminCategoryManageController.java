@@ -2,6 +2,7 @@ package com.blog.web.controller;
 
 import com.blog.domain.category.Category;
 import com.blog.service.CategoryService;
+import com.blog.web.dto.category.CategoryEditRequest;
 import com.blog.web.dto.category.CategorySaveRequest;
 import com.blog.web.form.CategoryEditForm;
 import com.blog.web.form.CategoryForm;
@@ -26,41 +27,28 @@ public class AdminCategoryManageController {
 
     @GetMapping("")
     public String manageCategory(Model model) {
-
         addAllCategoryAttribute(model);
-
         addCategoryFromAndCategoryEditForm(model);
-
         return "form/manageCategoryForm";
     }
 
     @PostMapping("")
     public String saveCategory(CategoryForm categoryForm) {
-
-        CategorySaveRequest categoryCreateRequestDto = createCategorySaveRequest(categoryForm);
-
-        categoryService.save(categoryCreateRequestDto);
-
+        CategorySaveRequest categorySaveRequest = createCategorySaveRequest(categoryForm);
+        categoryService.save(categorySaveRequest);
         return REDIRECT_HOME_URL;
-    }
-
-    private CategorySaveRequest createCategorySaveRequest(CategoryForm categoryForm) {
-        return new CategorySaveRequest(categoryForm.getTitle(), categoryForm.getListOrder());
     }
 
     @PostMapping("/delete/{categoryId}")
     public String deleteCategory(@PathVariable Long categoryId) {
-
         categoryService.delete(categoryId);
-
         return REDIRECT_HOME_URL;
     }
 
     @PostMapping("/edit/{categoryId}")
     public String editCategory(@RequestBody @Valid CategoryEditForm editForm,@PathVariable Long categoryId) {
-
-        categoryService.edit(categoryId,editForm);
-
+        CategoryEditRequest editRequest = createCategoryEditRequest(editForm);
+        categoryService.edit(categoryId,editRequest);
         return REDIRECT_HOME_URL;
     }
 
@@ -73,5 +61,16 @@ public class AdminCategoryManageController {
     private void addCategoryFromAndCategoryEditForm(Model model) {
         model.addAttribute("categoryForm", new CategoryForm());
         model.addAttribute("categoryEditForm", new CategoryEditForm());
+    }
+
+    private CategorySaveRequest createCategorySaveRequest(CategoryForm categoryForm) {
+        return new CategorySaveRequest(categoryForm.getTitle(), categoryForm.getListOrder());
+    }
+
+    private CategoryEditRequest createCategoryEditRequest(CategoryEditForm editForm) {
+        return CategoryEditRequest.builder()
+            .title(editForm.getTitle())
+            .listOrder(editForm.getListOrder())
+            .build();
     }
 }
