@@ -26,8 +26,6 @@ public class CategoryService {
         return categoryRepository.findCategoryByTitle(title).orElseThrow(CategoryNotFound::new);
     }
 
-    // findAllCategory 빼고 나머지는 다 필요 없어 보임
-
     public List<Category> findAllCategory() {
         return categoryRepository.findAll(Sort.by(Sort.DEFAULT_DIRECTION,"listOrder"));
     }

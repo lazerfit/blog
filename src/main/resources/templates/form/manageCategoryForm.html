@@ -33,7 +33,7 @@
                   <input type="text" th:field="*{listOrder}" class="form-control" id="floatingNumber" name="listOrder" placeholder="목록 순서">
                   <label for="floatingInput">목록 순서</label>
                 </div>
-              </div> <!-- /form-group -->
+              </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" onclick="$('#add_mainModal').modal('hide')">Cancel</button>
@@ -49,7 +49,7 @@
   카테고리 수정
 </button>
 
-  <!-- Modal -->
+  <!-- Main Modal -->
   <div class="modal fade" id="mainModal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="mainModal" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
@@ -84,7 +84,7 @@
                           ,this.parentNode.parentNode.querySelector('.categoryTitle').getAttribute('data-category-id')
                           ,this.parentNode.parentNode.querySelector('.categoryListOrder').getAttribute('data-category-id'))">수정</button>
                   <button type="button" class="btn btn-sm open-delete-modal delete-category-btn"
-                          onclick="transferCategoryIdTodeleteModal(this.getAttribute('data-category-id'))"
+                          onclick="transferCategoryIdToDeleteModal(this.getAttribute('data-category-id'))"
                           data-bs-toggle="modal" data-bs-target="#deleteModal"
                           th:data-category-id="${category_id}"
                           th:value="${category_id}" >삭제</button>
@@ -102,6 +102,7 @@
       </div>
     </div>
   </div>
+  <!-- /Main Modal -->
   <!-- delete modal  -->
   <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-labelledby="ModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -123,11 +124,11 @@
               <button type="button" class="btn btn-primary request-delete-button" onclick="deleteCategory()">Delete</button>
             </div>
         </div>
-          <script src="/js/deleteCategoryOnModal.js"></script>
         </form>
       </div>
     </div>
-  </div> <!-- /deleteModal -->
+  </div>
+  <!-- /deleteModal -->
   <!-- editModal -->
   <div class="modal fade" id="editModal" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-labelledby="ModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -149,18 +150,20 @@
                   <input type="text" class="form-control" id="editFloatingNumber" name="listOrder" placeholder="목록 순서">
                   <label for="floatingInput">목록 순서</label>
                 </div>
-              </div> <!-- /form-group -->
+              </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-toggle="modal" href="#mainModal">Back</button>
               <button type="button" class="btn btn-primary request-delete-button" onclick="editCategory()">Confirm</button>
             </div>
           </div>
-          <script src="/js/editCategoryOnModal.js"></script>
       </div>
     </div>
   </div>
   <!-- /editModal -->
-</div> <!-- /leftColumn -->
+  <script src="/js/category/deleteCategoryOnModal.js"></script>
+  <script src="/js/category/editCategoryOnModal.js"></script>
+</div>
+<!-- /leftColumn -->
 <div layout:fragment="rightcolumn">
 
   <div class="list-group" style="margin-top: 10px">

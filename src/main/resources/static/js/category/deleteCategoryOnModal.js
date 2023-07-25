@@ -11,7 +11,7 @@ function deleteCategory() {
   })
 }
 
-function transferCategoryIdTodeleteModal(categoryId) {
+function transferCategoryIdToDeleteModal(categoryId) {
   const deleteModal = document.getElementById("deleteModal");
   const editId = deleteModal.querySelector("#editId");
   editId.value = categoryId;

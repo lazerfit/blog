@@ -29,7 +29,8 @@
       </article>
     </div>
   </div>
-    <div> <!-- pagination -->
+  <!-- pagination -->
+    <div>
       <ul class="pagination justify-content-center"
           th:with="
           pageNumber=${postsList.getNumber()},
@@ -52,11 +53,8 @@
           <a class="page-link" th:unless="${keyword}" th:href="@{/(page=${pageNumber+2})}">&raquo;</a>
         </li> <!-- ${postsList.hasNext()} ? -->
       </ul>
-    </div> <!-- /pagination -->
-  </div> <!-- /container -->
-</div>
-<!--<th:block th:each="category:${allCategorizedPosts}">-->
-<!--  <a th:text="${category.getListOrder()}"></a>-->
-<!--</th:block>-->
+    </div>
+  <!-- /pagination -->
+  </div>
 </body>
 </html>
