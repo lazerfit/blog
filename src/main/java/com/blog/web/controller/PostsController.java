@@ -7,7 +7,9 @@ import com.blog.service.PostsService;
 import com.blog.web.dto.posts.PostSaveRequest;
 import com.blog.web.dto.posts.PostsResponse;
 import com.blog.web.dto.posts.PostsUpdateRequest;
-import com.blog.web.form.FormHandler;
+import com.blog.web.form.CommentEditForm;
+import com.blog.web.form.CommentForm;
+import com.blog.web.form.CommentPasswordCheckForm;
 import com.blog.web.form.PostCreateForm;
 import com.blog.web.form.PostEditForm;
 import jakarta.validation.Valid;
@@ -21,6 +23,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Slf4j
@@ -31,7 +34,6 @@ public class PostsController {
     private final PostsService postsService;
     private final CategoryService categoryService;
     private final CommentService commentService;
-    private final FormHandler formHandler;
 
     @GetMapping("/")
     public String index(Pageable pageable, Model model) {
@@ -50,15 +52,15 @@ public class PostsController {
         populateRelatedSidebar(model);
         // Add details about related categories, comments, tags
         populateRelatedDetails(postId, model, postsResponse);
-        formHandler.addCommentForm(model);
-        formHandler.addCommentPasswordCheckForm(model);
+        addCommentForm(model);
+        addCommentPasswordCheckForm(model);
         return "posts";
     }
 
     // Create
     @GetMapping("/post/new")
     public String createPostsForm(Model model) {
-        formHandler.addPostCreateForm(model);
+        addPostCreateForm(model);
         populateRelatedSidebar(model);
         return "form/createPostsForm";
     }
@@ -73,14 +75,14 @@ public class PostsController {
     // Edit
     @GetMapping("/post/edit/{postId}")
     public String createEditForm(@PathVariable Long postId, Model model) {
-        PostEditForm postEditForm = formHandler.createEditPostForm(postId);
+        PostEditForm postEditForm = createEditPostForm(postId);
         model.addAttribute("editPostsForm", postEditForm);
         populateRelatedSidebar(model);
-        return "form/editPostsForm";
+        return "form/editPostForm";
     }
 
     @PostMapping("/post/edit/{postId}")
-    public String editPost(@PathVariable Long postId, @Valid PostEditForm form) {
+    public String editPost(@PathVariable Long postId, @RequestBody @Valid PostEditForm form) {
         PostsUpdateRequest request = createPostEditRequest(form);
         postsService.edit(postId, request);
         return "redirect:/post/{postId}";
@@ -122,7 +124,7 @@ public class PostsController {
         model.addAttribute("categorizedPosts", categorizedPosts);
         addKeywordAttributes(q,model);
         populateRelatedSidebar(model);
-        return "categorizedPosts";
+        return "postsSortedByCategory";
     }
 
     @GetMapping("/tag")
@@ -131,7 +133,7 @@ public class PostsController {
         Page<PostsResponse> postsByTags = postsService.findPostsByTag(pageable, q);
         model.addAttribute("postsByTags", postsByTags);
         addKeywordAttributes(q,model);
-        return "postsByTags";
+        return "postsSortedByTags";
     }
 
     // Method
@@ -181,4 +183,32 @@ public class PostsController {
         return new PostSaveRequest(
             form.getTitle(),form.getContent(),category,form.getTags(),0L);
     }
+
+    public void addCommentPasswordCheckForm(Model model) {
+        model.addAttribute("commentPasswordCheckForm", new CommentPasswordCheckForm());
+    }
+
+    public void addCommentForm(Model model) {
+        model.addAttribute("commentForm", new CommentForm());
+    }
+
+    public PostEditForm createEditPostForm(Long postId) {
+
+        PostsResponse originalPost = postsService.findPostsByIdIncludingComments(postId);
+        String title=originalPost.getTitle();
+        String content=originalPost.getContent();
+        String categoryTitle=originalPost.getCategoryTitle();
+        String tag=originalPost.getTag();
+
+        return new PostEditForm(title, content, categoryTitle,tag);
+    }
+
+    public void addPostCreateForm(Model model) {
+        model.addAttribute("createPostsForm", new PostCreateForm());
+    }
+
+    public void addCommentEditForm(Model model) {
+        model.addAttribute("commentEdit", new CommentEditForm());
+    }
+
 }

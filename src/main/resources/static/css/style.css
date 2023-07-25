@@ -164,7 +164,7 @@ a:hover{
 
 .navbar{
   border-color: white;
-  border-bottom-color: #f1f1f1;
+  /*border-bottom-color: #f1f1f1;*/
 }
 
 .del-button {
@@ -598,7 +598,6 @@ a:hover{
   min-width: 200px;
 }
 
-
 .reply-btn {
   background-color: #333;
   color: #fff;
@@ -616,11 +615,6 @@ a:hover{
   justify-content: center;
   align-items: center;
   float: right;
-}
-
-.secret {
-  float: left;
-  margin-left: 24px;
 }
 
 .more {

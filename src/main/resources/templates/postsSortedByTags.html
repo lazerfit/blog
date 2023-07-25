@@ -29,7 +29,8 @@
         </article>
       </div>
     </div>
-    <div> <!-- pagination -->
+  <!-- pagination -->
+    <div>
       <ul class="pagination justify-content-center"
           th:with="
           pageNumber=${postsByTags.getNumber()},
@@ -47,9 +48,10 @@
         </li>
         <li class="page-item" th:classappend="${postsByTags.hasNext()} ? '#':'disabled'">
           <a class="page-link" th:href="@{/tag(q=${keyword},page=${pageNumber+2})}">&raquo;</a>
-        </li> <!-- ${postsList.hasNext()} ? -->
+        </li>
       </ul>
-    </div> <!-- /pagination -->
-  </div> <!-- /container -->
+    </div>
+  <!-- /pagination -->
+  </div>
 </body>
 </html>

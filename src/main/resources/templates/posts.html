@@ -27,7 +27,7 @@
           <button id="del-button" class="del-button" sec:authorize="hasRole('ROLE_ADMIN')" style="text-decoration-line: none">삭제</button>
           </span>
         </form>
-        <script src="/js/deletePost.js"></script>
+        <script src="/js/post/deletePost.js"></script>
         </div>
         </div>
       <div class="card-body">
@@ -92,25 +92,7 @@
                         삭제(관리자)
                       </a>
                     </div>
-                  <script>
-                    function openDeleteCommentModal(element) {
-                      const commentId = $(element).closest('.dropdown-content').attr(
-                          'data-commentId');
-                      const dropdownContent = document.querySelector(".comment-dropdown[data-commentId='" + commentId + "']");
-                      const postId = element.getAttribute('data-postId');
-                      dropdownContent.style.display="none"
-
-                      const inputCommentId = document.getElementById('deleteCommentId');
-                      const inputPostId = document.getElementById('deletePostId');
-                      inputCommentId.value=commentId;
-                      inputPostId.value=postId;
-
-                      $('#deleteCommentId').val(commentId);
-                      $('#deleteCommentModal').modal('show');
-                    }
-                  </script>
-                  <script src="/js/manageCommentDropdown.js"></script>
-                  <script src="/js/openCommentManageModal.js"></script>
+                  <script src="/js/comment/manageCommentDropdown.js"></script>
                 </div>
               </span>
               <!-- delete Modal -->
@@ -133,24 +115,7 @@
                         <button type="button" class="btn btn-secondary" onclick="$('#deleteCommentModal').modal('hide')">나가기</button>
                         <button type="button" class="btn btn-secondary comment-del-btn" onclick="adminDeleteComment()">삭제</button>
                       </div>
-                      <script>
-                        function adminDeleteComment() {
-                          const commentId=document.getElementById('deleteCommentId').value;
-                          const postId=document.getElementById('deletePostId').value;
-
-                          $.ajax({
-                            url: "/post/admin/comment/delete",
-                            data:{
-                              "commentId":commentId,
-                              "postId":postId
-                            },
-                            contentType:"application/json; charset=utf-8"
-                          }).done(function (result) {
-                            $('#comment-table').replaceWith(result)
-                          })
-
-                        }
-                      </script>
+                      <script src="/js/comment/adminDeleteComment.js"></script>
                     </div>
                   </div>
                 </div>
@@ -166,7 +131,7 @@
                         <span aria-hidden="true">&times;</span>
                       </button>
                     </div>
-                    <form id="passwordForm" name="passwordForm" th:object="${passwordForm}" method="post" th:action="@{/post/comment/manage}">
+                    <form id="commentPasswordCheckForm" name="passwordForm" th:object="${commentPasswordCheckForm}" method="post" th:action="@{/post/comment/manage}">
                     <div class="modal-body">
                       <input type="hidden" id="commentId" value="" th:field="*{commentId}" th:data-commentId="${comment.id}">
                       <div class="modal-body">
@@ -177,27 +142,12 @@
                         <button type="submit" class="btn btn-secondary comment-del-btn" onclick="openCommentManage()">확인</button>
                       </div>
                     </div>
-                      <script>
-                        function openCommentManage() {
-                          //close the modal
-                          $('#authCheckModal').modal('hide');
-
-                          // Open a new window
-                          const windowFeatures = 'width=500,height=550';
-                          const newWindow = window.open('', '댓글 수정/삭제', windowFeatures);
-
-                          // Submit the form in the new window
-                          document.getElementById('passwordForm').target = '댓글 수정/삭제';
-                          document.getElementById('passwordForm').submit();
-                        }
-                      </script>
+                      <script src="/js/comment/userCommentManage.js"></script>
                     </form>
                   </div>
                 </div>
               </div>
               <!-- /auth check Modal -->
-
-
             </div>
             <div class="comment-id" th:data-commentId="${comment.id}" style="margin-bottom: 20px">
             <p class="comment-content" id="commentContent" th:data-commentId="${comment.id}" th:data-postId="${postId}" th:text="${comment.getContent()}">
@@ -225,8 +175,7 @@
                         삭제(관리자)
                       </a>
                     </div>
-                  <script src="/js/manageCommentDropdown.js"></script>
-                  <script src="/js/openCommentManageModal.js"></script>
+                  <script src="/js/comment/manageCommentDropdown.js"></script>
                 </div>
               </span>
                 <p th:text="${child.content}">
@@ -262,10 +211,13 @@
           <button type="button" class="reply-btn">등록</button>
         </div>
         </div>
-        <script src="/js/comment.js"></script>
+        <script src="/js/comment/commentSubmit.js"></script>
       </form>
     </div>
     </div>
     </div>
+
+
+
 </div>
 </body>
