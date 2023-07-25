@@ -9,7 +9,6 @@ import com.blog.web.dto.posts.PostsResponse;
 import com.blog.web.form.CommentEditForm;
 import com.blog.web.form.CommentForm;
 import com.blog.web.form.CommentPasswordCheckForm;
-import com.blog.web.form.FormHandler;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,8 +29,6 @@ public class CommentController {
     private final CommentService commentService;
     private final PostsService postsService;
     private final PasswordEncoder passwordEncoder;
-    private final FormHandler formHandler;
-
     private static final String REPLACE_COMMENT_LIST = "posts :: commentList";
     private static final String SUCCESS = "성공";
     private static final String CHECK_PASSWORD = "비밀번호를 확인해 주세요";
@@ -39,37 +36,27 @@ public class CommentController {
     @PostMapping("/post/comment/new")
     public String saveComment(@RequestBody @Valid CommentForm form,
         Model model) {
-
-        formHandler.addCommentPasswordCheckForm(model);
-
+        addCommentPasswordCheckForm(model);
         commentService.save(form.getPostId(), form);
-
         addAsynchronousAttributes(form.getPostId(), model);
-
         return REPLACE_COMMENT_LIST;
     }
 
     @PostMapping("/post/admin/comment/delete")
     public String delete(@RequestParam Long commentId, @RequestParam Long postId, Model model) {
+        addCommentPasswordCheckForm(model);
         commentService.delete(commentId);
-
         addAsynchronousAttributes(postId, model);
-
         return REPLACE_COMMENT_LIST;
     }
 
     @PostMapping("/post/comment/manage")
     public String manageComment(@Valid CommentPasswordCheckForm form, Model model) {
-
-        formHandler.addCommentPasswordCheckForm(model);
-
+        addCommentPasswordCheckForm(model);
         if (isPasswordValid(form)) {
-
             CommentsResponse response = findCommentById(form.getCommentId());
-
             model.addAttribute("comment", response);
-            formHandler.addCommentEditForm(model);
-
+            addCommentEditForm(model);
             return "editComment";
         }
         return "/error/403";
@@ -77,8 +64,7 @@ public class CommentController {
 
     @PostMapping("/post/comment/manage/delete")
     @ResponseBody
-    public String userDeleteComment(@Valid CommentPasswordCheckForm form) {
-
+    public String userDeleteComment(@RequestBody @Valid CommentPasswordCheckForm form) {
         if (isPasswordValid(form)) {
             commentService.delete(form.getCommentId());
             return SUCCESS;
@@ -89,9 +75,7 @@ public class CommentController {
     @PostMapping("/post/comment/manage/edit")
     @ResponseBody
     public String userEditComment(@Valid CommentEditForm form,Model model){
-
-        formHandler.addCommentPasswordCheckForm(model);
-
+        addCommentPasswordCheckForm(model);
         if (isPasswordValid(form)) {
             CommentEditRequest request = new CommentEditRequest(form.getId(),form.getContent());
             commentService.edit(request);
@@ -102,19 +86,15 @@ public class CommentController {
 
     @GetMapping("/post/comment/subComment/new")
     public String subComment(@RequestParam Long commentId,@RequestParam Long postId ,Model model) {
-
         model.addAttribute("parentId", commentId);
         model.addAttribute("postId", postId);
-
         return "subComment";
     }
 
     @PostMapping("/post/comment/subComment/new")
     @ResponseBody
     public String subComment(@RequestBody @Valid CommentForm form) {
-
         commentService.save(form.getPostId(),form);
-
         return SUCCESS;
     }
 
@@ -141,5 +121,13 @@ public class CommentController {
     private void addAsynchronousAttributes(Long postId, Model model) {
         PostsResponse response = postsService.findPostsByIdIncludingComments(postId);
         model.addAttribute("postFindById", response);
+    }
+
+    public void addCommentPasswordCheckForm(Model model) {
+        model.addAttribute("commentPasswordCheckForm", new CommentPasswordCheckForm());
+    }
+
+    public void addCommentEditForm(Model model) {
+        model.addAttribute("commentEdit", new CommentEditForm());
     }
 }

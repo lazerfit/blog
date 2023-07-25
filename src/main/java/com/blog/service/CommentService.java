@@ -32,9 +32,7 @@ public class CommentService {
     }
 
     public CommentsResponse findById(Long id) {
-
         Comment comment = commentsRepository.findById(id).orElseThrow(CommentNotFound::new);
-
         return new CommentsResponse(comment);
     }
 
