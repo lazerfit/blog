@@ -35,6 +35,7 @@ public class WebSecurityConfig {
                 .requestMatchers("/post/new").hasRole(ROLE_ADMIN)
                 .requestMatchers("/post/delete/*").hasRole(ROLE_ADMIN)
                 .requestMatchers("/post/edit/*").hasRole(ROLE_ADMIN)
+                .requestMatchers("/tag").permitAll()
                 .requestMatchers("/post/admin/comment/delete/*").hasRole(ROLE_ADMIN)
                 .requestMatchers("/post/comment/manage").permitAll()
                 .requestMatchers("/post/comment/manage/edit").permitAll()
