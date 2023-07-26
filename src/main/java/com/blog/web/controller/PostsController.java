@@ -7,7 +7,6 @@ import com.blog.service.PostsService;
 import com.blog.web.dto.posts.PostSaveRequest;
 import com.blog.web.dto.posts.PostsResponse;
 import com.blog.web.dto.posts.PostsUpdateRequest;
-import com.blog.web.form.CommentEditForm;
 import com.blog.web.form.CommentForm;
 import com.blog.web.form.CommentPasswordCheckForm;
 import com.blog.web.form.PostCreateForm;
@@ -119,7 +118,7 @@ public class PostsController {
     @GetMapping("/post/category")
     public String getPostsClassifiedByCategory(Pageable pageable, @RequestParam String q,
         Model model) {
-        Page<PostsResponse> categorizedPosts = postsService.fetchPostsSortedByCategory(
+        Page<PostsResponse> categorizedPosts = postsService.findPostsSortedByCategory(
             pageable, q);
         model.addAttribute("categorizedPosts", categorizedPosts);
         addKeywordAttributes(q,model);
@@ -159,7 +158,7 @@ public class PostsController {
     }
 
     private void addAnotherCategories(String categoryTitle,Model model) {
-        var anotherCategory = postsService.fetchPostsSortedByCategory(
+        var anotherCategory = postsService.findPostsSortedByCategory(
             categoryTitle);
         model.addAttribute("anotherCategory",anotherCategory);
     }
@@ -206,9 +205,4 @@ public class PostsController {
     public void addPostCreateForm(Model model) {
         model.addAttribute("createPostsForm", new PostCreateForm());
     }
-
-    public void addCommentEditForm(Model model) {
-        model.addAttribute("commentEdit", new CommentEditForm());
-    }
-
 }

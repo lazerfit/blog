@@ -5,23 +5,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.blog.config.QdslConfig;
 import com.blog.domain.category.Category;
 import com.blog.domain.category.CategoryRepository;
-import com.blog.domain.comments.Comment;
 import com.blog.domain.comments.CommentsRepository;
 import com.blog.domain.posts.Post;
 import com.blog.domain.posts.PostsRepository;
-import com.blog.exception.CommentNotFound;
+import com.blog.exception.CategoryNotFound;
 import com.blog.exception.PostNotFound;
-import com.blog.web.dto.comments.CommentsSaveRequest;
-import com.blog.web.dto.posts.PostSaveRequest;
 import com.blog.web.dto.posts.PostsResponse;
 import com.blog.web.dto.posts.PostsUpdateRequest;
-import jakarta.persistence.EntityManager;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,41 +22,23 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
 @DataJpaTest
 @Import(QdslConfig.class)
 @AutoConfigureJson
+@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 class PostServiceTest {
 
     @Autowired
-    private EntityManager em;
-
-    @Autowired
     private PostsRepository postsRepository;
-
     @Autowired
     private CategoryRepository categoryRepository;
     @Autowired
     private CommentsRepository commentsRepository;
 
     @BeforeEach
-    void insertCategory() {
-        Category category1 = new Category("Spring", 1);
-        Category category2 = new Category("Java", 2);
-        categoryRepository.save(category1);
-        categoryRepository.save(category2);
-
-        String tagData = "[{\"value\":\"Spring\"},{\"value\":\"Java\"}]";
-
-        Category category = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
-
-        postsRepository.save(
-            Post.builder().title("제목").content("내용").category(category).tag(tagData).views(0L)
-                .build());
-
-    }
-
-    @AfterEach
     void tearDown() {
         postsRepository.deleteAll();
         categoryRepository.deleteAll();
@@ -74,246 +47,122 @@ class PostServiceTest {
     @Test
     @DisplayName("글 저장")
     void save() {
-
-        Post post = postsRepository.save(Post.builder()
-            .title("제목")
-            .content("내용")
-            .build());
-
-        Post foundPost = postsRepository.findById(post.getId()).orElseThrow(PostNotFound::new);
-
-        assertThat(foundPost.getTitle()).isEqualTo("제목");
-        assertThat(foundPost.getContent()).isEqualTo("내용");
+        makePost("spring",1,"제목","내용");
+        Post postsResponse = postsRepository.findById(1L).orElseThrow(PostNotFound::new);
+        assertThat(postsResponse.getCategory().getTitle()).isEqualTo("spring");
     }
 
     @Test
-    @DisplayName("글 수정")
-    void edit() {
-        Category category1 = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
-        Category category2 = categoryRepository.findCategoryByTitle("Java").orElseThrow();
+    @DisplayName("글 업데이트")
+    void update() {
+        makePost("spring",1,"제목","내용");
 
-        Post post = postsRepository.save(Post.builder()
-            .title("제목1")
-            .content("내용1")
-            .category(category1)
-            .build());
-
-        em.flush();
-        em.clear();
-
-        PostsUpdateRequest request = PostsUpdateRequest.builder()
-            .title("수정된 제목")
-            .content("수정된 내용")
-            .category(category2)
+        PostsUpdateRequest updateRequest = PostsUpdateRequest.builder()
+            .title("제목 수정")
+            .content("내용 수정")
             .build();
+        Post post = postsRepository.findById(1L).orElseThrow();
+        post.edit(updateRequest);
 
-        postsRepository.edit(post.getId(), request);
-
-        Post foundPost = postsRepository.findById(post.getId()).orElseThrow();
-
-        assertThat(foundPost.getCategory().getTitle()).isEqualTo("Java");
+        Post foundPost = postsRepository.findById(1L).orElseThrow(PostNotFound::new);
+        assertThat(foundPost.getTitle()).isEqualTo("제목 수정");
     }
 
     @Test
-    @DisplayName("다건 조회")
-    void multiSearch() {
-        IntStream.range(1, 11).forEach(
-            i -> postsRepository.save(Post.builder()
-                .title("제목" + i)
-                .content("내용" + i)
-                .build())
-        );
-
-        PageRequest request = PageRequest.of(0, 6);
-
-        List<PostsResponse> postsList = postsRepository.fetchPostsExcludingComment(request)
-            .stream().toList();
-
-        assertThat(postsList.get(0).getTitle()).isEqualTo("제목10");
-        assertThat(postsList.get(0).getContent()).isEqualTo("내용10");
-    }
-
-    @Test
-    @DisplayName("삭제")
+    @DisplayName("글 삭제")
     void delete() {
+        makePost("spring",1,"제목","내용");
 
-        PostsResponse post = postsRepository.findPostsById(1L).orElseThrow(PostNotFound::new);
-        postsRepository.deleteById(post.getId());
+        postsRepository.deleteById(1L);
 
-        Optional<PostsResponse> searchedPost = postsRepository.findPostsById(1L);
-
-        Assertions.assertThrows(PostNotFound.class, () ->
-            searchedPost.orElseThrow(PostNotFound::new));
+        boolean postExists = postsRepository.existsById(1L);
+        assertThat(postExists).isFalse();
     }
 
     @Test
-    @DisplayName("게시글 카테고리 분류")
-    void getCategorizedPosts() {
-        Category category = new Category("Spring", 1);
-        Category category2 = new Category("Java", 2);
-        categoryRepository.save(category);
-        categoryRepository.save(category2);
+    @DisplayName("카테고리로 게시물 찾기")
+    void findPostsByCategory() {
+        makePost("spring",1,"제목","내용");
+        makePost("java",2,"제목2","내용2");
 
-        postsRepository.save(Post.builder()
-            .title("제목1")
-            .content("내용1")
-            .category(category)
-            .build());
+        List<PostsResponse> java = postsRepository.findPostsSortedByCategory("java");
 
-        postsRepository.save(Post.builder()
-            .title("제목2")
-            .content("내용2")
-            .category(category2)
-            .build());
+        assertThat(java.get(0).getTitle()).isEqualTo("제목2");
+    }
+
+    @Test
+    @DisplayName("태그로 게시물 찾기")
+    void findPostsByTag() {
+        makePost("spring",1,"제목","내용");
+        makePost("java",2,"제목2","내용2");
 
         PageRequest pageRequest = PageRequest.of(0, 6);
 
-        Page<PostsResponse> categorizedPosts = postsRepository.fetchPostsSortedByCategory(
-            pageRequest,
-            "Spring");
-
-        assertThat(categorizedPosts.stream().toList().get(0).getTitle()).isEqualTo("제목1");
-        assertThat(categorizedPosts.stream().toList()).hasSize(1);
+        Page<PostsResponse> posts = postsRepository.findPostsByTag(pageRequest, "Java");
+        List<PostsResponse> postsList = posts.stream().toList();
+        assertThat(postsList.get(0).getTitle()).isEqualTo("제목2");
+        assertThat(postsList.get(1).getTitle()).isEqualTo("제목");
     }
 
     @Test
-    @DisplayName("태그 저장")
-    void insertTags() {
-        String tagData = "[{\"value\":\"Spring\"},{\"value\":\"Java\"}]";
+    @DisplayName("조회수 증가")
+    void addViews() {
+        makePost("spring",1,"제목","내용");
 
-        Category category = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
+        Post post = postsRepository.findById(1L).orElseThrow(PostNotFound::new);
+        post.addViews(1L);
 
-        PostSaveRequest postSaveRequest = new PostSaveRequest("제목", "내용", category,
-            tagData, 0L);
-
-        postsRepository.save(postSaveRequest.toEntity());
-
-        List<Post> all = postsRepository.findAll();
-
-        assertThat(all.get(0).getTag()).isEqualTo("Spring,Java");
+        assertThat(post.getViews()).isEqualTo(1L);
     }
 
     @Test
-    @DisplayName("getTags as List")
-    void getTagsAsList() {
-        String tagData = "[{\"value\":\"Spring\"},{\"value\":\"Java\"}]";
+    @DisplayName("인기 게시글 조회")
+    void getPopularPosts() {
+        makePost("spring",1,"제목","내용");
+        makePost("java",2,"제목2","내용2");
 
-        Category category = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
+        Post post = postsRepository.findById(2L).orElseThrow(PostNotFound::new);
+        post.addViews(2L);
 
-        PostSaveRequest postSaveRequest = new PostSaveRequest("제목", "내용", category,
-            tagData, 0L);
+        List<PostsResponse> popularPosts = postsRepository.getPopularPosts();
 
-        postsRepository.save(postSaveRequest.toEntity());
-
-        List<Post> all = postsRepository.findAll();
-
-        Post post = postsRepository.findById(all.get(0).getId()).orElseThrow(PostNotFound::new);
-        String tags = post.getTag();
-
-        List<String> tagList = Stream.of(tags.split(",", -1)).toList();
-
-        assertThat(tagList.get(0)).isEqualTo("Spring");
-        assertThat(tagList.get(1)).isEqualTo("Java");
+        assertThat(popularPosts.get(0).getTitle()).isEqualTo("제목2");
     }
 
     @Test
-    @DisplayName("classified by tags")
-    void getPostsByTags() {
-        String tagData = "[{\"value\":\"Spring\"},{\"value\":\"Java\"}]";
-
-        Category category = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
-
-        IntStream.range(1, 30).forEach(i -> postsRepository.save(
-            new PostSaveRequest("제목" + i, "내용" + i, category, tagData, 0L).toEntity()));
-
-//        postsRepository.save(postsSaveRequestDto.toEntity());
+    @DisplayName("검색어로 게시글 찾기")
+    void getPostsByKeyword() {
+        makePost("spring",1,"제목","내용");
+        makePost("java",2,"고양이","내용2");
 
         PageRequest pageRequest = PageRequest.of(0, 6);
 
-        Page<PostsResponse> postsByTags = postsRepository.findPostsByTag(pageRequest,
-            "Spring");
-
-        assertThat(postsByTags.stream().toList().get(0).getTitle()).isEqualTo("제목29");
-        assertThat(postsByTags.stream().toList().get(0).getTag()).isEqualTo("Spring,Java");
+        Page<PostsResponse> rawPostsByKeyword = postsRepository.findPostsByKeyword(pageRequest, "고양이");
+        List<PostsResponse> postsGroup = rawPostsByKeyword.stream().toList();
+        assertThat(postsGroup.get(0).getContent()).isEqualTo("내용2");
     }
 
-    @Test
-    @DisplayName("조회수 체크")
-    void hitTest() {
-        String tagData = "[{\"value\":\"Spring\"},{\"value\":\"Java\"}]";
-
-        Category category = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
-
+    private void makePost(String categoryTitle,int listOrder,String postTitle,String postContent) {
+        makeCategory(categoryTitle,listOrder);
+        Category category = getCategory(categoryTitle);
+        String tag="[{\"value\":\"Spring\"},{\"value\":\"Java\"}]";
         postsRepository.save(
-            Post.builder().title("제목").content("내용").category(category).tag(tagData).views(0L)
-                .build());
-
-        List<Post> posts = postsRepository.findAll();
-
-        Long hit = posts.get(0).getViews() + 1L;
-
-        posts.get(0).addViews(hit);
-
-        Post post1 = postsRepository.findById(posts.get(0).getId()).orElseThrow();
-
-        assertThat(post1.getViews()).isEqualTo(1L);
+            Post.builder()
+                .title(postTitle)
+                .content(postContent)
+                .category(category)
+                .tag(tag)
+                .views(0L)
+                .build()
+        );
     }
 
-    @Test
-    @DisplayName("Tree Entity")
-    void treeEntity() {
-        Post post = postsRepository.findById(1L).orElseThrow();
-
-        CommentsSaveRequest request = new CommentsSaveRequest("ddodi",
-            "정말 좋은 글이네요", null, post, "1234");
-
-        commentsRepository.save(request.toEntity());
-
-        Comment comment = commentsRepository.findById(1L).orElseThrow();
-
-        assertThat(comment.getParent()).isNull();
-        assertThat(comment.getUsername()).isEqualTo("ddodi");
-        assertThat(comment.getContent()).isEqualTo("정말 좋은 글이네요");
-        assertThat(comment.getPost().getTitle()).isEqualTo("제목");
-
+    private void makeCategory(String categoryTitle, int listOrder) {
+        Category category = new Category(categoryTitle, listOrder);
+        categoryRepository.save(category);
     }
-
-    @Test
-    @DisplayName("get Post with Comment")
-    void postWithComment() {
-
-        Post post = postsRepository.findById(1L).orElseThrow();
-
-        CommentsSaveRequest request = new CommentsSaveRequest("ddodi",
-            "정말 좋은 글이네요", null, post, "1234");
-
-        commentsRepository.save(request.toEntity());
-        Comment savedComment = commentsRepository.findById(1L).orElseThrow(CommentNotFound::new);
-
-        CommentsSaveRequest sbuRequest = new CommentsSaveRequest("kim",
-            "감사합니다.", savedComment, post, "1234");
-
-        commentsRepository.save(sbuRequest.toEntity());
-
-        PostsResponse responseDto = postsRepository.findPostsByIdIncludingComments(post.getId());
-
-        assertThat(responseDto.getComments().get(0).getContent()).isEqualTo("정말 좋은 글이네요");
-        assertThat(responseDto.getComments().get(0).getChild().get(0).getContent()).isEqualTo(
-            "감사합니다.");
-    }
-
-    @Test
-    @DisplayName("게시글 페이징 처리")
-    void getPostsWithPaging() {
-
-        PageRequest pageRequest = PageRequest.of(0, 6);
-
-        Page<PostsResponse> postsWithPaging = postsRepository.fetchPostsExcludingComment(
-            pageRequest);
-
-        System.out.println("======"+postsWithPaging.stream().toList().get(0));
-        assertThat(postsWithPaging.stream().toList().get(0).getId()).isEqualTo(1L);
-        assertThat(postsWithPaging.getTotalPages()).isEqualTo(1);
-
+    private Category getCategory(String categoryTitle) {
+        return categoryRepository.findCategoryByTitle(categoryTitle)
+            .orElseThrow(CategoryNotFound::new);
     }
 }

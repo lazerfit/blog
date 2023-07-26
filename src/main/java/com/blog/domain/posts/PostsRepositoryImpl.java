@@ -62,7 +62,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     }
 
     @Override
-    public Page<PostsResponse> fetchPostsSortedByCategory(Pageable pageable,
+    public Page<PostsResponse> findPostsSortedByCategory(Pageable pageable,
         String q) {
         List<PostsResponse> postsList = jpaQueryFactory
             .select(
@@ -129,7 +129,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     }
 
     @Override
-    public List<PostsResponse> fetchPostsSortedByCategory(String q) {
+    public List<PostsResponse> findPostsSortedByCategory(String q) {
         return jpaQueryFactory.select(new QPostsResponse(
                 post.id,
                 post.title,
@@ -194,7 +194,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     }
 
     @Override
-    public Optional<PostsResponse> findPostsById(Long id) {
+    public Optional<PostsResponse> findPostById(Long postId) {
         PostsResponse response = jpaQueryFactory.select(
                 new QPostsResponse(
                     post.id,
@@ -206,7 +206,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
                     post.views
                 ))
             .from(post)
-            .where(post.id.eq(id))
+            .where(post.id.eq(postId))
             .fetchOne();
         return Optional.ofNullable(response);
     }

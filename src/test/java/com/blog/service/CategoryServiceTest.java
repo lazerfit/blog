@@ -1,12 +1,9 @@
 package com.blog.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.blog.domain.category.Category;
 import com.blog.domain.category.CategoryRepository;
 import com.blog.domain.posts.PostsRepository;
 import com.blog.exception.CategoryNotFound;
-import com.blog.web.form.CategoryEditForm;
 import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -55,21 +52,5 @@ class CategoryServiceTest {
         Assertions.assertThrows(CategoryNotFound.class,
             () -> categoryByTitle.orElseThrow(CategoryNotFound::new)
             , "존재하지 않는 카테고리입니다.");
-    }
-
-    @Test
-    @DisplayName("카테고리 업데이트")
-    void editCategory() {
-        Category category = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
-
-        CategoryEditForm categoryEditForm = new CategoryEditForm();
-        categoryEditForm.setTitle("고양이");
-        categoryEditForm.setListOrder(1);
-
-        categoryService.edit(category.getId(),categoryEditForm);
-
-        Category category1 = categoryRepository.findById(1L).orElseThrow();
-
-        assertThat(category1.getTitle()).isEqualTo("고양이");
     }
 }

@@ -40,7 +40,7 @@ public class PostsService {
 
     @Transactional
     public void delete(Long postId) {
-        PostsResponse post = postsRepository.findPostsById(postId).orElseThrow(PostNotFound::new);
+        PostsResponse post = postsRepository.findPostById(postId).orElseThrow(PostNotFound::new);
         postsRepository.deleteById(post.getId());
     }
 
@@ -49,13 +49,13 @@ public class PostsService {
     }
 
     // Sorted By CategoryTitle
-    public Page<PostsResponse> fetchPostsSortedByCategory(Pageable pageable,
+    public Page<PostsResponse> findPostsSortedByCategory(Pageable pageable,
         String categoryTitle) {
-        return postsRepository.fetchPostsSortedByCategory(pageable, categoryTitle);
+        return postsRepository.findPostsSortedByCategory(pageable, categoryTitle);
     }
 
-    public List<PostsResponse> fetchPostsSortedByCategory(String categoryTitle) {
-        return postsRepository.fetchPostsSortedByCategory(
+    public List<PostsResponse> findPostsSortedByCategory(String categoryTitle) {
+        return postsRepository.findPostsSortedByCategory(
             categoryTitle);
     }
 
