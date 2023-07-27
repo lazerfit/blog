@@ -36,7 +36,7 @@ public class CommentService {
         return new CommentsResponse(comment);
     }
 
-    public CommentPassword findPassword(Long id) {
+    public CommentPassword findEncodedPassword(Long id) {
         Comment comment = commentsRepository.findById(id).orElseThrow(CommentNotFound::new);
         return new CommentPassword(comment.getPassword());
     }

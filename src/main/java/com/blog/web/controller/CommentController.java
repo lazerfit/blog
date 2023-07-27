@@ -115,7 +115,7 @@ public class CommentController {
     }
 
     private CommentPassword findEncodedPassword(Long commentId) {
-        return commentService.findPassword(commentId);
+        return commentService.findEncodedPassword(commentId);
     }
 
     private void addAsynchronousAttributes(Long postId, Model model) {
