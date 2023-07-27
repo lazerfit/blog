@@ -35,16 +35,12 @@ class PostControllerTest {
 
     @Autowired
     private PostsRepository postsRepository;
-
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private ObjectMapper objectMapper;
-
     @Autowired
     private CategoryRepository categoryRepository;
-
     @Autowired
     private CommentsRepository commentsRepository;
 
@@ -223,8 +219,6 @@ class PostControllerTest {
             .andDo(print())
             .andExpect(status().is3xxRedirection());
     }
-
-
 
     @Test
     @DisplayName("게시글 수정 - 수정 폼")
