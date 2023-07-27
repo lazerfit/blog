@@ -1,19 +1,21 @@
 package com.blog.service;
 
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+
 import com.blog.domain.category.Category;
 import com.blog.domain.category.CategoryRepository;
 import com.blog.domain.posts.PostsRepository;
 import com.blog.exception.CategoryNotFound;
-import java.util.Optional;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 
 @SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class CategoryServiceTest {
 
     @Autowired
@@ -25,14 +27,6 @@ class CategoryServiceTest {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @BeforeEach
-    void insertCategories() {
-        Category category1 = new Category("Spring", 1);
-        Category category2 = new Category("Java", 2);
-        categoryRepository.save(category1);
-        categoryRepository.save(category2);
-    }
-
     @AfterEach
     void tearDown() {
         postsRepository.deleteAll();
@@ -40,17 +34,43 @@ class CategoryServiceTest {
     }
 
     @Test
+    @DisplayName("카테고리 생성")
+    void createCategory() {
+        makeCategory("Spring", 1);
+        Category category = getCategory("Spring");
+
+        assertThat(category.getTitle()).isEqualTo("Spring");
+    }
+
+    @Test
     @DisplayName("카테고리 삭제")
     void deleteCategoryById() {
+        makeCategory("Spring", 1);
+        categoryRepository.deleteAll();
 
-        Category category = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
+        boolean existsById = categoryRepository.existsById(1L);
+        assertThat(existsById).isFalse();
+    }
 
-        categoryRepository.deleteById(category.getId());
+    @Test
+    @DisplayName("카테고리 업데이트")
+    @Transactional
+    void updateCategory() {
+        makeCategory("Spring", 1);
 
-        Optional<Category> categoryByTitle = categoryRepository.findCategoryByTitle("spring");
+        getCategory("Spring").edit("Spring2", 2);
+        Category category = categoryRepository.findCategoryByTitle("Spring2")
+            .orElseThrow(CategoryNotFound::new);
 
-        Assertions.assertThrows(CategoryNotFound.class,
-            () -> categoryByTitle.orElseThrow(CategoryNotFound::new)
-            , "존재하지 않는 카테고리입니다.");
+        assertThat(category.getTitle()).isEqualTo("Spring2");
+    }
+
+    private void makeCategory(String categoryTitle, int listOrder) {
+        Category category = new Category(categoryTitle, listOrder);
+        categoryRepository.save(category);
+    }
+    private Category getCategory(String categoryTitle) {
+        return categoryRepository.findCategoryByTitle(categoryTitle)
+            .orElseThrow(CategoryNotFound::new);
     }
 }
