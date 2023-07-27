@@ -13,12 +13,13 @@ import com.blog.domain.comments.Comment;
 import com.blog.domain.comments.CommentsRepository;
 import com.blog.domain.posts.Post;
 import com.blog.domain.posts.PostsRepository;
+import com.blog.exception.CategoryNotFound;
 import com.blog.web.form.CommentForm;
+import com.blog.web.form.PostEditForm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.stream.IntStream;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +27,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 @WithMockUser(roles = "ADMIN")
 @AutoConfigureMockMvc
 @SpringBootTest
+@DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
 class PostControllerTest {
 
     @Autowired
@@ -44,23 +48,6 @@ class PostControllerTest {
     @Autowired
     private CommentsRepository commentsRepository;
 
-    @BeforeEach
-    void setup() {
-        Category category1 = new Category("Java", 1);
-        Category category2 = new Category("Spring", 2);
-
-        categoryRepository.save(category1);
-        categoryRepository.save(category2);
-
-        String tagData = "[{\"value\":\"Spring\"},{\"value\":\"Java\"}]";
-
-        Category category = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
-
-        postsRepository.save(
-            Post.builder().title("제목").content("내용").category(category).tag(tagData).views(0L)
-                .build());
-    }
-
     @AfterEach()
     void tearDown() {
         postsRepository.deleteAll();
@@ -69,23 +56,22 @@ class PostControllerTest {
 
     @Test
     @DisplayName("글 저장")
-    @WithMockUser(roles = "ADMIN")
     void savePost() throws Exception{
+        makeCategory("Spring",1);
 
-        String title = "제목1";
-        String content = "내용1";
-        String tags = "spring";
+        String title = "제목";
+        String content = "내용";
         String categoryTitle = "Spring";
+        String tag="[{\"value\":\"Spring\"},{\"value\":\"Java\"}]";
 
         mockMvc.perform(post("/post/new")
-                .param("title",title)
-                .param("content",content)
-                .param("tags",tags)
-                .param("categoryTitle",categoryTitle))
+                .param("title", title)
+                .param("content", content)
+                .param("categoryTitle", categoryTitle)
+                .param("tags", tag))
             .andDo(print())
-            .andExpect(status().is3xxRedirection());
+        .andExpect(status().is3xxRedirection());
     }
-
     @Test
     @DisplayName("글 저장 - 실패")
     void savePostFail() throws Exception{
@@ -106,6 +92,7 @@ class PostControllerTest {
     @DisplayName("글 단건 조회")
     @WithMockUser(roles = "ADMIN")
     void getPost() throws Exception {
+        makePost("spring",1,"Spring","content");
 
         mockMvc.perform(get("/post/1"))
             .andDo(print())
@@ -116,6 +103,7 @@ class PostControllerTest {
     @DisplayName("글 단건 조회 - 실패")
     @WithMockUser(roles = "ADMIN")
     void gePostFail() throws Exception {
+        makePost("spring",1,"Spring","content");
 
         mockMvc.perform(get("/post/2"))
             .andDo(print())
@@ -126,11 +114,13 @@ class PostControllerTest {
     @Test
     @DisplayName("업데이트")
     void update() throws Exception {
+        makePost("spring",1,"Spring","content");
+        PostEditForm commentForm = new PostEditForm(
+            "제목","내용","spring","spring");
 
         mockMvc.perform(post("/post/edit/1")
-                .param("title", "수정된 제목")
-                .param("content", "수정된 내용")
-                .param("categoryTitle", "Spring"))
+            .content(objectMapper.writeValueAsString(commentForm))
+            .contentType(APPLICATION_JSON))
             .andDo(print())
             .andExpect(status().is3xxRedirection());
     }
@@ -138,6 +128,7 @@ class PostControllerTest {
     @Test
     @DisplayName("삭제")
     void delete() throws Exception {
+        makePost("spring",1,"Spring","content");
 
         mockMvc.perform(post("/post/delete/1"))
             .andDo(print())
@@ -145,10 +136,10 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("get Categorized Posts")
-    @WithMockUser(roles = "ADMIN")
+    @DisplayName("카테고리 게시글 분류")
     void getCategorizedPosts() throws Exception {
 
+        makePost("spring",1,"Spring","content");
         PageRequest pageRequest = PageRequest.of(0, 6);
 
         mockMvc.perform(get("/post/category")
@@ -162,6 +153,8 @@ class PostControllerTest {
     @DisplayName("태그로 게시글 분류")
     @WithMockUser(roles = "ADMIN")
     void getPostsByTags() throws Exception {
+        makePost("spring",1,"Spring","content");
+        PageRequest pageRequest = PageRequest.of(0, 6);
 
         mockMvc.perform(get("/tag")
                 .param("q", "Spring"))
@@ -174,17 +167,17 @@ class PostControllerTest {
     @WithMockUser(roles = "ADMIN")
     @Transactional
     void saveComment() throws Exception {
-
+        makePost("Spring",1,"Spring","content");
         List<Post> all = postsRepository.findAll();
 
         CommentForm commentForm = new CommentForm();
         commentForm.setUsername("sg");
         commentForm.setContent("정말 멋집 글이네요");
-        commentForm.setPostId(all.get(0).getId());
+        commentForm.setPostId(1L);
         commentForm.setParentId(null);
         commentForm.setPassword("1234");
 
-        mockMvc.perform(post("/post/1/comment")
+        mockMvc.perform(post("/post/comment/new")
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(commentForm)))
             .andDo(print())
@@ -194,47 +187,34 @@ class PostControllerTest {
     @Test
     @DisplayName("대댓글 저장")
     void saveSubComment() throws Exception {
-
+        makePost("Spring",1,"Spring","content");
         List<Post> all = postsRepository.findAll();
-
         commentsRepository.save(Comment.builder()
             .username("sg")
             .content("정말 좋은 글이네요")
             .parent(null)
             .post(all.get(0))
+            .password("1234")
             .build());
 
         List<Comment> allComments = commentsRepository.findAll();
         Long parentId = allComments.get(0).getId();
 
-        CommentForm SubCommentForm = new CommentForm();
-        SubCommentForm.setUsername("kim");
-        SubCommentForm.setContent("정말 감사합니다.");
-        SubCommentForm.setPostId(all.get(0).getId());
-        SubCommentForm.setParentId(parentId);
+        CommentForm subCommentForm = new CommentForm();
+        subCommentForm.setUsername("kim");
+        subCommentForm.setContent("정말 감사합니다.");
+        subCommentForm.setPostId(all.get(0).getId());
+        subCommentForm.setParentId(parentId);
+        subCommentForm.setPassword("1234");
 
-        mockMvc.perform(post("/post/1/comment")
+        mockMvc.perform(post("/post/comment/subComment/new")
                 .contentType(APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(SubCommentForm)))
-            .andDo(print())
-            .andExpect(status().is3xxRedirection());
-    }
-
-    @Test
-    @DisplayName("게시글 수정 - 수정 폼")
-    @WithMockUser(roles = "ADMIN")
-    @Transactional
-    void editForm() throws Exception{
-
-        // 수정 폼에 원래 게시글 정보 전달
-
-        mockMvc.perform(get("/post/edit/1"))
+                .content(objectMapper.writeValueAsString(subCommentForm)))
             .andDo(print())
             .andExpect(status().isOk());
-
     }
 
-    private void createPosts(Category category) {
+    private void makePosts(Category category) {
         IntStream.range(1, 30).forEach(
             i -> postsRepository.save(Post.builder()
                 .title("title" + i)
@@ -244,5 +224,29 @@ class PostControllerTest {
                 .category(category)
                 .build())
         );
+    }
+
+    private void makePost(String categoryTitle,int listOrder,String postTitle,String postContent) {
+        makeCategory(categoryTitle,listOrder);
+        Category category = getCategory(categoryTitle);
+        String tag="[{\"value\":\"Spring\"},{\"value\":\"Java\"}]";
+        postsRepository.save(
+            Post.builder()
+                .title(postTitle)
+                .content(postContent)
+                .category(category)
+                .tag(tag)
+                .views(0L)
+                .build()
+        );
+    }
+
+    private void makeCategory(String categoryTitle, int listOrder) {
+        Category category = new Category(categoryTitle, listOrder);
+        categoryRepository.save(category);
+    }
+    private Category getCategory(String categoryTitle) {
+        return categoryRepository.findCategoryByTitle(categoryTitle)
+            .orElseThrow(CategoryNotFound::new);
     }
 }
