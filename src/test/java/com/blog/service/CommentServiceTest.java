@@ -79,7 +79,6 @@ class CommentServiceTest {
     }
 
 
-
     private void makePost(String categoryTitle, int listOrder, String postTitle,
         String postContent) {
         makeCategory(categoryTitle, listOrder);
