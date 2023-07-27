@@ -154,7 +154,7 @@
               깔끔하게 글 잘쓰시네요!! 잘 보고 갑니당 ㅎㅎ
               <br>
             </p>
-            <a href="javascript:void(0)" onclick="openSubComment(this)" class="reply">답글</a>
+            <a href="javascript:void(0)" onclick="openSubCommentWindow(this)" class="reply">답글</a>
             </div>
             <!-- child comment -->
             <div class="child-comment" th:if="${comment.getChild()}" th:each="child:${comment.getChild()}" th:data-commentId="${child.getId()}">
@@ -187,13 +187,7 @@
 
           </li>
         </ul>
-        <script>
-          function openSubComment(elem) {
-            const id=$(elem).closest('.comment-id').attr('data-commentId')
-            const postId=document.getElementById('commentContent').getAttribute('data-postId')
-            window.open('/post/comment/subComment/new?commentId='+id+'&postId='+postId,'대댓글','width=500,height=500')
-          }
-        </script>
+        <script src="/js/comment/openSubCommentWindow.js"></script>
       </div>
       <form id="submit-commentForm">
         <div class="comment-form">
@@ -216,8 +210,5 @@
     </div>
     </div>
     </div>
-
-
-
 </div>
 </body>
