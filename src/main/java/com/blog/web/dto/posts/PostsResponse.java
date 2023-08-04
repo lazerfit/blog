@@ -44,7 +44,7 @@ public class PostsResponse {
         this.views = views;
     }
 
-    public void insertComment(List<CommentsResponse> responseDto) {
-        this.comments=responseDto;
+    public void insertComment(List<CommentsResponse> commentResponse) {
+        this.comments=commentResponse;
     }
 }
