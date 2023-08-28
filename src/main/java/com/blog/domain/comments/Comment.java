@@ -23,11 +23,6 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Comment extends BaseTimeEntity {
 
-    /**
-     * username 과 password 입력 후 댓글 달 수 있도록
-     * username 과 password 알아야 댓글 수정/삭제 가능하도록
-     */
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")

@@ -119,7 +119,7 @@ public class CommentController {
     }
 
     private void addAsynchronousAttributes(Long postId, Model model) {
-        PostsResponse response = postsService.findPostsByIdIncludingComments(postId);
+        PostsResponse response = postsService.getPostsByIdIncludingComments(postId);
         model.addAttribute("postFindById", response);
     }
 
