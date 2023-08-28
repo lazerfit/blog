@@ -47,7 +47,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     }
 
     @Override
-    public Page<PostsResponse> findPostsByKeyword(Pageable pageable, String keyword) {
+    public Page<PostsResponse> getPostsByKeyword(Pageable pageable, String keyword) {
         List<PostsResponse> postsList = jpaQueryFactory.select(
                 new QPostsResponse(post.id, post.title,post.content,post.generationTimeStamp,post.category.title,post.tag,post.views))
             .from(post)
@@ -62,7 +62,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     }
 
     @Override
-    public Page<PostsResponse> findPostsSortedByCategory(Pageable pageable,
+    public Page<PostsResponse> getPostsSortedByCategory(Pageable pageable,
         String q) {
         List<PostsResponse> postsList = jpaQueryFactory
             .select(
@@ -87,7 +87,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     }
 
     @Override
-    public Page<PostsResponse> findPostsByTag(Pageable pageable, String tag) {
+    public Page<PostsResponse> getPostsByTag(Pageable pageable, String tag) {
         List<PostsResponse> response = jpaQueryFactory
             .select(
                 new QPostsResponse(
@@ -129,7 +129,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     }
 
     @Override
-    public List<PostsResponse> findPostsSortedByCategory(String q) {
+    public List<PostsResponse> getPostsSortedByCategory(String q) {
         return jpaQueryFactory.select(new QPostsResponse(
                 post.id,
                 post.title,
@@ -147,7 +147,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     }
 
     @Override
-    public PostsResponse findPostsByIdIncludingComments(Long postId) {
+    public PostsResponse getPostsByIdIncludingComments(Long postId) {
         PostsResponse postsResponse = jpaQueryFactory
             .select(new QPostsResponse(
                 post.id,

@@ -85,7 +85,7 @@ class PostServiceTest {
         makePost("spring",1,"제목","내용");
         makePost("java",2,"제목2","내용2");
 
-        List<PostsResponse> java = postsRepository.findPostsSortedByCategory("java");
+        List<PostsResponse> java = postsRepository.getPostsSortedByCategory("java");
 
         assertThat(java.get(0).getTitle()).isEqualTo("제목2");
     }
@@ -98,7 +98,7 @@ class PostServiceTest {
 
         PageRequest pageRequest = PageRequest.of(0, 6);
 
-        Page<PostsResponse> posts = postsRepository.findPostsByTag(pageRequest, "Java");
+        Page<PostsResponse> posts = postsRepository.getPostsByTag(pageRequest, "Java");
         List<PostsResponse> postsList = posts.stream().toList();
         assertThat(postsList.get(0).getTitle()).isEqualTo("제목2");
         assertThat(postsList.get(1).getTitle()).isEqualTo("제목");
@@ -137,7 +137,7 @@ class PostServiceTest {
 
         PageRequest pageRequest = PageRequest.of(0, 6);
 
-        Page<PostsResponse> rawPostsByKeyword = postsRepository.findPostsByKeyword(pageRequest, "고양이");
+        Page<PostsResponse> rawPostsByKeyword = postsRepository.getPostsByKeyword(pageRequest, "고양이");
         List<PostsResponse> postsGroup = rawPostsByKeyword.stream().toList();
         assertThat(postsGroup.get(0).getContent()).isEqualTo("내용2");
     }

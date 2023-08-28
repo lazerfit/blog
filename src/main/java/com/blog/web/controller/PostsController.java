@@ -36,7 +36,7 @@ public class PostsController {
 
     @GetMapping("/")
     public String index(Pageable pageable, Model model) {
-        Page<PostsResponse> posts = postsService.fetchPostsExcludingComment(pageable);
+        Page<PostsResponse> posts = postsService.getPostsExcludingComment(pageable);
         model.addAttribute("postsList", posts);
         populateRelatedSidebar(model);
         return "index";
@@ -45,7 +45,7 @@ public class PostsController {
     @GetMapping("/post/{postId}")
     public String getPostDetail(@PathVariable Long postId, Model model) {
         postsService.addViews(postId);
-        PostsResponse postsResponse = postsService.findPostsByIdIncludingComments(postId);
+        PostsResponse postsResponse = postsService.getPostsByIdIncludingComments(postId);
         model.addAttribute("postFindById", postsResponse);
         // Add attributes about category, popular post
         populateRelatedSidebar(model);
@@ -107,7 +107,7 @@ public class PostsController {
     @GetMapping("/post/search")
     public String getPostsClassifiedByKeyword(Pageable pageable, Model model
         , @RequestParam String q) {
-        Page<PostsResponse> searchedPostsByKeyword = postsService.findPostsByKeyword(
+        Page<PostsResponse> searchedPostsByKeyword = postsService.getPostsByKeyword(
             pageable, q);
         model.addAttribute("postsList", searchedPostsByKeyword);
         addKeywordAttributes(q,model);
@@ -118,7 +118,7 @@ public class PostsController {
     @GetMapping("/post/category")
     public String getPostsClassifiedByCategory(Pageable pageable, @RequestParam String q,
         Model model) {
-        Page<PostsResponse> categorizedPosts = postsService.findPostsSortedByCategory(
+        Page<PostsResponse> categorizedPosts = postsService.getPostsSortedByCategory(
             pageable, q);
         model.addAttribute("categorizedPosts", categorizedPosts);
         addKeywordAttributes(q,model);
@@ -129,7 +129,7 @@ public class PostsController {
     @GetMapping("/tag")
     public String getPostsClassifiedByTags(Pageable pageable
         , @RequestParam String q, Model model) {
-        Page<PostsResponse> postsByTags = postsService.findPostsByTag(pageable, q);
+        Page<PostsResponse> postsByTags = postsService.getPostsByTag(pageable, q);
         model.addAttribute("postsByTags", postsByTags);
         addKeywordAttributes(q,model);
         return "postsSortedByTags";
@@ -158,7 +158,7 @@ public class PostsController {
     }
 
     private void addAnotherCategories(String categoryTitle,Model model) {
-        var anotherCategory = postsService.findPostsSortedByCategory(
+        var anotherCategory = postsService.getPostsSortedByCategory(
             categoryTitle);
         model.addAttribute("anotherCategory",anotherCategory);
     }
@@ -169,7 +169,7 @@ public class PostsController {
     }
 
     private void addTags(Long postId, Model model) {
-        List<String> tagList = postsService.fetchTags(postId);
+        List<String> tagList = postsService.getTags(postId);
         model.addAttribute("tagList", tagList);
     }
 
@@ -193,7 +193,8 @@ public class PostsController {
 
     public PostEditForm createEditPostForm(Long postId) {
 
-        PostsResponse originalPost = postsService.findPostsByIdIncludingComments(postId);
+        //comment 안 불러와도 될 듯
+        PostsResponse originalPost = postsService.getPostsByIdIncludingComments(postId);
         String title=originalPost.getTitle();
         String content=originalPost.getContent();
         String categoryTitle=originalPost.getCategoryTitle();

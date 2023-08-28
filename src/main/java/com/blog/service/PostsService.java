@@ -34,7 +34,7 @@ public class PostsService {
     }
 
     @Transactional(readOnly = true)
-    public Page<PostsResponse> fetchPostsExcludingComment(Pageable pageable) {
+    public Page<PostsResponse> getPostsExcludingComment(Pageable pageable) {
         return postsRepository.fetchPostsExcludingComment(pageable);
     }
 
@@ -44,29 +44,29 @@ public class PostsService {
         postsRepository.deleteById(post.getId());
     }
 
-    public Page<PostsResponse> findPostsByKeyword(Pageable pageable,String q) {
-        return postsRepository.findPostsByKeyword(pageable, q);
+    public Page<PostsResponse> getPostsByKeyword(Pageable pageable,String q) {
+        return postsRepository.getPostsByKeyword(pageable, q);
     }
 
     // Sorted By CategoryTitle
-    public Page<PostsResponse> findPostsSortedByCategory(Pageable pageable,
+    public Page<PostsResponse> getPostsSortedByCategory(Pageable pageable,
         String categoryTitle) {
-        return postsRepository.findPostsSortedByCategory(pageable, categoryTitle);
+        return postsRepository.getPostsSortedByCategory(pageable, categoryTitle);
     }
 
-    public List<PostsResponse> findPostsSortedByCategory(String categoryTitle) {
-        return postsRepository.findPostsSortedByCategory(
+    public List<PostsResponse> getPostsSortedByCategory(String categoryTitle) {
+        return postsRepository.getPostsSortedByCategory(
             categoryTitle);
     }
 
-    public List<String> fetchTags(Long id) {
+    public List<String> getTags(Long id) {
         Post post = postsRepository.findById(id).orElseThrow(PostNotFound::new);
         String tags = post.getTag();
         return Stream.of(tags.split(",", -1)).toList();
     }
 
-    public Page<PostsResponse> findPostsByTag(Pageable pageable, String tagTitle) {
-        return postsRepository.findPostsByTag(pageable,tagTitle);
+    public Page<PostsResponse> getPostsByTag(Pageable pageable, String tagTitle) {
+        return postsRepository.getPostsByTag(pageable,tagTitle);
     }
 
     @Transactional
@@ -80,8 +80,8 @@ public class PostsService {
     }
 
     @Transactional(readOnly = true)
-    public PostsResponse findPostsByIdIncludingComments(Long id) {
-        return postsRepository.findPostsByIdIncludingComments(id);
+    public PostsResponse getPostsByIdIncludingComments(Long id) {
+        return postsRepository.getPostsByIdIncludingComments(id);
     }
 }
 
