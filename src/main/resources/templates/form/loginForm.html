@@ -12,13 +12,13 @@
   <div class="title">
     Login
   </div>
-  <form th:action="@{/login}" method="post">
+  <form>
     <div class="field">
-      <input type="text" name="username" required>
+      <input type="text" name="username" id="username" required>
       <label>Email Address</label>
     </div>
     <div class="field">
-      <input type="password" name="password" required>
+      <input type="password" name="password" id="password" required>
       <label>Password</label>
     </div>
     <div class="content">
@@ -33,7 +33,10 @@
     <div class="field">
       <input type="submit" value="Login">
     </div>
+    <button type="button" id="signIn" class="btn btn-primary">Login</button>
   </form>
 </div>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+<script src="/js/login/loginForm.js"></script>
 </body>
 </html>

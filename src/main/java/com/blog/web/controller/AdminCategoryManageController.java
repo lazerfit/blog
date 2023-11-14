@@ -6,11 +6,11 @@ import com.blog.web.dto.category.CategoryEditRequest;
 import com.blog.web.dto.category.CategorySaveRequest;
 import com.blog.web.form.CategoryEditForm;
 import com.blog.web.form.CategoryForm;
-import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,7 +46,7 @@ public class AdminCategoryManageController {
     }
 
     @PostMapping("/edit/{categoryId}")
-    public String editCategory(@RequestBody @Valid CategoryEditForm editForm,@PathVariable Long categoryId) {
+    public String editCategory(@RequestBody @Validated CategoryEditForm editForm,@PathVariable Long categoryId) {
         CategoryEditRequest editRequest = createCategoryEditRequest(editForm);
         categoryService.edit(categoryId,editRequest);
         return REDIRECT_HOME_URL;

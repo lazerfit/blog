@@ -16,7 +16,7 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @GetMapping("/auth/login")
+    @GetMapping("/login")
     public String login() {
         return "form/loginForm";
     }

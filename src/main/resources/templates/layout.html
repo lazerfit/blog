@@ -25,7 +25,7 @@
 <h4><a class="navbar-brand" th:href="@{/}">Gran Adentura</a></h4>
   <div th:if="${#authorization.expression('isAuthenticated()')}">
     <div class="dropdown" data-bs-target="dropdownContent">
-      <img src="/img/pikachu.png" alt="Profile Picture" class="profile" onclick="toggleDropdown('dropdownContent')">
+      <img src="/img/klayrabbit.jpeg" alt="Profile Picture" class="profile" onclick="toggleDropdown('dropdownContent')">
       <div id="dropdownContent" class="dropdown-content">
         <a th:href="@{/admin/setting}" sec:authorize="hasRole('ROLE_ADMIN')">관리</a>
         <a th:href="@{/post/new}" sec:authorize="hasRole('ROLE_ADMIN')">글쓰기</a>
@@ -34,7 +34,7 @@
     </div>
   </div>
   <div th:unless="${#authorization.expression('isAuthenticated()')}">
-    <button class="loginId" th:href="@{auth/login}" onclick="login()" style="float: right;font-size: 20px">Login</button>
+    <button class="loginId" th:href="@{/login}" onclick="login()" style="float: right;font-size: 20px">Login</button>
   </div>
 </div>
   <!-- nav -->
@@ -71,7 +71,7 @@
         <li class="list-group-item d-flex justify-content-between align-items-center border-0 categoryList"><a th:href="@{/}">전체 글</a></li>
     <th:block th:each="category:${allCategorizedPosts}">
           <li th:if="${category.getListOrder()>0}" class="list-group-item d-flex justify-content-between align-items-center border-0 categoryList" style="padding-top: 0">
-            <a th:href="@{/post/category(q=${category.getTitle()})}" th:text="${category.getTitle()}" style="color: gray"></a>
+            <a th:href="@{/post/category(q=${category.getTitle()})}" th:text="${category.getTitle()}" style="color: rgb(128,128,128)"></a>
           </li>
     </th:block>
       </ul>
@@ -81,7 +81,7 @@
       <ul class="list-group list-group-light">
         <th:block th:each="post:${popularPosts}">
           <li class="list-group-item d-flex justify-content-between align-items-center border-0 categoryList" style="padding-top: 0">
-            <a th:href="@{/post/{id}(id=${post.getId()})}" th:text="${post.getTitle()}" style="color: gray"></a>
+            <a th:href="@{/post/{id}(id=${post.getId()})}" th:text="${post.getTitle()}" style="color: rgb(128,128,128)"></a>
           </li>
         </th:block>
       </ul>
@@ -97,9 +97,9 @@
     style="float: right;width: 20px;height: 20px;margin-top: 5px"></a>
 </div>
 </div>
-<script src="/js/login.js"></script>
+<script src="/js/login/login.js"></script>
 <script src="/js/layout/footer.js"></script>
-<script type="text/javascript" src="/js/logout.js"></script>
+<script type="text/javascript" src="/js/login/logout.js"></script>
 <script type="text/javascript" src="/js/layout/toggleDropdown.js"></script>
 </body>
 </html>
