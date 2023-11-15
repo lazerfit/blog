@@ -8,6 +8,7 @@ import com.blog.web.form.CategoryEditForm;
 import com.blog.web.form.CategoryForm;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/admin/setting/category")
+@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 public class AdminCategoryManageController {
 
     private final CategoryService categoryService;

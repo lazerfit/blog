@@ -8,10 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -26,6 +26,7 @@ import org.springframework.session.security.web.authentication.SpringSessionReme
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true,securedEnabled = true,jsr250Enabled = true)
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
@@ -66,40 +67,11 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests(requests -> requests
-                .requestMatchers("/").permitAll()
-                .requestMatchers(HttpMethod.GET, "/post/*").permitAll()
-                .requestMatchers("/post/search/*").permitAll()
-                .requestMatchers("/post/category/*").permitAll()
-                .requestMatchers("/post/new").hasRole(ROLE_ADMIN)
-                .requestMatchers("/post/delete/*").hasRole(ROLE_ADMIN)
-                .requestMatchers("/post/edit/*").hasRole(ROLE_ADMIN)
-                .requestMatchers("/tag").permitAll()
-                .requestMatchers("/post/admin/comment/delete/*").hasRole(ROLE_ADMIN)
-                .requestMatchers("/post/comment/manage").permitAll()
-                .requestMatchers("/post/comment/manage/edit").permitAll()
-                .requestMatchers("/post/comment/subComment/new").permitAll()
-                .requestMatchers("/post/comment/manage/delete").permitAll()
-                .requestMatchers(HttpMethod.POST, "/post/comment/new").permitAll()
-                .requestMatchers("/admin/**").hasRole(ROLE_ADMIN)
-                .requestMatchers("/auth/signup").permitAll()
-                .requestMatchers("/auth/login").permitAll()
-                .requestMatchers("/login").permitAll()
-                .anyRequest().authenticated()
-            )
             .addFilterBefore(usernamePasswordAuthenticationFilter(),
                 UsernamePasswordAuthenticationFilter.class)
-            .exceptionHandling(e -> {
-                e.authenticationEntryPoint(new Http401Handler(objectMapper));
-            })
-//            .formLogin(form -> form
-//                .usernameParameter("username")
-//                .passwordParameter("password")
-//                .loginPage("/auth/login")
-//                .loginProcessingUrl("/login")
-//                .defaultSuccessUrl("/")
-//                .permitAll()
-//            )
+            .exceptionHandling(e ->
+                e.authenticationEntryPoint(new Http401Handler(objectMapper))
+            )
             .csrf(AbstractHttpConfigurer::disable)
             .rememberMe(rm -> rm.rememberMeParameter("remember")
                 .alwaysRemember(false)

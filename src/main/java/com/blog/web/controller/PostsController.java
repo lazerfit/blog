@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,14 +35,7 @@ public class PostsController {
     private final CategoryService categoryService;
     private final CommentService commentService;
 
-    @GetMapping("/")
-    public String index(Pageable pageable, Model model) {
-        Page<PostsResponse> posts = postsService.getPostsExcludingComment(pageable);
-        model.addAttribute("postsList", posts);
-        populateRelatedSidebar(model);
-        return "index";
-    }
-
+    @PreAuthorize("permitAll()")
     @GetMapping("/post/{postId}")
     public String getPostDetail(@PathVariable Long postId, Model model) {
         postsService.addViews(postId);
@@ -57,6 +51,7 @@ public class PostsController {
     }
 
     // Create
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/post/new")
     public String createPostsForm(Model model) {
         addPostCreateForm(model);
@@ -64,6 +59,7 @@ public class PostsController {
         return "form/createPostsForm";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping("/post/new")
     public String savePost(@Valid PostCreateForm form) {
         PostSaveRequest saveRequest = createPostSaveRequest(form);
@@ -72,6 +68,7 @@ public class PostsController {
     }
 
     // Edit
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/post/edit/{postId}")
     public String createEditForm(@PathVariable Long postId, Model model) {
         PostEditForm postEditForm = createEditPostForm(postId);
@@ -80,6 +77,7 @@ public class PostsController {
         return "form/editPostForm";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping("/post/edit/{postId}")
     public String editPost(@PathVariable Long postId, @RequestBody @Valid PostEditForm form) {
         PostsUpdateRequest request = createPostEditRequest(form);
@@ -98,12 +96,14 @@ public class PostsController {
     }
 
     // Delete
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping("/post/delete/{postId}")
     public String deletePost(@PathVariable Long postId) {
         postsService.delete(postId);
         return "redirect:/";
     }
 
+    @PreAuthorize("permitAll()")
     @GetMapping("/post/search")
     public String getPostsClassifiedByKeyword(Pageable pageable, Model model
         , @RequestParam String q) {
@@ -115,6 +115,7 @@ public class PostsController {
         return "index";
     }
 
+    @PreAuthorize("permitAll()")
     @GetMapping("/post/category")
     public String getPostsClassifiedByCategory(Pageable pageable, @RequestParam String q,
         Model model) {
@@ -126,6 +127,7 @@ public class PostsController {
         return "postsSortedByCategory";
     }
 
+    @PreAuthorize("permitAll()")
     @GetMapping("/tag")
     public String getPostsClassifiedByTags(Pageable pageable
         , @RequestParam String q, Model model) {

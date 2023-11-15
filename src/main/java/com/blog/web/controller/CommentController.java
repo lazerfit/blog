@@ -12,6 +12,7 @@ import com.blog.web.form.CommentPasswordCheckForm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,6 +34,7 @@ public class CommentController {
     private static final String SUCCESS = "성공";
     private static final String CHECK_PASSWORD = "비밀번호를 확인해 주세요";
 
+    @PreAuthorize("permitAll()")
     @PostMapping("/post/comment/new")
     public String saveComment(@RequestBody @Valid CommentForm form,
         Model model) {
@@ -42,6 +44,7 @@ public class CommentController {
         return REPLACE_COMMENT_LIST;
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping("/post/admin/comment/delete")
     public String delete(@RequestParam Long commentId, @RequestParam Long postId, Model model) {
         addCommentPasswordCheckForm(model);
@@ -50,6 +53,7 @@ public class CommentController {
         return REPLACE_COMMENT_LIST;
     }
 
+    @PreAuthorize("permitAll()")
     @PostMapping("/post/comment/manage")
     public String manageComment(@Valid CommentPasswordCheckForm form, Model model) {
         addCommentPasswordCheckForm(model);
@@ -62,6 +66,7 @@ public class CommentController {
         return "/error/403";
     }
 
+    @PreAuthorize("permitAll()")
     @PostMapping("/post/comment/manage/delete")
     @ResponseBody
     public String userDeleteComment(@RequestBody @Valid CommentPasswordCheckForm form) {
@@ -72,6 +77,7 @@ public class CommentController {
         return CHECK_PASSWORD;
     }
 
+    @PreAuthorize("permitAll()")
     @PostMapping("/post/comment/manage/edit")
     @ResponseBody
     public String userEditComment(@Valid CommentEditForm form,Model model){
@@ -84,6 +90,7 @@ public class CommentController {
         return CHECK_PASSWORD;
     }
 
+    @PreAuthorize("permitAll()")
     @GetMapping("/post/comment/subComment/new")
     public String subComment(@RequestParam Long commentId,@RequestParam Long postId ,Model model) {
         model.addAttribute("parentId", commentId);
@@ -91,6 +98,7 @@ public class CommentController {
         return "subComment";
     }
 
+    @PreAuthorize("permitAll()")
     @PostMapping("/post/comment/subComment/new")
     @ResponseBody
     public String subComment(@RequestBody @Valid CommentForm form) {
