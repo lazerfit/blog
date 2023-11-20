@@ -20,10 +20,7 @@ public class CategoryResponse {
         return Category.builder()
             .title(title)
             .listOrder(listOrder)
-<<<<<<< HEAD
             .id(id)
-=======
->>>>>>> cache
             .build();
     }
 }
