@@ -1,9 +1,9 @@
 package com.blog.web.controller;
 
-import com.blog.domain.category.Category;
 import com.blog.service.CategoryService;
 import com.blog.service.CommentService;
 import com.blog.service.PostsService;
+import com.blog.web.dto.category.CategoryResponse;
 import com.blog.web.dto.posts.PostSaveRequest;
 import com.blog.web.dto.posts.PostsResponse;
 import com.blog.web.dto.posts.PostsUpdateRequest;
@@ -86,12 +86,12 @@ public class PostsController {
     }
 
     private PostsUpdateRequest createPostEditRequest(PostEditForm form) {
-        Category category = categoryService.findCategoryByTitle(form.getCategoryTitle());
+        CategoryResponse categoryResponse = categoryService.findCategoryByTitle(form.getCategoryTitle());
         return PostsUpdateRequest.builder()
             .title(form.getTitle())
             .content(form.getContent())
             .tag(form.getTag())
-            .category(category)
+            .category(categoryResponse.toEntity())
             .build();
     }
 
@@ -144,7 +144,7 @@ public class PostsController {
     }
 
     private void addCategoriesAttributes(Model model) {
-        List<Category> allCategory = categoryService.findAllCategory();
+        List<CategoryResponse> allCategory = categoryService.findAllCategory();
         model.addAttribute("allCategorizedPosts", allCategory);
     }
 
@@ -180,9 +180,10 @@ public class PostsController {
     }
 
     public PostSaveRequest createPostSaveRequest(PostCreateForm form) {
-        Category category = categoryService.findCategoryByTitle(form.getCategoryTitle());
+        CategoryResponse categoryResponse = categoryService.findCategoryByTitle(
+            form.getCategoryTitle());
         return new PostSaveRequest(
-            form.getTitle(),form.getContent(),category,form.getTags(),0L);
+            form.getTitle(),form.getContent(),categoryResponse.toEntity(),form.getTags(),0L);
     }
 
     public void addCommentPasswordCheckForm(Model model) {

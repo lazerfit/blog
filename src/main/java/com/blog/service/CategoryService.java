@@ -4,9 +4,11 @@ import com.blog.domain.category.Category;
 import com.blog.domain.category.CategoryRepository;
 import com.blog.exception.CategoryNotFound;
 import com.blog.web.dto.category.CategoryEditRequest;
+import com.blog.web.dto.category.CategoryResponse;
 import com.blog.web.dto.category.CategorySaveRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,12 +24,14 @@ public class CategoryService {
         categoryRepository.save(requestDto.toEntity());
     }
 
-    public Category findCategoryByTitle(String title) {
-        return categoryRepository.findCategoryByTitle(title).orElseThrow(CategoryNotFound::new);
+    @Cacheable(value = "categoryCache", unless = "#result==null")
+    public CategoryResponse findCategoryByTitle(String title) {
+        return categoryRepository.findCategoryByTitle(title).map(CategoryResponse::new).orElseThrow();
     }
 
-    public List<Category> findAllCategory() {
-        return categoryRepository.findAll(Sort.by(Sort.DEFAULT_DIRECTION,"listOrder"));
+    public List<CategoryResponse> findAllCategory() {
+        return categoryRepository.findAll(Sort.by(Sort.DEFAULT_DIRECTION,"listOrder"))
+            .stream().map(CategoryResponse::new).toList();
     }
 
     @Transactional
