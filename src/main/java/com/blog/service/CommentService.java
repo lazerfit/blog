@@ -13,6 +13,7 @@ import com.blog.web.dto.comments.CommentsSaveRequest;
 import com.blog.web.form.CommentForm;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +33,7 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "commentCached",key = "{#id}")
     public CommentsResponse findById(Long id) {
         Comment comment = commentsRepository.findById(id).orElseThrow(CommentNotFound::new);
         return new CommentsResponse(comment);

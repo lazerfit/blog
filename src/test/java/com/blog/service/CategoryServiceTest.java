@@ -7,7 +7,6 @@ import com.blog.domain.category.CategoryRepository;
 import com.blog.domain.posts.PostsRepository;
 import com.blog.exception.CategoryNotFound;
 import jakarta.transaction.Transactional;
-import java.util.Collection;
 import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -70,22 +69,16 @@ class CategoryServiceTest {
         assertThat(category.getTitle()).isEqualTo("Spring2");
     }
 
-    @Test
-    void 카테고리_조회() {
-
-        Category category = getCategory("Spring");
-
-        Collection<String> cacheNames = cacheManager.getCacheNames();
-        System.out.println(cacheNames);
-    }
-
     private Category getCachedCategory(String title) {
         return Optional.ofNullable(cacheManager.getCache("category")).map(c ->
             c.get(title, Category.class)).orElseThrow();
     }
 
     private void makeCategory(String categoryTitle, int listOrder) {
-        Category category = new Category(categoryTitle, listOrder);
+        Category category = Category.builder()
+            .title(categoryTitle)
+            .listOrder(listOrder)
+            .build();
         categoryRepository.save(category);
     }
     private Category getCategory(String categoryTitle) {
