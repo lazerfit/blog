@@ -15,4 +15,11 @@ public class CategoryResponse {
         this.title= category.getTitle();
         this.listOrder= category.getListOrder();
     }
+
+    public Category toEntity() {
+        return Category.builder()
+            .title(title)
+            .listOrder(listOrder)
+            .build();
+    }
 }
