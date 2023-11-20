@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -39,6 +41,7 @@ public class PostsService {
     }
 
     @Transactional
+    @CacheEvict(value = "postCached", key = "{#postId}")
     public void delete(Long postId) {
         PostsResponse post = postsRepository.findPostById(postId).orElseThrow(PostNotFound::new);
         postsRepository.deleteById(post.getId());
@@ -80,9 +83,11 @@ public class PostsService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "postCached",key = "{#id}" , unless = "#result==null")
     public PostsResponse getPostsByIdIncludingComments(Long id) {
         return postsRepository.getPostsByIdIncludingComments(id);
     }
 }
+
 
 
