@@ -29,8 +29,9 @@ public class CategoryService {
         return categoryRepository.findCategoryByTitle(title).map(CategoryResponse::new).orElseThrow();
     }
 
-    public List<Category> findAllCategory() {
-        return categoryRepository.findAll(Sort.by(Sort.DEFAULT_DIRECTION,"listOrder"));
+    public List<CategoryResponse> findAllCategory() {
+        return categoryRepository.findAll(Sort.by(Sort.DEFAULT_DIRECTION,"listOrder"))
+            .stream().map(CategoryResponse::new).toList();
     }
 
     @Transactional

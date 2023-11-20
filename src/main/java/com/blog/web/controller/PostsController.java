@@ -1,6 +1,5 @@
 package com.blog.web.controller;
 
-import com.blog.domain.category.Category;
 import com.blog.service.CategoryService;
 import com.blog.service.CommentService;
 import com.blog.service.PostsService;
@@ -145,7 +144,7 @@ public class PostsController {
     }
 
     private void addCategoriesAttributes(Model model) {
-        List<Category> allCategory = categoryService.findAllCategory();
+        List<CategoryResponse> allCategory = categoryService.findAllCategory();
         model.addAttribute("allCategorizedPosts", allCategory);
     }
 
