@@ -53,6 +53,7 @@ lazerfit 의 개인 blog 프로젝트입니다.
 
 ## *개발 일지*
 - ### [231120] 게시글, 댓글 캐시 적용
+  - Caffeine 사용
 - ### [231115] 시큐리티 커스텀 인증 만들기 (JSON으로 로그인 정보 받기)
 - ### [230828] get / find 네이밍 규칙 수정 & postEdit 페이지 내 original 카테고리명 카테고리 수정 탭에 기본값으로 보이도록 수정
 - ### [230724] Comment, Category controller & service refactoring
