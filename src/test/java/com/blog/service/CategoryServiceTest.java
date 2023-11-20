@@ -7,11 +7,15 @@ import com.blog.domain.category.CategoryRepository;
 import com.blog.domain.posts.PostsRepository;
 import com.blog.exception.CategoryNotFound;
 import jakarta.transaction.Transactional;
+import java.util.Collection;
+import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cache.CacheManager;
 import org.springframework.test.annotation.DirtiesContext;
 
 @SpringBootTest
@@ -19,13 +23,18 @@ import org.springframework.test.annotation.DirtiesContext;
 class CategoryServiceTest {
 
     @Autowired
-    private CategoryService categoryService;
-
-    @Autowired
     private PostsRepository postsRepository;
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private CacheManager cacheManager;
+
+    @BeforeEach
+    void makeDummyCategory() {
+        makeCategory("Spring", 1);
+    }
 
     @AfterEach
     void tearDown() {
@@ -36,7 +45,6 @@ class CategoryServiceTest {
     @Test
     @DisplayName("카테고리 생성")
     void createCategory() {
-        makeCategory("Spring", 1);
         Category category = getCategory("Spring");
 
         assertThat(category.getTitle()).isEqualTo("Spring");
@@ -45,7 +53,6 @@ class CategoryServiceTest {
     @Test
     @DisplayName("카테고리 삭제")
     void deleteCategoryById() {
-        makeCategory("Spring", 1);
         categoryRepository.deleteAll();
 
         boolean existsById = categoryRepository.existsById(1L);
@@ -56,13 +63,25 @@ class CategoryServiceTest {
     @DisplayName("카테고리 업데이트")
     @Transactional
     void updateCategory() {
-        makeCategory("Spring", 1);
-
         getCategory("Spring").edit("Spring2", 2);
         Category category = categoryRepository.findCategoryByTitle("Spring2")
             .orElseThrow(CategoryNotFound::new);
 
         assertThat(category.getTitle()).isEqualTo("Spring2");
+    }
+
+    @Test
+    void 카테고리_조회() {
+
+        Category category = getCategory("Spring");
+
+        Collection<String> cacheNames = cacheManager.getCacheNames();
+        System.out.println(cacheNames);
+    }
+
+    private Category getCachedCategory(String title) {
+        return Optional.ofNullable(cacheManager.getCache("category")).map(c ->
+            c.get(title, Category.class)).orElseThrow();
     }
 
     private void makeCategory(String categoryTitle, int listOrder) {

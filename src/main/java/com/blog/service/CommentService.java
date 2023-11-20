@@ -31,6 +31,7 @@ public class CommentService {
         commentsRepository.save(request.toEntity());
     }
 
+    @Transactional(readOnly = true)
     public CommentsResponse findById(Long id) {
         Comment comment = commentsRepository.findById(id).orElseThrow(CommentNotFound::new);
         return new CommentsResponse(comment);
@@ -41,6 +42,7 @@ public class CommentService {
         return new CommentPassword(comment.getPassword());
     }
 
+    @Transactional(readOnly = true)
     public List<CommentsResponse> findByPostId(Long postId) {
         return commentsRepository.findByPostId(postId).stream().map(CommentsResponse::new).toList();
     }

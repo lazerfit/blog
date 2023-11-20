@@ -32,7 +32,6 @@ public class SiteUser {
 
     private LocalDateTime createdDate;
 
-
     @Builder
     public SiteUser(String name, String email, String password, LocalDateTime createdDate) {
         this.name = name;

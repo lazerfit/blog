@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.stream.IntStream;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,11 @@ class PostControllerTest {
     private CategoryRepository categoryRepository;
     @Autowired
     private CommentsRepository commentsRepository;
+
+    @BeforeEach
+    void saveMockPost() {
+        makePost("spring",1,"Spring","content");
+    }
 
     @AfterEach()
     void tearDown() {
@@ -90,9 +96,8 @@ class PostControllerTest {
 
     @Test
     @DisplayName("글 단건 조회")
-    @WithMockUser(roles = "ADMIN")
+    @WithMockUser(roles = "USER")
     void getPost() throws Exception {
-        makePost("spring",1,"Spring","content");
 
         mockMvc.perform(get("/post/1"))
             .andDo(print())
@@ -101,9 +106,8 @@ class PostControllerTest {
 
     @Test
     @DisplayName("글 단건 조회 - 실패")
-    @WithMockUser(roles = "ADMIN")
+    @WithMockUser(roles = "USER")
     void gePostFail() throws Exception {
-        makePost("spring",1,"Spring","content");
 
         mockMvc.perform(get("/post/2"))
             .andDo(print())
@@ -114,7 +118,6 @@ class PostControllerTest {
     @Test
     @DisplayName("업데이트")
     void update() throws Exception {
-        makePost("spring",1,"Spring","content");
         PostEditForm commentForm = new PostEditForm(
             "제목","내용","spring","spring");
 
@@ -128,7 +131,6 @@ class PostControllerTest {
     @Test
     @DisplayName("삭제")
     void delete() throws Exception {
-        makePost("spring",1,"Spring","content");
 
         mockMvc.perform(post("/post/delete/1"))
             .andDo(print())
@@ -139,7 +141,6 @@ class PostControllerTest {
     @DisplayName("카테고리 게시글 분류")
     void getCategorizedPosts() throws Exception {
 
-        makePost("spring",1,"Spring","content");
         PageRequest pageRequest = PageRequest.of(0, 6);
 
         mockMvc.perform(get("/post/category")
@@ -151,9 +152,7 @@ class PostControllerTest {
 
     @Test
     @DisplayName("태그로 게시글 분류")
-    @WithMockUser(roles = "ADMIN")
     void getPostsByTags() throws Exception {
-        makePost("spring",1,"Spring","content");
         PageRequest pageRequest = PageRequest.of(0, 6);
 
         mockMvc.perform(get("/tag")
@@ -164,10 +163,8 @@ class PostControllerTest {
 
     @Test
     @DisplayName("댓글 저장")
-    @WithMockUser(roles = "ADMIN")
     @Transactional
     void saveComment() throws Exception {
-        makePost("Spring",1,"Spring","content");
         List<Post> all = postsRepository.findAll();
 
         CommentForm commentForm = new CommentForm();
@@ -187,7 +184,6 @@ class PostControllerTest {
     @Test
     @DisplayName("대댓글 저장")
     void saveSubComment() throws Exception {
-        makePost("Spring",1,"Spring","content");
         List<Post> all = postsRepository.findAll();
         commentsRepository.save(Comment.builder()
             .username("sg")

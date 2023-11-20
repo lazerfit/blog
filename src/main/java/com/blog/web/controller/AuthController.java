@@ -23,7 +23,7 @@ public class AuthController {
         return "form/loginForm";
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("permitAll()")
     @PostMapping("/auth/signup")
     public void signUp(@RequestBody SiteUserDto siteUserDto) {
         authService.signUp(siteUserDto);

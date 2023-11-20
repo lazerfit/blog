@@ -8,12 +8,12 @@ import org.springframework.data.domain.Pageable;
 
 public interface PostsRepositoryCustom {
     Page<PostsResponse> fetchPostsExcludingComment(Pageable pageable);
-    Page<PostsResponse> findPostsByKeyword(Pageable pageable,String keyword);
-    Page<PostsResponse> findPostsSortedByCategory(Pageable pageable,String category);
-    Page<PostsResponse> findPostsByTag(Pageable pageable,String tag);
+    Page<PostsResponse> getPostsByKeyword(Pageable pageable,String keyword);
+    Page<PostsResponse> getPostsSortedByCategory(Pageable pageable,String category);
+    Page<PostsResponse> getPostsByTag(Pageable pageable,String tag);
     List<PostsResponse> getPopularPosts();
-    List<PostsResponse> findPostsSortedByCategory(String q);
+    List<PostsResponse> getPostsSortedByCategory(String q);
     // Using When go into Posts Detail page
-    PostsResponse findPostsByIdIncludingComments(Long postId);
+    PostsResponse getPostsByIdIncludingComments(Long postId);
     Optional<PostsResponse> findPostById(Long id);
 }

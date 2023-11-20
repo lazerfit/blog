@@ -15,4 +15,5 @@ public class SiteUserPrincipal extends User {
         super(user.getEmail(), user.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_ADMIN")));
         this.userid= user.getId();
     }
+
 }

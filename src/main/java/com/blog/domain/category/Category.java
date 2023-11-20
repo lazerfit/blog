@@ -32,9 +32,10 @@ public class Category {
     private Integer listOrder;
 
     @Builder
-    public Category(String title, Integer listOrder) {
+    public Category(Long id, String title, Integer listOrder) {
+        this.id = id;
         this.title = title;
-        this.listOrder=listOrder;
+        this.listOrder = listOrder;
     }
 
     public void edit(String title, Integer listOrder) {

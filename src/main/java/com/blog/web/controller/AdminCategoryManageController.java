@@ -1,8 +1,8 @@
 package com.blog.web.controller;
 
-import com.blog.domain.category.Category;
 import com.blog.service.CategoryService;
 import com.blog.web.dto.category.CategoryEditRequest;
+import com.blog.web.dto.category.CategoryResponse;
 import com.blog.web.dto.category.CategorySaveRequest;
 import com.blog.web.form.CategoryEditForm;
 import com.blog.web.form.CategoryForm;
@@ -56,7 +56,7 @@ public class AdminCategoryManageController {
 
     //Method
     private void addAllCategoryAttribute(Model model) {
-        List<Category> allCategory = categoryService.findAllCategory();
+        List<CategoryResponse> allCategory = categoryService.findAllCategory();
         model.addAttribute("allCategory", allCategory);
     }
 
