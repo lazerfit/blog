@@ -47,27 +47,32 @@ public class PostsService {
         postsRepository.deleteById(post.getId());
     }
 
+    @Transactional(readOnly = true)
     public Page<PostsResponse> getPostsByKeyword(Pageable pageable,String q) {
         return postsRepository.getPostsByKeyword(pageable, q);
     }
 
     // Sorted By CategoryTitle
+    @Transactional(readOnly = true)
     public Page<PostsResponse> getPostsSortedByCategory(Pageable pageable,
         String categoryTitle) {
         return postsRepository.getPostsSortedByCategory(pageable, categoryTitle);
     }
 
+    @Transactional(readOnly = true)
     public List<PostsResponse> getPostsSortedByCategory(String categoryTitle) {
         return postsRepository.getPostsSortedByCategory(
             categoryTitle);
     }
 
+    @Transactional(readOnly = true)
     public List<String> getTags(Long id) {
         Post post = postsRepository.findById(id).orElseThrow(PostNotFound::new);
         String tags = post.getTag();
         return Stream.of(tags.split(",", -1)).toList();
     }
 
+    @Transactional(readOnly = true)
     public Page<PostsResponse> getPostsByTag(Pageable pageable, String tagTitle) {
         return postsRepository.getPostsByTag(pageable,tagTitle);
     }
@@ -78,6 +83,7 @@ public class PostsService {
         post.addViews(1L);
     }
 
+    @Transactional(readOnly = true)
     public List<PostsResponse> getPopularPosts() {
         return postsRepository.getPopularPosts();
     }

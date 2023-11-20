@@ -24,11 +24,13 @@ public class CategoryService {
         categoryRepository.save(requestDto.toEntity());
     }
 
+    @Transactional(readOnly = true)
     @Cacheable(value = "categoryCache", unless = "#result==null")
     public CategoryResponse findCategoryByTitle(String title) {
         return categoryRepository.findCategoryByTitle(title).map(CategoryResponse::new).orElseThrow();
     }
 
+    @Transactional(readOnly = true)
     public List<CategoryResponse> findAllCategory() {
         return categoryRepository.findAll(Sort.by(Sort.DEFAULT_DIRECTION,"listOrder"))
             .stream().map(CategoryResponse::new).toList();
