@@ -1,5 +1,6 @@
 package com.blog.web.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -44,10 +46,19 @@ class CommentControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @BeforeEach
     void insertCategories() {
-        Category category1 = new Category("Java", 1);
-        Category category2 = new Category("Spring", 2);
+        Category category1 = Category.builder()
+            .title("Java")
+            .listOrder(1)
+            .build();
+        Category category2 = Category.builder()
+            .title("Spring")
+            .listOrder(2)
+            .build();
 
         categoryRepository.save(category1);
         categoryRepository.save(category2);
@@ -87,11 +98,15 @@ class CommentControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andExpect(status().isOk());
+
+        assertThat(commentsRepository.count()).isEqualTo(1);
+        assertThat(commentsRepository.findAll().get(0).getUsername()).isEqualTo("s");
+        assertThat(commentsRepository.findAll().get(0).getContent()).isEqualTo("ss");
     }
 
 
     @Test
-    @DisplayName("Comment Delete")
+    @DisplayName("Comment Delete by Admin")
     @WithMockUser(roles = "ADMIN")
     @Transactional
     void deleteComment() throws Exception {
@@ -106,28 +121,61 @@ class CommentControllerTest {
             .content("ss")
             .build();
 
-        mockMvc.perform(post("/post/comment/delete")
+        commentsRepository.save(comment);
+
+        mockMvc.perform(post("/post/admin/comment/delete")
                 .param("commentId", "1")
                 .param("postId", "1"))
             .andDo(print())
             .andExpect(status().isOk());
+
+        assertThat(commentsRepository.count()).isZero();
+    }
+
+    @Test
+    @DisplayName("Comment Delete by USER")
+    @WithMockUser(roles = "USER")
+    @Transactional
+    void deleteCommentByUser() throws Exception {
+
+        Post post = postsRepository.findById(1L).orElseThrow();
+
+        Comment comment = Comment.builder()
+            .password(passwordEncoder.encode("1234"))
+            .parent(null)
+            .post(post)
+            .username("s")
+            .content("ss")
+            .build();
+
+        commentsRepository.save(comment);
+
+        mockMvc.perform(post("/post/comment/manage/delete")
+                .param("password","123")
+                .param("commentId", "1"))
+            .andDo(print())
+            .andExpect(status().isOk());
+
+        assertThat(commentsRepository.count()).isZero();
     }
 
     @Test
     @DisplayName("comment edit")
-    @WithMockUser(roles = "ADMIN")
+    @WithMockUser(roles = "USER")
     @Transactional
     void editComment() throws Exception {
 
         Post post = postsRepository.findById(1L).orElseThrow();
 
         Comment comment = Comment.builder()
-            .password("1234")
+            .password(passwordEncoder.encode("1234"))
             .parent(null)
             .post(post)
             .username("s")
             .content("ss")
             .build();
+
+        commentsRepository.save(comment);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/post/comment/manage/edit")
                 .param("id","1")
@@ -135,5 +183,7 @@ class CommentControllerTest {
                 .param("content","멍"))
             .andDo(print())
             .andExpect(status().isOk());
+
+        assertThat(commentsRepository.findAll().get(0).getContent()).isEqualTo("멍");
     }
 }

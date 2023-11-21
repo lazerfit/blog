@@ -48,7 +48,7 @@ public class CommentController {
     @PostMapping("/post/admin/comment/delete")
     public String delete(@RequestParam Long commentId, @RequestParam Long postId, Model model) {
         addCommentPasswordCheckForm(model);
-        commentService.delete(commentId);
+        commentService.adminDelete(commentId);
         addAsynchronousAttributes(postId, model);
         return REPLACE_COMMENT_LIST;
     }
@@ -70,11 +70,8 @@ public class CommentController {
     @PostMapping("/post/comment/manage/delete")
     @ResponseBody
     public String userDeleteComment(@RequestBody @Valid CommentPasswordCheckForm form) {
-        if (isPasswordValid(form)) {
-            commentService.delete(form.getCommentId());
-            return SUCCESS;
-        }
-        return CHECK_PASSWORD;
+        commentService.delete(form);
+        return SUCCESS;
     }
 
     @PreAuthorize("permitAll()")
