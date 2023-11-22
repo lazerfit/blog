@@ -1,7 +1,7 @@
 const main = {
   init: function () {
     const _this = this;
-    $('#signIn').on('click', function () {
+    $('#login-submit').on('click', function () {
       _this.signIn();
     });
   },
@@ -10,7 +10,6 @@ const main = {
     const data={
       "email":$('#username').val(),
       "password":$('#password').val(),
-      "remember":$('#remember').val()
     };
 
     $.post(
