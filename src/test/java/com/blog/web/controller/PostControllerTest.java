@@ -238,7 +238,10 @@ class PostControllerTest {
     }
 
     private void makeCategory(String categoryTitle, int listOrder) {
-        Category category = new Category(categoryTitle, listOrder);
+        Category category = Category.builder()
+            .title(categoryTitle)
+            .listOrder(listOrder)
+            .build();
         categoryRepository.save(category);
     }
     private Category getCategory(String categoryTitle) {
