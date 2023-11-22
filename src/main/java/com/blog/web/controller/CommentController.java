@@ -57,13 +57,10 @@ public class CommentController {
     @PostMapping("/post/comment/manage")
     public String manageComment(@Valid CommentPasswordCheckForm form, Model model) {
         addCommentPasswordCheckForm(model);
-        if (isPasswordValid(form)) {
-            CommentsResponse response = findCommentById(form.getCommentId());
-            model.addAttribute("comment", response);
-            addCommentEditForm(model);
-            return "editComment";
-        }
-        return "/error/403";
+        CommentsResponse response = commentService.checkAuthenticationAndReturnDto(form);
+        model.addAttribute("comment", response);
+        addCommentEditForm(model);
+        return "editComment";
     }
 
     @PreAuthorize("permitAll()")
@@ -79,12 +76,8 @@ public class CommentController {
     @ResponseBody
     public String userEditComment(@Valid CommentEditForm form,Model model){
         addCommentPasswordCheckForm(model);
-        if (isPasswordValid(form)) {
-            CommentEditRequest request = new CommentEditRequest(form.getId(),form.getContent());
-            commentService.edit(request);
-            return SUCCESS;
-        }
-        return CHECK_PASSWORD;
+        commentService.edit(form);
+        return SUCCESS;
     }
 
     @PreAuthorize("permitAll()")
@@ -105,17 +98,8 @@ public class CommentController {
 
 
     //Method
-    private CommentsResponse findCommentById(Long commentId) {
-        return commentService.findById(commentId);
-    }
-
     private boolean isPasswordValid(CommentEditForm form) {
         CommentPassword encodedPassword = findEncodedPassword(form.getId());
-        return passwordEncoder.matches(form.getPassword(), encodedPassword.password());
-    }
-
-    private boolean isPasswordValid(CommentPasswordCheckForm form) {
-        CommentPassword encodedPassword = findEncodedPassword(form.getCommentId());
         return passwordEncoder.matches(form.getPassword(), encodedPassword.password());
     }
 

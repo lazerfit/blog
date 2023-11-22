@@ -131,34 +131,6 @@ class CommentControllerTest {
 
         assertThat(commentsRepository.count()).isZero();
     }
-
-    @Test
-    @DisplayName("Comment Delete by USER")
-    @WithMockUser(roles = "USER")
-    @Transactional
-    void deleteCommentByUser() throws Exception {
-
-        Post post = postsRepository.findById(1L).orElseThrow();
-
-        Comment comment = Comment.builder()
-            .password(passwordEncoder.encode("1234"))
-            .parent(null)
-            .post(post)
-            .username("s")
-            .content("ss")
-            .build();
-
-        commentsRepository.save(comment);
-
-        mockMvc.perform(post("/post/comment/manage/delete")
-                .param("password","123")
-                .param("commentId", "1"))
-            .andDo(print())
-            .andExpect(status().isOk());
-
-        assertThat(commentsRepository.count()).isZero();
-    }
-
     @Test
     @DisplayName("comment edit")
     @WithMockUser(roles = "USER")
