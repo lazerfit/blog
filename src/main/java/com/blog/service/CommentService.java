@@ -5,12 +5,13 @@ import com.blog.domain.comments.CommentsRepository;
 import com.blog.domain.posts.Post;
 import com.blog.domain.posts.PostsRepository;
 import com.blog.exception.CommentNotFound;
+import com.blog.exception.PasswordNotMatches;
 import com.blog.exception.PostNotFound;
-import com.blog.web.dto.comments.CommentEditRequest;
 import com.blog.web.dto.comments.CommentPassword;
 import com.blog.web.dto.comments.CommentsResponse;
-import com.blog.web.dto.comments.CommentsSaveRequest;
+import com.blog.web.form.CommentEditForm;
 import com.blog.web.form.CommentForm;
+import com.blog.web.form.CommentPasswordCheckForm;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
@@ -28,14 +29,20 @@ public class CommentService {
 
     @Transactional
     public void save(Long postId,CommentForm form) {
-        CommentsSaveRequest request = createCommentSaveRequest(postId, form);
-        commentsRepository.save(request.toEntity());
+
+        Comment comment = convertFormToCommentEntity(postId, form);
+        commentsRepository.save(comment);
     }
 
     @Transactional(readOnly = true)
     @Cacheable(value = "commentCached",key = "{#id}")
     public CommentsResponse findById(Long id) {
         Comment comment = commentsRepository.findById(id).orElseThrow(CommentNotFound::new);
+        return new CommentsResponse(comment);
+    }
+
+    public CommentsResponse checkAuthenticationAndReturnDto(CommentPasswordCheckForm form) {
+        Comment comment = isPasswordValidate(form.getPassword(), form.getCommentId());
         return new CommentsResponse(comment);
     }
 
@@ -50,27 +57,43 @@ public class CommentService {
     }
 
     @Transactional
-    public void delete(Long commentId) {
+    public void delete(CommentPasswordCheckForm form) {
+        Comment comment = isPasswordValidate(form.getPassword(), form.getCommentId());
+        commentsRepository.delete(comment);
+    }
+
+    @Transactional
+    public void adminDelete(Long commentId) {
         Comment comment = commentsRepository.findById(commentId).orElseThrow(CommentNotFound::new);
         commentsRepository.delete(comment);
     }
 
     @Transactional
-    public void edit(CommentEditRequest request) {
-        Comment comment = commentsRepository.findById(request.getId()).orElseThrow(CommentNotFound::new);
-        comment.edit(request.getContent());
+    public void edit(CommentEditForm form) {
+        Comment comment = isPasswordValidate(form.getPassword(), form.getId());
+        comment.edit(form.getContent());
     }
 
     //Method
-    private CommentsSaveRequest createCommentSaveRequest(Long postId, CommentForm form) {
+    private Comment convertFormToCommentEntity(Long postId, CommentForm form) {
         Post post = postsRepository.findById(postId).orElseThrow(PostNotFound::new);
         Comment comment = commentsRepository.findById(form.getParentId()).orElse(null);
-        return CommentsSaveRequest.builder()
+        return Comment.builder()
             .username(form.getUsername())
             .content(form.getContent())
-            .parentComment(comment)
+            .parent(comment)
             .post(post)
             .password(passwordEncoder.encode(form.getPassword()))
             .build();
+    }
+
+    private Comment isPasswordValidate(String rawPassword, Long commentId) {
+        Comment comment = commentsRepository.findById(commentId).orElseThrow(CommentNotFound::new);
+
+        if (!passwordEncoder.matches(rawPassword, comment.getPassword())) {
+            throw new PasswordNotMatches();
+        }
+
+        return comment;
     }
 }

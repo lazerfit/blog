@@ -167,7 +167,8 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
                 comment.username,
                 comment.content,
                 comment.generationTimeStamp,
-                comment.parent.id))
+                comment.parent.id,
+                comment.modificationTimeStamp))
             .from(comment)
             .where(post.id.eq(postId).and(comment.parent.id.isNull()))
             .orderBy(comment.id.asc())
@@ -179,7 +180,8 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
                 comment.username,
                 comment.content,
                 comment.generationTimeStamp,
-                comment.parent.id))
+                comment.parent.id,
+                comment.modificationTimeStamp))
             .from(comment)
             .where(post.id.eq(postId).and(comment.parent.id.isNotNull()))
             .orderBy(comment.id.asc())
