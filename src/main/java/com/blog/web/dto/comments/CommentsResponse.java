@@ -14,6 +14,7 @@ public class CommentsResponse {
     private final String username;
     private final String content;
     private final LocalDateTime generationTimeStamp;
+    private final LocalDateTime lastModifiedTimeStamp;
     private final Long parentId;
     private List<CommentsResponse> child=new ArrayList<>();
 
@@ -22,6 +23,7 @@ public class CommentsResponse {
         this.username=comment.getUsername();
         this.content=comment.getContent();
         this.generationTimeStamp =comment.getGenerationTimeStamp();
+        this.lastModifiedTimeStamp=comment.getModificationTimeStamp();
         this.parentId= checkNullAndSetDefaultValue(comment);
     }
 
@@ -31,12 +33,13 @@ public class CommentsResponse {
 
     @QueryProjection
     public CommentsResponse(Long id, String username, String content, LocalDateTime generationTimeStamp,
-        Long parentId) {
+        Long parentId,LocalDateTime lastModifiedTimeStamp) {
         this.id = id;
         this.username = username;
         this.content = content;
         this.generationTimeStamp = generationTimeStamp;
         this.parentId = parentId;
+        this.lastModifiedTimeStamp=lastModifiedTimeStamp;
     }
 
     public void insertChildComment(List<CommentsResponse> child) {

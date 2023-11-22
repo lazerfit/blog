@@ -80,6 +80,7 @@
               <span class="date" th:data-commentId="${comment.id}" th:text="${#temporals.format(comment.getGenerationTimeStamp(),'yyyy-MM-dd')}">
                 2023.07.09 22:33
               </span>
+              <span class="date" th:data-commentId="${comment.id}" th:if="${comment.getGenerationTimeStamp()}!=${comment.getLastModifiedTimeStamp()}">(수정됨)</span>
               <span class="control">
                 <div class="dropdown" data-bs-target="dropdownComment">
                   <img src="/img/menu.png" alt="더보기" class="more" onclick="manageCommentDropdown(this)">
@@ -163,6 +164,7 @@
                 <span class="date" th:data-commentId="${child.id}" th:text="${#temporals.format(child.getGenerationTimeStamp(),'yyyy-MM-dd')}">
                 2023.07.09 22:33
                 </span>
+                <span class="date" th:data-commentId="${child.id}" th:if="${child.getGenerationTimeStamp()}!=${child.getLastModifiedTimeStamp()}">(수정됨)</span>
                 <span class="control">
                 <div class="dropdown" data-bs-target="dropdownComment">
                   <img src="/img/menu.png" alt="더보기" class="more" onclick="manageCommentDropdown(this)">

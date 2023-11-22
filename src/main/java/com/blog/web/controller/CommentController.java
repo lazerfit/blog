@@ -2,8 +2,6 @@ package com.blog.web.controller;
 
 import com.blog.service.CommentService;
 import com.blog.service.PostsService;
-import com.blog.web.dto.comments.CommentEditRequest;
-import com.blog.web.dto.comments.CommentPassword;
 import com.blog.web.dto.comments.CommentsResponse;
 import com.blog.web.dto.posts.PostsResponse;
 import com.blog.web.form.CommentEditForm;
@@ -66,18 +64,16 @@ public class CommentController {
     @PreAuthorize("permitAll()")
     @PostMapping("/post/comment/manage/delete")
     @ResponseBody
-    public String userDeleteComment(@RequestBody @Valid CommentPasswordCheckForm form) {
+    public void userDeleteComment(@RequestBody @Valid CommentPasswordCheckForm form) {
         commentService.delete(form);
-        return SUCCESS;
     }
 
     @PreAuthorize("permitAll()")
     @PostMapping("/post/comment/manage/edit")
     @ResponseBody
-    public String userEditComment(@Valid CommentEditForm form,Model model){
+    public void userEditComment(@Valid CommentEditForm form,Model model){
         addCommentPasswordCheckForm(model);
         commentService.edit(form);
-        return SUCCESS;
     }
 
     @PreAuthorize("permitAll()")
@@ -98,15 +94,6 @@ public class CommentController {
 
 
     //Method
-    private boolean isPasswordValid(CommentEditForm form) {
-        CommentPassword encodedPassword = findEncodedPassword(form.getId());
-        return passwordEncoder.matches(form.getPassword(), encodedPassword.password());
-    }
-
-    private CommentPassword findEncodedPassword(Long commentId) {
-        return commentService.findEncodedPassword(commentId);
-    }
-
     private void addAsynchronousAttributes(Long postId, Model model) {
         PostsResponse response = postsService.getPostsByIdIncludingComments(postId);
         model.addAttribute("postFindById", response);
