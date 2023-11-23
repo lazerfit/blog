@@ -118,15 +118,16 @@ class PostServiceTest {
     @Test
     @DisplayName("인기 게시글 조회")
     void getPopularPosts() {
-        makePost("spring",1,"제목","내용");
+        makePost("spring",1,"제목1","내용");
         makePost("java",2,"제목2","내용2");
 
-        Post post = postsRepository.findById(2L).orElseThrow(PostNotFound::new);
+        Post post = postsRepository.findAll().get(1);
         post.addViews(2L);
 
         List<PostsResponse> popularPosts = postsRepository.getPopularPosts();
 
         assertThat(popularPosts.get(0).getTitle()).isEqualTo("제목2");
+        assertThat(popularPosts.get(0).getContent()).isEqualTo("내용2");
     }
 
     @Test

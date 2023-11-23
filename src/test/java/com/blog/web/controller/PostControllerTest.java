@@ -18,7 +18,6 @@ import com.blog.web.form.CommentForm;
 import com.blog.web.form.PostEditForm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
-import java.util.stream.IntStream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -208,18 +207,6 @@ class PostControllerTest {
                 .content(objectMapper.writeValueAsString(subCommentForm)))
             .andDo(print())
             .andExpect(status().isOk());
-    }
-
-    private void makePosts(Category category) {
-        IntStream.range(1, 30).forEach(
-            i -> postsRepository.save(Post.builder()
-                .title("title" + i)
-                .content("content" + i)
-                .views(0L)
-                .tag("spring")
-                .category(category)
-                .build())
-        );
     }
 
     private void makePost(String categoryTitle,int listOrder,String postTitle,String postContent) {
