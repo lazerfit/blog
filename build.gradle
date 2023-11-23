@@ -37,6 +37,7 @@ dependencies {
     implementation 'org.springframework.session:spring-session-jdbc'
     implementation('org.springframework.boot:spring-boot-starter-cache')
     implementation('org.springframework:spring-context')
+    compileOnly('org.mariadb.jdbc:mariadb-java-client')
 
     //Caffeine
     implementation('com.github.ben-manes.caffeine:caffeine')
