@@ -1,5 +1,6 @@
 spring:
-  profiles: real-db
+  profiles:
+    include: real-db
   jpa:
     properties:
       hibernate:
