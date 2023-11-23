@@ -11,6 +11,7 @@ import com.blog.domain.comments.Comment;
 import com.blog.domain.comments.CommentsRepository;
 import com.blog.domain.posts.Post;
 import com.blog.domain.posts.PostsRepository;
+import com.blog.exception.CategoryNotFound;
 import com.blog.web.form.CommentForm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
@@ -50,26 +51,8 @@ class CommentControllerTest {
     private PasswordEncoder passwordEncoder;
 
     @BeforeEach
-    void insertCategories() {
-        Category category1 = Category.builder()
-            .title("Java")
-            .listOrder(1)
-            .build();
-        Category category2 = Category.builder()
-            .title("Spring")
-            .listOrder(2)
-            .build();
-
-        categoryRepository.save(category1);
-        categoryRepository.save(category2);
-
-        String tagData = "[{\"value\":\"Spring\"},{\"value\":\"Java\"}]";
-
-        Category category = categoryRepository.findCategoryByTitle("Spring").orElseThrow();
-
-        postsRepository.save(
-            Post.builder().title("제목").content("내용").category(category).tag(tagData).views(0L)
-                .build());
+    void saveMockPost() {
+        makePost("spring",1,"Spring","content");
     }
 
     @AfterEach()
@@ -84,13 +67,13 @@ class CommentControllerTest {
     @Transactional
     void saveComment() throws Exception {
 
-        Post post = postsRepository.findById(1L).orElseThrow();
+        Post post = postsRepository.findAll().get(0);
 
         CommentForm commentForm = new CommentForm();
         commentForm.setUsername("s");
         commentForm.setContent("ss");
         commentForm.setParentId(null);
-        commentForm.setPostId(1L);
+        commentForm.setPostId(post.getId());
         commentForm.setPassword("1234");
 
         mockMvc.perform(post("/post/comment/new")
@@ -111,21 +94,19 @@ class CommentControllerTest {
     @Transactional
     void deleteComment() throws Exception {
 
-        Post post = postsRepository.findById(1L).orElseThrow();
+        Post post = postsRepository.findAll().get(0);
 
-        Comment comment = Comment.builder()
+        Comment comment = commentsRepository.save(Comment.builder()
             .password("1234")
             .parent(null)
             .post(post)
             .username("s")
             .content("ss")
-            .build();
-
-        commentsRepository.save(comment);
+            .build());
 
         mockMvc.perform(post("/post/admin/comment/delete")
-                .param("commentId", "1")
-                .param("postId", "1"))
+                .param("commentId", String.valueOf(comment.getId()))
+                .param("postId", String.valueOf(post.getId())))
             .andDo(print())
             .andExpect(status().isOk());
 
@@ -137,7 +118,7 @@ class CommentControllerTest {
     @Transactional
     void editComment() throws Exception {
 
-        Post post = postsRepository.findById(1L).orElseThrow();
+        Post post = postsRepository.findAll().get(0);
 
         Comment comment = Comment.builder()
             .password(passwordEncoder.encode("1234"))
@@ -157,5 +138,32 @@ class CommentControllerTest {
             .andExpect(status().isOk());
 
         assertThat(commentsRepository.findAll().get(0).getContent()).isEqualTo("멍");
+    }
+
+    private void makePost(String categoryTitle,int listOrder,String postTitle,String postContent) {
+        makeCategory(categoryTitle,listOrder);
+        Category category = getCategory(categoryTitle);
+        String tag="[{\"value\":\"Spring\"},{\"value\":\"Java\"}]";
+        postsRepository.save(
+            Post.builder()
+                .title(postTitle)
+                .content(postContent)
+                .category(category)
+                .tag(tag)
+                .views(0L)
+                .build()
+        );
+    }
+
+    private void makeCategory(String categoryTitle, int listOrder) {
+        Category category = Category.builder()
+            .title(categoryTitle)
+            .listOrder(listOrder)
+            .build();
+        categoryRepository.save(category);
+    }
+    private Category getCategory(String categoryTitle) {
+        return categoryRepository.findCategoryByTitle(categoryTitle)
+            .orElseThrow(CategoryNotFound::new);
     }
 }
