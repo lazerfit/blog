@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+    url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1
+    hikari:
+      maximum-pool-size: 40
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        use_sql_comments: true
+  logging:
+    level:
+      org:
+        hibernate:
+          SQL: debug
+          type:
+            descriptor:
+              sql:
+                BasicBinder: trace
