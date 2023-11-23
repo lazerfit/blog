@@ -1,8 +1,10 @@
 spring:
-  profiles: real-db
+  profiles:
+    include: real-db
   jpa:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect.storage_engine: innodb
   session:
     store-type: jdbc
