@@ -2,9 +2,11 @@ spring:
   jpa:
     show-sql: true
     open-in-view: false
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
       show-sql: true
       ddl-auto: update
+      dialect: org.hibernate.dialect.MySQL5InnoDBDialect
       naming:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
     properties:
@@ -20,8 +22,6 @@ spring:
     username: root
     password: 1111
     driver-class-name: com.mysql.cj.jdbc.Driver
-  profiles:
-    active: local
   thymeleaf:
     cache: false
   devtools:
