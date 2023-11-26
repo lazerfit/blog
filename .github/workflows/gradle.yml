@@ -31,12 +31,12 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: 'gradle'
+    - name: Run chmod to make gradlew executable
+      run: chmod +x ./gradlew
     - name: Build with Gradle
       uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
       with:
         arguments: build
-    - name: Run chmod to make gradlew executable
-      run: chmod +x ./gradlew
 
       # build한 후 프로젝트를 압축한다.
     - name: Make zip file
@@ -55,3 +55,11 @@ jobs:
       # 압축한 프로젝트를 S3로 전송한다.
     - name: Upload to S3
       run: aws s3 cp --region ap-northeast-2 ./blog-deploy.zip s3://$S3_BUCKET_NAME/blog-deploy.zip
+
+      # CodeDeploy에게 배포 명령을 내린다.
+    - name: Code Deploy
+      run: >
+        aws deploy create-deployment --application-name myblog-webserver
+        --deployment-config-name CodeDeployDefault.AllAtOnce
+        --deployment-group-name myblog-webserver-group
+        --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=blog-deploy.zip
