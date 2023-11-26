@@ -2,6 +2,7 @@ package com.blog.web.controller;
 
 import com.blog.service.AuthService;
 import com.blog.web.dto.SiteUserDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,8 +26,9 @@ public class AuthController {
 
     @PreAuthorize("permitAll()")
     @PostMapping("/auth/signup")
-    public void signUp(@RequestBody SiteUserDto siteUserDto) {
+    public String signUp(@RequestBody @Valid SiteUserDto siteUserDto) {
         authService.signUp(siteUserDto);
+        return "redirect:/";
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
