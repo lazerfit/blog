@@ -24,7 +24,7 @@ jobs:
       SEGMENT_DOWNLOAD_TIMEOUT_MINS: '5'
       S3_BUCKET_NAME: ddoddi-github-action-build
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Setup Java JDK
       uses: actions/setup-java@v3
       with:
@@ -46,7 +46,7 @@ jobs:
       # Access Key와 Secret Access Key를 통해 권한을 확인한다.
       # 아래 코드에 Access Key와 Secret Key를 직접 작성하지 않는다.
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
+      uses: aws-actions/configure-aws-credentials@v3
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}        # 등록한 Github Secret이 자동으로 불려온다.
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}        # 등록한 Github Secret이 자동으로 불려온다.
