@@ -1,6 +1,6 @@
 #!/bin/bash
 
-REPOSITORY=home/ec2-user/app/action
+REPOSITORY=/home/ec2-user/app/action
 PROJECT_NAME=blog
 
 echo "> Build 파일 복사"
