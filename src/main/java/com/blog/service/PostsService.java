@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -92,6 +96,25 @@ public class PostsService {
     @Cacheable(value = "postCached",key = "{#id}" , unless = "#result==null")
     public PostsResponse getPostsByIdIncludingComments(Long id) {
         return postsRepository.getPostsByIdIncludingComments(id);
+    }
+
+    public String getContentPlainText(String content) {
+        Document document = Jsoup.parse(content);
+        return document.text();
+    }
+
+
+    public String getThumbnail(String content) {
+        String img="";
+        Document document = Jsoup.parse(content);
+        Elements elements = document.select("img");
+        if (elements.isEmpty()) {
+            return null;
+        } else {
+            Element element = elements.get(0);
+            img += element.attr("src");
+            return img;
+        }
     }
 }
 

@@ -47,16 +47,20 @@ public class Post extends BaseTimeEntity {
     @Column(nullable = false)
     private Long views;
 
+    @Column(length = 1000)
+    private String thumbnail;
+
     @OneToMany(orphanRemoval = true,mappedBy = "post")
     private List<Comment> comments=new ArrayList<>();
 
     @Builder
-    public Post(String title, String content, String tag, Category category, Long views) {
+    public Post(String title, String content, String tag, Category category, Long views, String thumbnail) {
         this.title = title;
         this.content = content;
         this.tag = tag;
         this.category = category;
         this.views = views;
+        this.thumbnail=thumbnail;
     }
 
     public void addViews(Long hit) {
@@ -68,5 +72,6 @@ public class Post extends BaseTimeEntity {
         this.content=request.getContent();
         this.tag=request.getTag();
         this.category=request.getCategory();
+        this.thumbnail=request.getThumbnail();
     }
 }
