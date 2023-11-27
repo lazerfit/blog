@@ -468,11 +468,7 @@ a:hover{
   overflow: hidden;
   width: 100%;
   margin: 0 0 28px;
-  padding: 10px;
-}
-
-.post-item a span:hover {
-  color: #eb6864
+  padding: 0 24px;
 }
 
 .post-header {
@@ -492,6 +488,7 @@ a:hover{
   margin-inline-start: 0;
   margin-inline-end: 0;
   font-weight: bold;
+  padding: 0 12px;
 }
 
 .post-header h1 em {
@@ -689,3 +686,46 @@ button.close {
 .child-comment .author-meta p {
   font-size: 13px;
 }
+
+.list-type-thumbnail .post-item {
+  float: none;
+  overflow: hidden;
+  width: 100%;
+  margin: 0 0 28px;
+}
+
+.list-type-thumbnail .post-item .thum {
+  display: inline;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 0;
+}
+
+.list-type-thumbnail .post-item .thum img {
+  float: right;
+  width: 126px;
+  height: auto;
+  margin-left: 57px;
+  border: 1px solid #f1f1f1;
+  transform: translateY(0);
+  -webkit-transform-origin: right;
+  -ms-transform: translateY(0);
+}
+
+.post-item a {
+  display: block;
+  text-decoration: none;
+}
+
+.post-item a:hover .title,
+.post-item a:focus .title {
+  text-decoration: underline;
+  color: #eb6864;
+}
+
+@media screen and (max-width: 767px)
+.content-inner {
+  padding: 0 12px;
+}
+
