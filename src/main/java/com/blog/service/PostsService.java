@@ -98,6 +98,12 @@ public class PostsService {
         return postsRepository.getPostsByIdIncludingComments(id);
     }
 
+    public String getContentPlainText(String content) {
+        Document document = Jsoup.parse(content);
+        return document.text();
+    }
+
+
     public String getThumbnail(String content) {
         String img="";
         Document document = Jsoup.parse(content);
