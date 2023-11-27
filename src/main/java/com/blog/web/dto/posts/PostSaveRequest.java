@@ -3,11 +3,11 @@ package com.blog.web.dto.posts;
 import com.blog.domain.category.Category;
 import com.blog.domain.posts.Post;
 import jakarta.validation.constraints.NotBlank;
-import lombok.RequiredArgsConstructor;
+import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RequiredArgsConstructor
 public class PostSaveRequest {
 
     @NotBlank(message = "제목은 필수입니다.")
@@ -18,7 +18,20 @@ public class PostSaveRequest {
     private final Category category;
     private final String tags;
     private final Long views;
+    @NotNull(message = "썸네일은 필수입니다.")
+    private final String thumbnail;
     private final TagHandler tagHandler=new TagHandler();
+
+    @Builder
+    public PostSaveRequest(String title, String content, Category category, String tags, Long views,
+        @NotNull(message = "썸네일은 필수입니다.") String thumbnail) {
+        this.title = title;
+        this.content = content;
+        this.category = category;
+        this.tags = tags;
+        this.views = views;
+        this.thumbnail = thumbnail;
+    }
 
     public Post toEntity(){
         return Post.builder()
@@ -27,6 +40,7 @@ public class PostSaveRequest {
             .category(category)
             .tag(tagHandler.setDefaultValueOrTransformJsonArrayToString(tags))
             .views(views)
+            .thumbnail(thumbnail)
             .build();
     }
 }

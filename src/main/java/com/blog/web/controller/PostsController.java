@@ -182,8 +182,16 @@ public class PostsController {
     public PostSaveRequest createPostSaveRequest(PostCreateForm form) {
         CategoryResponse categoryResponse = categoryService.findCategoryByTitle(
             form.getCategoryTitle());
-        return new PostSaveRequest(
-            form.getTitle(),form.getContent(),categoryResponse.toEntity(),form.getTags(),0L);
+        String thumbnail = postsService.getThumbnail(form.getContent());
+        return
+            PostSaveRequest.builder()
+                .title(form.getTitle())
+                .content(form.getContent())
+                .category(categoryResponse.toEntity())
+                .tags(form.getTags())
+                .views(0L)
+                .thumbnail(thumbnail)
+                .build();
     }
 
     public void addCommentPasswordCheckForm(Model model) {

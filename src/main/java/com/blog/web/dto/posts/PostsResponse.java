@@ -20,6 +20,7 @@ public class PostsResponse {
     private final String tag;
     private final Long views;
     private List<CommentsResponse> comments;
+    private final String thumbnail;
 
     public PostsResponse(Post post) {
         this.id= post.getId();
@@ -30,11 +31,12 @@ public class PostsResponse {
         this.tag = post.getTag();
         this.views = post.getViews();
         this.comments= post.getComments().stream().map(CommentsResponse::new).toList();
+        this.thumbnail=post.getThumbnail();
     }
 
     @QueryProjection
     public PostsResponse(Long id, String title, String content, LocalDateTime createdDate,
-        String categoryTitle, String tag, Long views) {
+        String categoryTitle, String tag, Long views,String thumbnail) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -42,6 +44,7 @@ public class PostsResponse {
         this.categoryTitle = categoryTitle;
         this.tag = tag;
         this.views = views;
+        this.thumbnail=thumbnail;
     }
 
     public void insertComment(List<CommentsResponse> commentResponse) {
