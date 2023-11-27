@@ -87,11 +87,13 @@ public class PostsController {
 
     private PostsUpdateRequest createPostEditRequest(PostEditForm form) {
         CategoryResponse categoryResponse = categoryService.findCategoryByTitle(form.getCategoryTitle());
+        String thumbnail = postsService.getThumbnail(form.getContent());
         return PostsUpdateRequest.builder()
             .title(form.getTitle())
             .content(form.getContent())
             .tag(form.getTag())
             .category(categoryResponse.toEntity())
+            .thumbnail(thumbnail)
             .build();
     }
 
