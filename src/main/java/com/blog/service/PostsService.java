@@ -102,8 +102,8 @@ public class PostsService {
         String img="";
         Document document = Jsoup.parse(content);
         Elements elements = document.select("img");
-        if (elements.size() == 0) {
-            return "/img/thumbnail_default.jpg";
+        if (elements.isEmpty()) {
+            return null;
         } else {
             Element element = elements.get(0);
             img += element.attr("src");
