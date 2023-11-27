@@ -54,6 +54,9 @@ lazerfit 의 개인 blog 프로젝트입니다.
 ***
 
 ## *개발 일지*
+- ### [231128] 썸네일 기능 개발
+  - thymeleaf utext 적용하여도 img 태그는 살아서 이미지가 index 미리보기창에 보임
+  - javascript 사용하여 plain text만 보이도록 함
 - ### [231127] 도메인 구매 / HTTPS 적용 완료
 - ### [231127] AWS 배포 완료
 - ### [231124] AWS 배포
@@ -133,7 +136,7 @@ lazerfit 의 개인 blog 프로젝트입니다.
     - Controller 에서 Model 로 Keyword 넘김
     - thymeleaf if 로 만약 keyword 가 넘어왔을시 검색된 Posts Pagination 작동
 - ### [230627] Add social-media-icon on Footer
-  - Github / LinkedIn / ScrollToTop
+  - GitHub / LinkedIn / ScrollToTop
   - TODO: 
     - Make Spring Security Test code
 - ### [230622] Login 버튼 보임 -> 로그인시 프로필 사진 보이도록 개선
