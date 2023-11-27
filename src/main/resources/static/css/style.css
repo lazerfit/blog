@@ -247,7 +247,7 @@ a:hover{
   padding: 4px;
   cursor: pointer;
   text-align: center;
-  color: gray;
+  color: rgb(128, 128, 128);
 }
 
 .tag-btn:hover {
