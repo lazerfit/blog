@@ -54,7 +54,9 @@ lazerfit 의 개인 blog 프로젝트입니다.
 ***
 
 ## *개발 일지*
+- ### [231127] DNS Route53 -> CloudFlare 변경
 - ### [231127] 도메인 구매 / HTTPS 적용 완료
+  - Let's Encrypt 사용하여 인증서 발급
 - ### [231127] AWS 배포 완료
 - ### [231124] AWS 배포
   - ec2, RDS(mariaDB) 생성 및 설정
