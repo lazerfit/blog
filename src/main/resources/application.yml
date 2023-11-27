@@ -1,32 +1,14 @@
 spring:
   jpa:
-    show-sql: true
-    open-in-view: false
     hibernate:
-      show-sql: true
-      ddl-auto: update
       dialect: org.hibernate.dialect.MySQL8InnoDBDialect
       naming:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
-    properties:
-      hibernate:
-        jdbc: trace
-        format_sql: true
   session:
     timeout: 86400
     store-type: jdbc
-  datasource:
-    url: jdbc:mysql://localhost:3306/blog
-    username: root
-    password: 1111
-    driver-class-name: com.mysql.cj.jdbc.Driver
   thymeleaf:
     cache: false
-  devtools:
-    livereload:
-      enabled: true
-    restart:
-      enabled: true
   data:
     web:
       pageable:
