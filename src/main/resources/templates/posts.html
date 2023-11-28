@@ -5,7 +5,6 @@
       layout:decorate="~{layout}">
 <head>
   <title th:text="${postFindById.getTitle()}"></title>
-  <link rel="canonical" href="https://gomdolog.store/">
   <meta name="title" th:content="${postFindById.getTitle()}">
   <meta name="robots" content="all">
   <meta name="description" th:if="${postFindById.getContent().length()>70}" th:content="${#strings.substring(postFindById.getContent(),0,70)}">
