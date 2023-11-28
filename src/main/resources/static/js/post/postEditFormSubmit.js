@@ -12,7 +12,7 @@ function postEditFormSubmit() {
     "tag":tag
   }
   $.ajax({
-    url: '/post/edit/' + postId,
+    url: 'https://gomdolog.store/post/edit/' + postId,
     type: 'POST',
     data: JSON.stringify(data),
     contentType: 'application/json; charset=utf-8',
