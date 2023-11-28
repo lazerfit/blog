@@ -5,12 +5,6 @@ $('.reply-btn').on('click',function (){
   const password=document.getElementById("inputInfo").querySelector(".password").value
   const content=document.getElementById("inputComment").querySelector("#comment").value
 
-  console.log(postId);
-  console.log(username);
-  console.log(password);
-  console.log(content);
-
-
   const comment = {
     'postId':postId,
     'username':username,
