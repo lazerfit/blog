@@ -47,7 +47,7 @@ public class Post extends BaseTimeEntity {
     @Column(nullable = false)
     private Long views;
 
-    @Column(length = 1000)
+    @Column(length = 500)
     private String thumbnail;
 
     @OneToMany(orphanRemoval = true,mappedBy = "post")
