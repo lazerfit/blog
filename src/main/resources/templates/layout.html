@@ -20,7 +20,7 @@
 <h4><a class="navbar-brand" th:href="@{/}">Gran Aventura</a></h4>
   <div th:if="${#authorization.expression('isAuthenticated()')}">
     <div class="dropdown" data-bs-target="dropdownContent">
-      <img src="/img/klayrabbit.jpeg" alt="Profile Picture" class="profile" onclick="toggleDropdown('dropdownContent')">
+      <img src="/img/cat2.png" alt="Profile Picture" class="profile" onclick="toggleDropdown('dropdownContent')">
       <div id="dropdownContent" class="dropdown-content">
         <a th:href="@{/admin/setting}" sec:authorize="hasRole('ROLE_ADMIN')">관리</a>
         <a th:href="@{/post/new}" sec:authorize="hasRole('ROLE_ADMIN')">글쓰기</a>
