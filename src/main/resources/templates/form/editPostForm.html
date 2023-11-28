@@ -12,31 +12,32 @@
 <body>
 <div layout:fragment="leftcolumn">
   <div class="container">
+    <form th:object="${editPostsForm}" method="post">
       <div class="card">
         <div class="form-group" style="padding: 1px">
-          <select class="form-select" id="categorySelect" th:value="${editPostsForm.categoryTitle}" style="margin-bottom: 5px;width: 20%">
+          <select class="form-select" id="categorySelect" th:field="*{categoryTitle}" th:value="${editPostsForm.categoryTitle}" style="margin-bottom: 5px;width: 20%">
             <th:block th:each="category:${allCategorizedPosts}">
               <option th:value="${category.title}" th:text="${category.title}"
                       th:selected="${category.title == editPostsForm.categoryTitle}">카테고리</option>
             </th:block>
           </select>
-          <input type="text" th:value="${editPostsForm.title}" id="editForm-title" class="form-control"  placeholder="제목을 입력하세요">
+          <input type="text" th:field="*{title}" th:value="${editPostsForm.title}" id="editForm-title" class="form-control"  placeholder="제목을 입력하세요">
         </div>
       </div>
       <div class="card">
-        <textarea class="summernote" id="editForm-content" th:text="${editPostsForm.content}"></textarea>
+        <textarea class="summernote" id="editForm-content" th:field="*{content}" th:text="${editPostsForm.content}"></textarea>
       </div>
       <div>
         <input type="hidden" id="postId" th:value="${postId}">
-        <input id="input-tag" name="tags" th:value="${editPostsForm.tag}">
+        <input id="input-tag" name="tags" th:field="*{tag}" th:value="${editPostsForm.tag}">
         <button type="button" class="btn btn-secondary" onclick="location.href='/'" style="float: right;margin-top: 1px;margin-left: 10px">Cancel</button>
-        <button type="button" class="btn btn-primary" onclick="postEditFormSubmit()" data-bitwarden-clicked="1" style="float: right;margin-top: 1px">Submit</button>
+        <button type="submit" class="btn btn-primary"  data-bitwarden-clicked="1" style="float: right;margin-top: 1px">Submit</button>
       </div>
+    </form>
   </div>
   <script src="/js/settingTagify.js"></script>
   <script src="/js/summernote.js"></script>
   <script src="/js/refreshAlert.js"></script>
-  <script src="/js/post/postEditFormSubmit.js"></script>
 </div>
 
 </body>
