@@ -12,13 +12,13 @@ public class PostEditForm {
     @NotBlank(message = "제목은 필수입니다.") private String title;
     @NotBlank(message = "내용은 필수입니다.") private String content;
     @NotBlank(message = "카테고리 선택은 필수입니다.") private String categoryTitle;
-    String tag;
+    private String tags;
 
     @Builder
-    public PostEditForm(String title, String content,String categoryTitle, String tag) {
+    public PostEditForm(String title, String content, String categoryTitle, String tags) {
         this.title = title;
         this.content = content;
         this.categoryTitle = categoryTitle;
-        this.tag=tag;
+        this.tags = tags;
     }
 }

@@ -7,6 +7,9 @@
   <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
   <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+  <!-- include summernote css/js -->
+  <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
 </head>
 <body>
@@ -21,25 +24,24 @@
                       th:selected="${category.title == editPostsForm.categoryTitle}">카테고리</option>
             </th:block>
           </select>
-          <input type="text" th:field="*{title}" th:value="${editPostsForm.title}" id="editForm-title" class="form-control"  placeholder="제목을 입력하세요">
+          <input type="text" th:field="*{title}" th:value="${editPostsForm.title}" class="form-control"  placeholder="제목을 입력하세요" id="inputDefault">
         </div>
       </div>
       <div class="card">
-        <textarea class="summernote" id="editForm-content" th:field="*{content}" th:text="${editPostsForm.content}"></textarea>
+        <textarea class="summernote" id="summernote" th:field="*{content}" th:text="${editPostsForm.content}"></textarea>
       </div>
       <div>
         <input type="hidden" id="postId" th:value="${postId}">
-        <input id="input-tag" name="tags" th:field="*{tag}" th:value="${editPostsForm.tag}">
+        <input id="tags" th:field="*{tags}" name="tags" th:value="${editPostsForm.tags}" class="tags" placeholder="#태그입력">
         <button type="button" class="btn btn-secondary" onclick="location.href='/'" style="float: right;margin-top: 1px;margin-left: 10px">Cancel</button>
         <button type="submit" class="btn btn-primary"  data-bitwarden-clicked="1" style="float: right;margin-top: 1px">Submit</button>
       </div>
     </form>
   </div>
-  <script src="/js/settingTagify.js"></script>
   <script src="/js/summernote.js"></script>
+  <script src="/js/settingTagify.js"></script>
   <script src="/js/refreshAlert.js"></script>
 </div>
-
 </body>
 </html>
 
