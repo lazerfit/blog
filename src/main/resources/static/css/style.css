@@ -729,11 +729,11 @@ button.close {
   padding: 0 12px;
 }
 
-img{
+.post-inner .card-body img{
   overflow-clip-margin: content-box;
   overflow: clip;
   display: inline-block;
-  max-width: 100% !important;
+  width: 100%;
   margin: 0;
   height: auto;
 }
