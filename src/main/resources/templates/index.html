@@ -18,19 +18,15 @@
           </h1>
         </div>
         <div class="content-inner">
-          <div class="post-item" th:each="post:${postsList}">
+          <div class="post-item" th:each="post:${postsListPlainText}">
             <a href="#" th:href="@{/post/{id}(id=${post.getId()})}">
               <span class="thum">
                 <img th:if="${post.getThumbnail()!=null}" th:src="${post.getThumbnail()}" alt="">
               </span>
               <span class="title" th:text="${post.getTitle()}"></span>
-              <span class="excerpt" id="index-page-content"></span>
+              <span class="excerpt" id="index-page-content" th:utext="${post.getContent()}"></span>
             </a>
             <span class="meta" th:text="${#temporals.format(post.getCreatedDate(),'yyyy-MM-dd')}"></span>
-            <script th:inline="javascript">
-              const content=[[${post.getContent()}]].text();
-              document.getElementById('index-page-content').innerText=content;
-            </script>
           </div>
         </div>
       </article>
