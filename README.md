@@ -56,7 +56,7 @@ lazerfit 의 개인 blog 프로젝트입니다.
 ## *개발 일지*
 - ### [231128] 썸네일 기능 개발
   - thymeleaf utext 적용하여도 img 태그는 살아서 이미지가 index 미리보기창에 보임
-  - javascript 사용하여 plain text만 보이도록 함
+  - 서버에서 plain text만 추출하여 view로 넘김
 - ### [231127] 도메인 구매 / HTTPS 적용 완료
 - ### [231127] AWS 배포 완료
 - ### [231124] AWS 배포
