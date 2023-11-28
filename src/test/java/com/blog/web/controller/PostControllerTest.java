@@ -1,5 +1,6 @@
 package com.blog.web.controller;
 
+import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -121,8 +122,11 @@ class PostControllerTest {
             "제목","내용","spring","spring");
 
         mockMvc.perform(post("/post/edit/1")
-            .content(objectMapper.writeValueAsString(commentForm))
-            .contentType(APPLICATION_JSON))
+                .param("categoryTitle","spring")
+                .param("title","제목")
+                .param("content","내용")
+                .param("tags","spring")
+            .contentType(APPLICATION_FORM_URLENCODED_VALUE))
             .andDo(print())
             .andExpect(status().is3xxRedirection());
     }
