@@ -34,7 +34,8 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
                     post.generationTimeStamp,
                     post.category.title,
                     post.tag,
-                    post.views
+                    post.views,
+                    post.thumbnail
                 ))
             .from(post)
             .limit(pageable.getPageSize())
@@ -49,7 +50,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     @Override
     public Page<PostsResponse> getPostsByKeyword(Pageable pageable, String keyword) {
         List<PostsResponse> postsList = jpaQueryFactory.select(
-                new QPostsResponse(post.id, post.title,post.content,post.generationTimeStamp,post.category.title,post.tag,post.views))
+                new QPostsResponse(post.id, post.title,post.content,post.generationTimeStamp,post.category.title,post.tag,post.views,post.thumbnail))
             .from(post)
             .where(post.title.contains(keyword))
             .limit(pageable.getPageSize())
@@ -73,7 +74,8 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
                     post.generationTimeStamp,
                     post.category.title,
                     post.tag,
-                    post.views
+                    post.views,
+                    post.thumbnail
                 ))
             .from(post)
             .where(post.category.title.eq(q))
@@ -97,7 +99,8 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
                     post.generationTimeStamp,
                     post.category.title,
                     post.tag,
-                    post.views
+                    post.views,
+                    post.thumbnail
                 ))
             .from(post)
             .where(post.tag.contains(tag))
@@ -120,7 +123,8 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
                     post.generationTimeStamp,
                     post.category.title,
                     post.tag,
-                    post.views
+                    post.views,
+                    post.thumbnail
                 ))
             .from(post)
             .orderBy(post.views.desc())
@@ -137,7 +141,8 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
                 post.generationTimeStamp,
                 post.category.title,
                 post.tag,
-                post.views
+                post.views,
+                post.thumbnail
             ))
             .from(post)
             .where(post.category.title.eq(q))
@@ -156,7 +161,8 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
                 post.generationTimeStamp,
                 post.category.title,
                 post.tag,
-                post.views))
+                post.views,
+                post.thumbnail))
             .from(post)
             .where(post.id.eq(postId))
             .fetchOne();
@@ -205,7 +211,8 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
                     post.generationTimeStamp,
                     post.category.title,
                     post.tag,
-                    post.views
+                    post.views,
+                    post.thumbnail
                 ))
             .from(post)
             .where(post.id.eq(postId))

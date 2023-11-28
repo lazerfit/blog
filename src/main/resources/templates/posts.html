@@ -151,7 +151,7 @@
               <!-- /auth check Modal -->
             </div>
             <div class="comment-id" th:data-commentId="${comment.id}" style="margin-bottom: 20px">
-            <p class="comment-content" id="commentContent" th:data-commentId="${comment.id}" th:data-postId="${postId}" th:text="${comment.getContent()}">
+            <p class="comment-content" id="commentContent" th:data-commentId="${comment.id}" th:data-postId="${postId}" th:utext="${comment.getContent()}">
               깔끔하게 글 잘쓰시네요!! 잘 보고 갑니당 ㅎㅎ
               <br>
             </p>
@@ -180,7 +180,7 @@
                   <script src="/js/comment/manageCommentDropdown.js"></script>
                 </div>
               </span>
-                <p th:text="${child.content}">
+                <p th:utext="${child.content}">
                   대댓글
                 </p>
               </div>

@@ -3,6 +3,7 @@ package com.blog.web.controller;
 import com.blog.service.CategoryService;
 import com.blog.service.PostsService;
 import com.blog.web.dto.category.CategoryResponse;
+import com.blog.web.dto.posts.PostsIndexContent;
 import com.blog.web.dto.posts.PostsResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,16 @@ public class MainController {
     @GetMapping("/")
     public String index(Pageable pageable, Model model) {
         Page<PostsResponse> posts = postsService.getPostsExcludingComment(pageable);
+        List<PostsIndexContent> postsIndexContents = posts.stream().map(r -> PostsIndexContent.builder()
+            .title(r.getTitle())
+            .id(r.getId())
+            .thumbnail(r.getThumbnail())
+            .content(postsService.getContentPlainText(r.getContent()))
+            .createdDate(r.getCreatedDate())
+            .build()).toList();
+
         model.addAttribute("postsList", posts);
+        model.addAttribute("postsListPlainText",postsIndexContents);
         populateRelatedSidebar(model);
         return "index";
     }
