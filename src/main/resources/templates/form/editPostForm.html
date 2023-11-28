@@ -31,6 +31,7 @@
         <textarea class="summernote" id="summernote" th:field="*{content}" th:text="${editPostsForm.content}"></textarea>
       </div>
       <div>
+
         <input type="hidden" id="postId" th:value="${postId}">
         <input id="tags" th:field="*{tags}" name="tags" th:value="${editPostsForm.tags}" class="tags" placeholder="#태그입력">
         <button type="button" class="btn btn-secondary" onclick="location.href='/'" style="float: right;margin-top: 1px;margin-left: 10px">Cancel</button>
