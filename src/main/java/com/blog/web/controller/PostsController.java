@@ -90,7 +90,7 @@ public class PostsController {
         return PostsUpdateRequest.builder()
             .title(form.getTitle())
             .content(form.getContent())
-            .tag(form.getTag())
+            .tag(form.getTags())
             .category(categoryResponse.toEntity())
             .thumbnail(thumbnail)
             .build();
@@ -210,9 +210,9 @@ public class PostsController {
         String title=originalPost.getTitle();
         String content=originalPost.getContent();
         String categoryTitle=originalPost.getCategoryTitle();
-        String tag=originalPost.getTag();
+        String tags=originalPost.getTag();
 
-        return new PostEditForm(title, content, categoryTitle,tag);
+        return new PostEditForm(title, content, categoryTitle,tags);
     }
 
     public void addPostCreateForm(Model model) {
