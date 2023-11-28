@@ -4,12 +4,17 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
       layout:decorate="~{layout}">
 <head>
-  <title>Post</title>
-  <style>
-    body {
-      padding: 5px;
-    }
-  </style>
+  <title th:text="${postFindById.getTitle()}"></title>
+  <link rel="canonical" href="https://gomdolog.store/post/">
+  <meta name="title" th:content="${postFindById.getTitle()}">
+  <meta name="robots" content="all">
+  <meta name="description" th:if="${postFindById.getContent().length()>70}" th:content="${#strings.substring(postFindById.getContent(),0,70)}">
+  <meta name="description" th:unless="${postFindById.getContent().length()>70}" th:content="${postFindById.getContent()}">
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" th:content="${postFindById.getTitle()}"/>
+  <meta property="og:image" th:content="${postFindById.getThumbnail()}" th:if="${postFindById.getThumbnail()!=null}"/>
+  <meta property="og:description" th:if="${postFindById.getContent().length()>70}" th:content="${#strings.substring(postFindById.getContent(),0,70)}">
+  <meta property="og:description" th:unless="${postFindById.getContent().length()>70}" th:content="${postFindById.getContent()}">
 </head>
 <body>
 <div layout:fragment="leftcolumn" class="post-inner">
