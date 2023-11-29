@@ -27,6 +27,7 @@
   <div  style="float: right; margin-right: 80px;margin-top: 10px">
   <button type="button" class="btn btn-secondary">취소</button>
   <button type="button" class="btn btn-secondary btn-confirm" onclick="subCommentSubmit()">확인</button>
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
   </div>
   </div>
 <script src="/js/comment/subCommentSubmit.js"></script>

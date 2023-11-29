@@ -38,6 +38,7 @@
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" onclick="$('#add_mainModal').modal('hide')">Cancel</button>
               <button type="submit" class="btn btn-primary request-delete-button">Confirm</button>
+              <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
             </div>
           </div>
         </form>

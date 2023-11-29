@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <title>Setting</title>
+    <link rel="stylesheet" href="/css/adminUserSetting.css">
+</head>
+<body>
+<div layout:fragment="leftcolumn">
+  <table class="user-table">
+    <thead>
+      <th>name</th>
+      <th>email</th>
+      <th>created Date</th>
+      <th>change password</th>
+    </thead>
+    <tbody>
+      <th:block th:each="user:${allUsers}">
+        <tr>
+          <td th:text="${user.getName()}"></td>
+          <td id="user-email" th:text="${user.getEmail()}"></td>
+          <td th:text="${#temporals.format(user.getCreatedDate(),'yyyy-MM-dd')}"></td>
+          <td><button class="btn" id="change-password" type="button" data-bs-toggle="modal" data-bs-target="#change-password-modal">비밀번호 변경</button> </td>
+        </tr>
+      </th:block>
+    </tbody>
+  </table>
+  <!-- change password modal-->
+  <div class="modal fade" id="change-password-modal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="mainModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">비밀번호 변경</h5>
+          <button type="button" class="close" onclick="$('#change-password-modal').modal('hide');" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form>
+          <div class="modal-body">
+            <div class="form-group"> <!-- form-group -->
+              <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="origin-password" name="origin-password" placeholder="현재 비밀번호">
+                <label for="origin-password">현재 비밀번호</label>
+              </div>
+              <div class="form-floating">
+                <input type="password" class="form-control" id="new-password" name="new-password" placeholder="새 비밀번호">
+                <label for="new-password">새 비밀번호</label>
+              </div>
+              <div class="form-floating">
+                <input type="password" class="form-control" id="new-password-check" name="new-password-check" placeholder="새 비밀번호 확인">
+                <label for="new-password-check">새 비밀번호 확인</label>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="$('#change-password-modal').modal('hide');">Close</button>
+            <button type="submit" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- /change password modal-->
+</div>
+<div layout:fragment="rightcolumn">
+
+  <div class="list-group" style="margin-top: 10px">
+    <a href="" id="manageCategory" onclick="manageCategory()" class="list-group-item list-group-item-action" data-bs-toggle="list">카테고리 관리</a>
+    <a href="#" class="list-group-item list-group-item-action" data-bs-toggle="list">계정 관리</a>
+  </div>
+  <script src="/js/category/adminCategoryManage.js"></script>
+</div>
+</body>
+</html>
