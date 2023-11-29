@@ -66,7 +66,7 @@ class AdminManageControllerTest {
             .content(objectMapper.writeValueAsString(editRequest))
             .contentType(MediaType.APPLICATION_JSON))
             .andDo(print())
-            .andExpect(status().is3xxRedirection());
+            .andExpect(status().isOk());
 
     }
 }
