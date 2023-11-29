@@ -15,7 +15,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -48,7 +47,6 @@ public class WebSecurityConfig {
         filter.setAuthenticationSuccessHandler(new SimpleUrlAuthenticationSuccessHandler("/"));
         filter.setAuthenticationFailureHandler(new LoginFailHandler(objectMapper));
         filter.setSecurityContextRepository(new HttpSessionSecurityContextRepository());
-
         SpringSessionRememberMeServices rememberMeServices = new SpringSessionRememberMeServices();
         rememberMeServices.setAlwaysRemember(true);
         rememberMeServices.setValiditySeconds(3600 * 24 * 30);
@@ -72,7 +70,7 @@ public class WebSecurityConfig {
             .exceptionHandling(e ->
                 e.authenticationEntryPoint(new Http401Handler(objectMapper))
             )
-            .csrf(AbstractHttpConfigurer::disable)
+//            .csrf(AbstractHttpConfigurer::disable)
             .rememberMe(rm -> rm.rememberMeParameter("remember")
                 .alwaysRemember(false)
                 .tokenValiditySeconds(2592000));
