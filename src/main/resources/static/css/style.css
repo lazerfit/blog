@@ -750,3 +750,7 @@ button.close {
   transform: scale(1.3);
 }
 
+.list-group {
+  width: 100%;
+  padding: 20px;
+}

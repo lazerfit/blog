@@ -16,18 +16,20 @@ Content-Type: application/json
 
 {
   "email": "unpadded7479@duck.com",
-  "password": 1123,
+  "password": 1234,
   "remember": 1
 }
 
-### 로그아웃
+### 비밀번호 변경
 
-POST http://localhost:8080/logout
+POST http://localhost:8080/admin/setting/account/edit/password
+Content-Type: application/json
 
-### 메인 페이지
+{
+  "email": "unpadded7479@duck.com",
+  "originPassword": "1234",
+  "newPassword": "1123"
+}
 
-GET http://localhost:8080/
 
-### 글 쓰기
 
-GET http://localhost:8080/post/new

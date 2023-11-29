@@ -8,6 +8,7 @@ function backToMainModel(){
 function userDeleteComment(elem) {
   const id=document.getElementById('commentId').value;
   const password=document.getElementById('comment-pwd').value;
+  const _token=$('input[name="_csrf"]').val()
   console.log(id);
   console.log(password);
   const data={
@@ -18,6 +19,9 @@ function userDeleteComment(elem) {
     url: "/post/comment/manage/delete",
     type: "POST",
     data: JSON.stringify(data),
+    headers: {
+      'X-CSRF-TOKEN': _token
+    },
     contentType: 'application/json; charset=utf-8'
   }).done(function () {
     window.close();

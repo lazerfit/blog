@@ -40,4 +40,8 @@ public class SiteUser {
         this.createdDate = createdDate;
     }
 
+    public void changePassword(String newPassword) {
+        this.password=newPassword;
+    }
+
 }

@@ -38,6 +38,7 @@
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" onclick="$('#add_mainModal').modal('hide')">Cancel</button>
               <button type="submit" class="btn btn-primary request-delete-button">Confirm</button>
+              <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
             </div>
           </div>
         </form>
@@ -167,9 +168,10 @@
 <div layout:fragment="rightcolumn">
 
   <div class="list-group" style="margin-top: 10px">
-    <a href="#" class="list-group-item list-group-item-action active" data-bs-toggle="list">카테고리 관리</a>
-    <a href="#" class="list-group-item list-group-item-action" data-bs-toggle="list">계정 관리</a>
+    <a href="#" onclick="manageCategory()" class="list-group-item list-group-item-action active" data-bs-toggle="list">카테고리 관리</a>
+    <a href="#" onclick="manageAccount()" class="list-group-item list-group-item-action" data-bs-toggle="list">계정 관리</a>
   </div>
+  <script src="/js/category/adminCategoryManage.js"></script>
 </div>
 </body>
 </html>

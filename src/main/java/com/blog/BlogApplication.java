@@ -11,10 +11,4 @@ public class BlogApplication {
     public static void main(String[] args) {
         SpringApplication.run(BlogApplication.class, args);
     }
-
-//    @Bean
-//    @Profile("local")
-//    public TestDataInit testDataInit(PostsRepository postsRepository) {
-//        return new TestDataInit(postsRepository);
-//    }
 }

@@ -35,23 +35,12 @@ public class MainController {
 
         model.addAttribute("postsList", posts);
         model.addAttribute("postsListPlainText",postsIndexContents);
-        populateRelatedSidebar(model);
-        return "index";
-    }
 
-    //common method
-    private void populateRelatedSidebar(Model model) {
-        addCategoriesAttributes(model);
-        addPopularPostsAttributes(model);
-    }
-
-    private void addCategoriesAttributes(Model model) {
+        //sidebar
         List<CategoryResponse> allCategory = categoryService.findAllCategory();
         model.addAttribute("allCategorizedPosts", allCategory);
-    }
-
-    private void addPopularPostsAttributes(Model model) {
         List<PostsResponse> popularPosts = postsService.getPopularPosts();
         model.addAttribute("popularPosts",popularPosts);
+        return "index";
     }
 }
