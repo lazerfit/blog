@@ -754,3 +754,18 @@ button.close {
   width: 100%;
   padding: 20px;
 }
+
+.note-editor .dropdown-toggle::after {
+  all: unset
+}
+.note-editor .note-dropdown-menu {
+  box-sizing: content-box
+}
+.note-editor .note-modal-footer {
+  box-sizing: content-box
+}
+
+.card-summernote {
+  padding-top: 0;
+  margin-top: 0;
+}

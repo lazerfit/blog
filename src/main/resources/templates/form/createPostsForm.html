@@ -7,16 +7,16 @@
   <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
   <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
-  <!-- include summernote css/js -->
-  <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
-
+  <!-- include summernote css/js-->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 </head>
 <body>
 <div layout:fragment="leftcolumn">
 <div class="container">
   <form th:object="${createPostsForm}" method="post">
-  <div class="card">
+  <div class="card card-summernote-title">
     <div class="form-group" style="padding: 1px">
       <select class="form-select" id="exampleSelect1" th:field="*{categoryTitle}" style="margin-bottom: 5px;width: 20%">
         <th:block th:each="category:${allCategorizedPosts}">
@@ -27,7 +27,7 @@
       <input type="text" th:field="*{title}" class="form-control"  placeholder="제목을 입력하세요" id="inputDefault">
     </div>
   </div>
-  <div class="card">
+  <div class="card card-summernote">
   <textarea class="summernote" id="summernote" th:field="*{content}"></textarea>
   </div>
 
