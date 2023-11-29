@@ -16,7 +16,11 @@ const main = {
         '/auth/login', JSON.stringify(data), function () {
           window.location.href = "/";
         }
-    );
+    )
+    .fail(function (response) {
+      const error=JSON.parse(response.responseText)
+      alert(error.message)
+    });
   },
 }
 
