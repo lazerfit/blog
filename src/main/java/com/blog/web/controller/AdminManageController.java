@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequiredArgsConstructor
@@ -77,9 +78,8 @@ public class AdminManageController {
     }
 
     @PostMapping("/admin/setting/account/edit/password")
-    public String editPassword(@RequestBody @Valid UserPasswordEditRequest passwordEdit) {
+    @ResponseBody
+    public void editPassword(@RequestBody @Valid UserPasswordEditRequest passwordEdit) {
         userService.changePassword(passwordEdit);
-
-        return "redirect:/logout";
     }
 }
