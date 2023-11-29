@@ -5,6 +5,7 @@ import com.blog.service.CommentService;
 import com.blog.service.PostsService;
 import com.blog.web.dto.category.CategoryResponse;
 import com.blog.web.dto.posts.PostSaveRequest;
+import com.blog.web.dto.posts.PostsIndexContent;
 import com.blog.web.dto.posts.PostsResponse;
 import com.blog.web.dto.posts.PostsUpdateRequest;
 import com.blog.web.form.CommentForm;
@@ -113,13 +114,16 @@ public class PostsController {
     @GetMapping("/post/search")
     public String getPostsClassifiedByKeyword(Pageable pageable, Model model
         , @RequestParam String q) {
-        Page<PostsResponse> searchedPostsByKeyword = postsService.getPostsByKeyword(
+        Page<PostsResponse> posts = postsService.getPostsByKeyword(
             pageable, q);
         // Add attributes about category, popular post
         populateRelatedSidebar(model);
         model.addAttribute("keyword", q);
-        model.addAttribute("postsList", searchedPostsByKeyword);
-        return "index";
+        model.addAttribute("searchedPostsByKeyword", posts);
+
+        getPlainTextContentAndSendView(model, posts);
+
+        return "postsSearchedByKeyword";
     }
 
     @PreAuthorize("permitAll()")
@@ -131,6 +135,8 @@ public class PostsController {
         populateRelatedSidebar(model);
         model.addAttribute("categorizedPosts", categorizedPosts);
         model.addAttribute("keyword", q);
+
+        getPlainTextContentAndSendView(model, categorizedPosts);
         return "postsSortedByCategory";
     }
 
@@ -141,10 +147,24 @@ public class PostsController {
         Page<PostsResponse> postsByTags = postsService.getPostsByTag(pageable, q);
         model.addAttribute("postsByTags", postsByTags);
         model.addAttribute("keyword", q);
+        populateRelatedSidebar(model);
+        getPlainTextContentAndSendView(model, postsByTags);
         return "postsSortedByTags";
     }
 
     // Method
+    private void getPlainTextContentAndSendView(Model model, Page<PostsResponse> posts) {
+        List<PostsIndexContent> postsIndexContents = posts.stream().map(r -> PostsIndexContent.builder()
+            .title(r.getTitle())
+            .id(r.getId())
+            .thumbnail(r.getThumbnail())
+            .content(postsService.getContentPlainText(r.getContent()))
+            .createdDate(r.getCreatedDate())
+            .build()).toList();
+
+        model.addAttribute("postsListPlainText",postsIndexContents);
+    }
+
     private void populateRelatedSidebar(Model model) {
         List<PostsResponse> popularPosts = postsService.getPopularPosts();
         model.addAttribute("popularPosts",popularPosts);
