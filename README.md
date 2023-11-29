@@ -54,7 +54,7 @@ lazerfit 의 개인 blog 프로젝트입니다.
 ***
 
 ## *개발 일지*
-- ### [231130] csrf 적용/keyword 검색 시 검색 결과 표시안되는 요류 수정
+- ### [231130] csrf 적용/keyword 검색 시 검색 결과 표시안되는 오류 수정
 - ### [231129] PostController 가독성 개선
 - ### [231128] 썸네일 기능 개발
   - thymeleaf utext 적용하여도 img 태그는 살아서 이미지가 index 미리보기창에 보임
