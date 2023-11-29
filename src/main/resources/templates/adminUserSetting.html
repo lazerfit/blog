@@ -22,7 +22,7 @@
           <td th:text="${user.getName()}"></td>
           <td id="user-email" th:text="${user.getEmail()}"></td>
           <td th:text="${#temporals.format(user.getCreatedDate(),'yyyy-MM-dd')}"></td>
-          <td><button class="btn" id="change-password" type="button" data-bs-toggle="modal" data-bs-target="#change-password-modal">비밀번호 변경</button> </td>
+          <td><button class="btn" onclick="openPasswordModal()" id="change-password" type="button" data-bs-toggle="modal" data-bs-target="#change-password-modal">비밀번호 변경</button> </td>
         </tr>
       </th:block>
     </tbody>
@@ -37,26 +37,28 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form>
+        <form id="passwordForm">
           <div class="modal-body">
             <div class="form-group"> <!-- form-group -->
               <div class="form-floating mb-3">
+                <input type="hidden" id="account-email" value="">
                 <input type="password" class="form-control" id="origin-password" name="origin-password" placeholder="현재 비밀번호">
                 <label for="origin-password">현재 비밀번호</label>
               </div>
               <div class="form-floating">
-                <input type="password" class="form-control" id="new-password" name="new-password" placeholder="새 비밀번호">
+                <input type="password" class="form-control" onchange="passwordCheck()" id="new-password" name="new-password" placeholder="새 비밀번호">
                 <label for="new-password">새 비밀번호</label>
               </div>
               <div class="form-floating">
-                <input type="password" class="form-control" id="new-password-check" name="new-password-check" placeholder="새 비밀번호 확인">
+                <input type="password" class="form-control" onchange="passwordCheck()" id="new-password-check" name="new-password-check" placeholder="새 비밀번호 확인">
                 <label for="new-password-check">새 비밀번호 확인</label>
               </div>
             </div>
+            <span id="password-check"></span>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" onclick="$('#change-password-modal').modal('hide');">Close</button>
-            <button type="submit" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+            <button type="button" onclick="saveChanges()" class="btn btn-primary" data-dismiss="modal">Save changes</button>
           </div>
         </form>
       </div>
@@ -67,8 +69,8 @@
 <div layout:fragment="rightcolumn">
 
   <div class="list-group" style="margin-top: 10px">
-    <a href="" id="manageCategory" onclick="manageCategory()" class="list-group-item list-group-item-action" data-bs-toggle="list">카테고리 관리</a>
-    <a href="#" class="list-group-item list-group-item-action" data-bs-toggle="list">계정 관리</a>
+    <a href="" onclick="manageCategory()" class="list-group-item list-group-item-action" data-bs-toggle="list">카테고리 관리</a>
+    <a href="#" onclick="manageAccount()" class="list-group-item list-group-item-action active" data-bs-toggle="list">계정 관리</a>
   </div>
   <script src="/js/category/adminCategoryManage.js"></script>
 </div>
