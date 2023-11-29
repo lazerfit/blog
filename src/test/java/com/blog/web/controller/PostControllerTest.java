@@ -2,6 +2,7 @@ package com.blog.web.controller;
 
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -71,11 +72,13 @@ class PostControllerTest {
         String tag="[{\"value\":\"Spring\"},{\"value\":\"Java\"}]";
 
         mockMvc.perform(post("/post/new")
+                .with(csrf())
                 .param("title", title)
                 .param("content", content)
                 .param("categoryTitle", categoryTitle)
                 .param("tags", tag))
             .andDo(print())
+
         .andExpect(status().is3xxRedirection());
     }
     @Test
@@ -87,6 +90,7 @@ class PostControllerTest {
         String categoryTitle = "Spring";
 
         mockMvc.perform(post("/post/new")
+                .with(csrf())
                 .param("content",content)
                 .param("tags",tags)
                 .param("categoryTitle",categoryTitle))
@@ -122,6 +126,7 @@ class PostControllerTest {
             "제목","내용","spring","spring");
 
         mockMvc.perform(post("/post/edit/1")
+                .with(csrf())
                 .param("categoryTitle","spring")
                 .param("title","제목")
                 .param("content","내용")
@@ -135,7 +140,8 @@ class PostControllerTest {
     @DisplayName("삭제")
     void delete() throws Exception {
 
-        mockMvc.perform(post("/post/delete/1"))
+        mockMvc.perform(post("/post/delete/1")
+                .with(csrf()))
             .andDo(print())
             .andExpect(status().is3xxRedirection());
     }
@@ -178,6 +184,7 @@ class PostControllerTest {
         commentForm.setPassword("1234");
 
         mockMvc.perform(post("/post/comment/new")
+                .with(csrf())
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(commentForm)))
             .andDo(print())
@@ -207,6 +214,7 @@ class PostControllerTest {
         subCommentForm.setPassword("1234");
 
         mockMvc.perform(post("/post/comment/subComment/new")
+                .with(csrf())
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(subCommentForm)))
             .andDo(print())

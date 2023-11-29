@@ -1,5 +1,6 @@
 package com.blog.web.controller;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -46,6 +47,7 @@ class CategoryControllerTest {
     void saveCategory() throws Exception {
 
         mockMvc.perform(post("/admin/setting/category")
+                .with(csrf())
                 .param("title", "spring")
                 .param("listOrder", "1")
             )
@@ -60,7 +62,8 @@ class CategoryControllerTest {
 
         makeCategory("spring",1);
 
-        mockMvc.perform(post("/admin/setting/category/delete/{categoryId}", 1L))
+        mockMvc.perform(post("/admin/setting/category/delete/{categoryId}", 1L)
+                .with(csrf()))
             .andDo(print())
             .andExpect(status().is3xxRedirection());
     }
@@ -77,6 +80,7 @@ class CategoryControllerTest {
         categoryEditForm.setListOrder(1);
 
         mockMvc.perform(post("/admin/setting/category/edit/{categoryId}", 1L)
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(categoryEditForm)))
             .andDo(print())

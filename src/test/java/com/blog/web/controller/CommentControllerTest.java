@@ -1,6 +1,7 @@
 package com.blog.web.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -77,6 +78,7 @@ class CommentControllerTest {
         commentForm.setPassword("1234");
 
         mockMvc.perform(post("/post/comment/new")
+                .with(csrf())
                 .content(objectMapper.writeValueAsString(commentForm))
                 .contentType(MediaType.APPLICATION_JSON))
             .andDo(print())
@@ -105,6 +107,7 @@ class CommentControllerTest {
             .build());
 
         mockMvc.perform(post("/post/admin/comment/delete")
+                .with(csrf())
                 .param("commentId", String.valueOf(comment.getId()))
                 .param("postId", String.valueOf(post.getId())))
             .andDo(print())
@@ -131,6 +134,7 @@ class CommentControllerTest {
         commentsRepository.save(comment);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/post/comment/manage/edit")
+                .with(csrf())
                 .param("id","1")
                 .param("password","1234")
                 .param("content","멍"))
