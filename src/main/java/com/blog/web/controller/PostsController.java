@@ -39,13 +39,14 @@ public class PostsController {
     public String getPostDetail(@PathVariable Long postId, Model model) {
         postsService.addViews(postId);
         PostsResponse postsResponse = postsService.getPostsByIdIncludingComments(postId);
-        model.addAttribute("postFindById", postsResponse);
         // Add attributes about category, popular post
         populateRelatedSidebar(model);
         // Add details about related categories, comments, tags
         populateRelatedDetails(postId, model, postsResponse);
-        addCommentForm(model);
-        addCommentPasswordCheckForm(model);
+
+        model.addAttribute("postFindById", postsResponse);
+        model.addAttribute("commentForm", new CommentForm());
+        model.addAttribute("commentPasswordCheckForm", new CommentPasswordCheckForm());
         return "posts";
     }
 
@@ -53,8 +54,10 @@ public class PostsController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/post/new")
     public String createPostsForm(Model model) {
-        addPostCreateForm(model);
+        // Add attributes about category, popular post
         populateRelatedSidebar(model);
+
+        model.addAttribute("createPostsForm", new PostCreateForm());
         return "form/createPostsForm";
     }
 
@@ -70,9 +73,11 @@ public class PostsController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/post/edit/{postId}")
     public String createEditForm(@PathVariable Long postId, Model model) {
+        // Add attributes about category, popular post
+        populateRelatedSidebar(model);
+
         PostEditForm postEditForm = createEditPostForm(postId);
         model.addAttribute("editPostsForm", postEditForm);
-        populateRelatedSidebar(model);
         return "form/editPostForm";
     }
 
@@ -110,9 +115,10 @@ public class PostsController {
         , @RequestParam String q) {
         Page<PostsResponse> searchedPostsByKeyword = postsService.getPostsByKeyword(
             pageable, q);
-        model.addAttribute("postsList", searchedPostsByKeyword);
-        addKeywordAttributes(q,model);
+        // Add attributes about category, popular post
         populateRelatedSidebar(model);
+        model.addAttribute("keyword", q);
+        model.addAttribute("postsList", searchedPostsByKeyword);
         return "index";
     }
 
@@ -122,9 +128,9 @@ public class PostsController {
         Model model) {
         Page<PostsResponse> categorizedPosts = postsService.getPostsSortedByCategory(
             pageable, q);
-        model.addAttribute("categorizedPosts", categorizedPosts);
-        addKeywordAttributes(q,model);
         populateRelatedSidebar(model);
+        model.addAttribute("categorizedPosts", categorizedPosts);
+        model.addAttribute("keyword", q);
         return "postsSortedByCategory";
     }
 
@@ -134,50 +140,29 @@ public class PostsController {
         , @RequestParam String q, Model model) {
         Page<PostsResponse> postsByTags = postsService.getPostsByTag(pageable, q);
         model.addAttribute("postsByTags", postsByTags);
-        addKeywordAttributes(q,model);
+        model.addAttribute("keyword", q);
         return "postsSortedByTags";
     }
 
     // Method
     private void populateRelatedSidebar(Model model) {
-        addCategoriesAttributes(model);
-        addPopularPostsAttributes(model);
-    }
+        List<PostsResponse> popularPosts = postsService.getPopularPosts();
+        model.addAttribute("popularPosts",popularPosts);
 
-    private void addCategoriesAttributes(Model model) {
         List<CategoryResponse> allCategory = categoryService.findAllCategory();
         model.addAttribute("allCategorizedPosts", allCategory);
     }
 
-    private void addPopularPostsAttributes(Model model) {
-        List<PostsResponse> popularPosts = postsService.getPopularPosts();
-        model.addAttribute("popularPosts",popularPosts);
-    }
-
     private void populateRelatedDetails(Long postId, Model model, PostsResponse postsResponse) {
-        addAnotherCategories(postsResponse.getCategoryTitle(), model);
-        addCommentCount(postId, model);
-        addTags(postId, model);
-    }
-
-    private void addAnotherCategories(String categoryTitle,Model model) {
-        var anotherCategory = postsService.getPostsSortedByCategory(
-            categoryTitle);
+        List<PostsResponse> anotherCategory = postsService.getPostsSortedByCategory(
+            postsResponse.getCategoryTitle());
         model.addAttribute("anotherCategory",anotherCategory);
-    }
 
-    private void addCommentCount(Long postId, Model model) {
         int totalCommentSize = commentService.findByPostId(postId).size();
         model.addAttribute("commentSize", totalCommentSize);
-    }
 
-    private void addTags(Long postId, Model model) {
         List<String> tagList = postsService.getTags(postId);
         model.addAttribute("tagList", tagList);
-    }
-
-    private void addKeywordAttributes(String q,Model model) {
-        model.addAttribute("keyword", q);
     }
 
     public PostSaveRequest createPostSaveRequest(PostCreateForm form) {
@@ -195,14 +180,6 @@ public class PostsController {
                 .build();
     }
 
-    public void addCommentPasswordCheckForm(Model model) {
-        model.addAttribute("commentPasswordCheckForm", new CommentPasswordCheckForm());
-    }
-
-    public void addCommentForm(Model model) {
-        model.addAttribute("commentForm", new CommentForm());
-    }
-
     public PostEditForm createEditPostForm(Long postId) {
 
         //comment 안 불러와도 될 듯
@@ -213,9 +190,5 @@ public class PostsController {
         String tags=originalPost.getTag();
 
         return new PostEditForm(title, content, categoryTitle,tags);
-    }
-
-    public void addPostCreateForm(Model model) {
-        model.addAttribute("createPostsForm", new PostCreateForm());
     }
 }
