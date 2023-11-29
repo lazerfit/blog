@@ -4,7 +4,7 @@ $('.reply-btn').on('click',function (){
   const username=document.getElementById("inputInfo").querySelector(".username").value
   const password=document.getElementById("inputInfo").querySelector(".password").value
   const content=document.getElementById("inputComment").querySelector("#comment").value
-
+  const _token=$('input[name="_csrf"]').val()
   console.log(postId);
   console.log(username);
   console.log(password);
@@ -23,6 +23,9 @@ $('.reply-btn').on('click',function (){
     url:"/post/comment/new",
     type: "POST",
     data: JSON.stringify(comment),
+    headers: {
+      'X-CSRF-TOKEN': _token
+    },
     dataType:"html",
     contentType: "application/json; charset=utf-8"
   })
