@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <title>Home</title>
+</head>
+<body class="list-type-thumbnail">
+
+<div layout:fragment="leftcolumn">
+  <div class="container">
+    <div class="content-wrap">
+      <article id="content">
+        <div class="post-header">
+          <h1>
+            <span th:text="${keyword}">전체 글</span>
+            <em th:text="${searchedPostsByKeyword.getTotalElements()}">21</em>
+          </h1>
+        </div>
+        <div class="content-inner">
+          <div class="post-item" th:each="post:${postsListPlainText}">
+            <a href="#" th:href="@{/post/{id}(id=${post.getId()})}">
+              <span class="thum">
+                <img th:if="${post.getThumbnail()!=null}" th:src="${post.getThumbnail()}" alt="">
+              </span>
+              <span class="title" th:text="${post.getTitle()}"></span>
+              <span class="excerpt" id="index-page-content" th:utext="${post.getContent()}"></span>
+              <span class="meta" th:text="${#temporals.format(post.getCreatedDate(),'yyyy-MM-dd')}"></span>
+            </a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+  <!-- pagination -->
+  <div>
+    <ul class="pagination justify-content-center"
+        th:with="
+          pageNumber=${searchedPostsByKeyword.getNumber()},
+          pageSize=${searchedPostsByKeyword.getSize()},
+          startPage=${T(java.lang.Math).floor(pageNumber/pageSize)*pageSize+1},
+          totalPage=${searchedPostsByKeyword.getTotalPages()},
+          endPage=(${startPage + pageSize - 1 < totalPage ? startPage + pageSize - 1 : totalPage})">
+      <li class="page-item" th:classappend="${searchedPostsByKeyword.hasPrevious()} ? '#':'disabled'">
+        <a class="page-link" th:href="@{/post/category(q=${keyword},page=${pageNumber})}">&laquo;</a>
+      </li>
+      <li class="page-item"
+          th:each="page:${#numbers.sequence(startPage,endPage)}"
+          th:classappend="${page==pageNumber+1} ? 'active'">
+        <a th:text="${page}" class="page-link" th:href="@{/post/category(q=${keyword},page=${page})}">1</a>
+      </li>
+      <li class="page-item" th:classappend="${searchedPostsByKeyword.hasNext()} ? '#':'disabled'">
+        <a class="page-link" th:href="@{/post/category(q=${keyword},page=${pageNumber+2})}">&raquo;</a>
+      </li>
+    </ul>
+  </div>
+  <!-- /pagination -->
+</div>
+<!-- /leftColumn -->
+</body>
+</html>
