@@ -7,13 +7,16 @@ function editCategory() {
   const listOrder=document.getElementById('editModal').querySelector('#editFloatingNumber').value;
 
   const formData={'title':title, 'listOrder':listOrder};
-
+  const _token=$('input[name="_csrf"]').val()
   console.log(formData)
 
   $.ajax({
     url: "/admin/setting/category/edit/"+categoryId.value,
     type: "POST",
     data: JSON.stringify(formData),
+    headers: {
+      'X-CSRF-TOKEN': _token
+    },
     dataType:'json',
     contentType: 'application/json; charset=utf-8',
     success:
