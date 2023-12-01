@@ -16,8 +16,8 @@
   <meta property="og:description" th:unless="${postFindById.getContent().length()>70}" th:content="${postFindById.getContent()}">
 </head>
 <body>
-<div layout:fragment="leftcolumn" class="post-inner">
-  <div class="container">
+<div layout:fragment="leftcolumn">
+  <div class="container post-inner">
     <div class="card bg-light mb-3 content-wrap">
       <div class="post-card-header">
         <div class="inner">

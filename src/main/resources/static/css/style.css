@@ -707,6 +707,8 @@ button.close {
   float: right;
   width: 126px;
   height: auto;
+  max-height: 120px;
+  object-fit: cover;
   margin-left: 57px;
   border: 1px solid #f1f1f1;
   transform: translateY(0);
@@ -748,11 +750,6 @@ button.close {
 .loginId img:hover {
   -webkit-transform-style: preserve-3d;
   transform: scale(1.3);
-}
-
-.list-group {
-  width: 100%;
-  padding: 20px;
 }
 
 .note-editor .dropdown-toggle::after {
