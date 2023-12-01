@@ -40,12 +40,15 @@ public class PostsController {
     public String getPostDetail(@PathVariable Long postId, Model model) {
         postsService.addViews(postId);
         PostsResponse postsResponse = postsService.getPostsByIdIncludingComments(postId);
+        String contentPlainText = postsService.getContentPlainText(postsResponse.getContent());
+
         // Add attributes about category, popular post
         populateRelatedSidebar(model);
         // Add details about related categories, comments, tags
         populateRelatedDetails(postId, model, postsResponse);
 
         model.addAttribute("postFindById", postsResponse);
+        model.addAttribute("plainTextContent", contentPlainText);
         model.addAttribute("commentForm", new CommentForm());
         model.addAttribute("commentPasswordCheckForm", new CommentPasswordCheckForm());
         return "posts";
