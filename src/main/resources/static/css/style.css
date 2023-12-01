@@ -707,6 +707,8 @@ button.close {
   float: right;
   width: 126px;
   height: auto;
+  max-height: 120px;
+  object-fit: cover;
   margin-left: 57px;
   border: 1px solid #f1f1f1;
   transform: translateY(0);
