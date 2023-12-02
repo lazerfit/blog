@@ -732,13 +732,17 @@ button.close {
   padding: 0 12px;
 }
 
-.post-inner .card-body img{
+.card .card-body img{
   overflow-clip-margin: content-box;
   overflow: clip;
   display: inline-block;
-  width: 100%;
+  width: 100% !important;
   margin: 0;
   height: auto;
+}
+
+.card .card-body table {
+  width: 100% !important;
 }
 
 .loginId {
