@@ -25,22 +25,23 @@ public class MainController {
     @GetMapping("/")
     public String index(Pageable pageable, Model model) {
         Page<PostsResponse> posts = postsService.getPostsExcludingComment(pageable);
-        List<PostsIndexContent> postsIndexContents = posts.stream().map(r -> PostsIndexContent.builder()
-            .title(r.getTitle())
-            .id(r.getId())
-            .thumbnail(r.getThumbnail())
-            .content(postsService.getContentPlainText(r.getContent()))
-            .createdDate(r.getCreatedDate())
-            .build()).toList();
+        List<PostsIndexContent> postsIndexContents = posts.stream()
+            .map(r -> PostsIndexContent.builder()
+                .title(r.getTitle())
+                .id(r.getId())
+                .thumbnail(r.getThumbnail())
+                .content(postsService.getContentPlainText(r.getContent()))
+                .createdDate(r.getCreatedDate())
+                .build()).toList();
 
         model.addAttribute("postsList", posts);
-        model.addAttribute("postsListPlainText",postsIndexContents);
+        model.addAttribute("postsListPlainText", postsIndexContents);
 
         //sidebar
         List<CategoryResponse> allCategory = categoryService.findAllCategory();
         model.addAttribute("allCategorizedPosts", allCategory);
         List<PostsResponse> popularPosts = postsService.getPopularPosts();
-        model.addAttribute("popularPosts",popularPosts);
+        model.addAttribute("popularPosts", popularPosts);
         return "index";
     }
 }
