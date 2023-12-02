@@ -11,10 +11,12 @@
 <div layout:fragment="leftcolumn">
   <table class="user-table">
     <thead>
-      <th>name</th>
-      <th>email</th>
-      <th>created Date</th>
-      <th>change password</th>
+      <tr>
+        <th scope="col">name</th>
+        <th scope="col">email</th>
+        <th scope="col">created Date</th>
+        <th scope="col">change password</th>
+      </tr>
     </thead>
     <tbody>
       <th:block th:each="user:${allUsers}">
