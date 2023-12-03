@@ -8,16 +8,16 @@
 <!--  <link rel="stylesheet" href="/css/adminPage.css">-->
 </head>
 <body>
-<div layout:fragment="leftcolumn">
+<main layout:fragment="leftcolumn">
 <h4 style="margin-top: 10px;text-align: center">관리자 페이지입니다.</h4>
-</div>
-<div layout:fragment="rightcolumn">
+</main>
+<aside layout:fragment="rightcolumn">
 
-  <div class="list-group" style="margin-top: 10px">
+  <section class="list-group" style="margin-top: 10px">
     <a href="#" onclick="manageCategory()" class="list-group-item list-group-item-action" data-bs-toggle="list">카테고리 관리</a>
     <a href="#" onclick="manageAccount()" class="list-group-item list-group-item-action" data-bs-toggle="list">계정 관리</a>
-  </div>
+  </section>
   <script src="/js/category/adminCategoryManage.js"></script>
-</div>
+</aside>
 </body>
 </html>

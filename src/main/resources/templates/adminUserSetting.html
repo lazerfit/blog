@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/css/adminUserSetting.css">
 </head>
 <body>
-<div layout:fragment="leftcolumn">
+<main layout:fragment="leftcolumn">
   <table class="user-table">
     <thead>
       <tr>
@@ -30,17 +30,17 @@
     </tbody>
   </table>
   <!-- change password modal-->
-  <div class="modal fade" id="change-password-modal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="mainModal" aria-hidden="true">
+  <section class="modal fade" id="change-password-modal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="mainModal" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
-        <div class="modal-header">
+        <header class="modal-header">
           <h5 class="modal-title" id="exampleModalLongTitle">비밀번호 변경</h5>
           <button type="button" class="close" onclick="$('#change-password-modal').modal('hide');" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
-        </div>
+        </header>
         <form id="passwordForm">
-          <div class="modal-body">
+          <section class="modal-body">
             <div class="form-group"> <!-- form-group -->
               <div class="form-floating mb-3">
                 <input type="hidden" id="account-email" value="">
@@ -57,24 +57,24 @@
               </div>
             </div>
             <span id="password-check"></span>
-          </div>
-          <div class="modal-footer">
+          </section>
+          <footer class="modal-footer">
             <button type="button" class="btn btn-secondary" onclick="$('#change-password-modal').modal('hide');">Close</button>
             <button type="button" onclick="saveChanges()" class="btn btn-primary" data-dismiss="modal">Save changes</button>
-          </div>
+          </footer>
         </form>
       </div>
     </div>
-  </div>
+  </section>
   <!-- /change password modal-->
-</div>
-<div layout:fragment="rightcolumn">
+</main>
+<aside layout:fragment="rightcolumn">
 
-  <div class="list-group" style="margin-top: 10px">
+  <section class="list-group" style="margin-top: 10px">
     <a href="" onclick="manageCategory()" class="list-group-item list-group-item-action" data-bs-toggle="list">카테고리 관리</a>
     <a href="#" onclick="manageAccount()" class="list-group-item list-group-item-action active" data-bs-toggle="list">계정 관리</a>
-  </div>
+  </section>
   <script src="/js/category/adminCategoryManage.js"></script>
-</div>
+</aside>
 </body>
 </html>

@@ -770,3 +770,48 @@ button.close {
   margin-left: 10px;
   margin-right: 10px;
 }
+
+.container {
+  margin-top: 30px
+}
+
+#subComment-header {
+  text-align: center;
+}
+
+#subComment-body {
+  margin-left: 80px;
+  margin-top: 30px;
+  margin-right: 80px
+}
+
+#subComment-footer {
+  float: right;
+  margin-right: 80px;
+  margin-top: 10px
+}
+
+#subComment-username,
+#subComment-password
+{
+  width: 100px;
+  border: 1px
+  solid #eee;
+}
+
+#subComment-content-area {
+  width: 100%;
+  margin-top: 20px
+}
+
+.comment-header {
+  text-align: center;
+}
+
+.manage-category-header {
+  margin-top: 10px;
+}
+
+.list-group {
+  margin-top: 10px;
+}

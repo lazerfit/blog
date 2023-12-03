@@ -13,10 +13,10 @@
 
 </head>
 <body>
-<div layout:fragment="leftcolumn">
-  <div class="container">
+<main layout:fragment="leftcolumn">
+  <section class="container">
     <form th:object="${editPostsForm}" method="post">
-      <div class="card card-summernote-title">
+      <section class="card card-summernote-title">
         <div class="form-group" style="padding: 1px">
           <select class="form-select" id="categorySelect" th:field="*{categoryTitle}" th:value="${editPostsForm.categoryTitle}" style="margin-bottom: 5px;width: 20%">
             <th:block th:each="category:${allCategorizedPosts}">
@@ -26,24 +26,24 @@
           </select>
           <input type="text" th:field="*{title}" th:value="${editPostsForm.title}" class="form-control"  placeholder="제목을 입력하세요" id="inputDefault">
         </div>
-      </div>
-      <div class="card card-summernote">
+      </section>
+      <section class="card card-summernote">
         <textarea class="summernote" id="summernote" th:field="*{content}" th:text="${editPostsForm.content}"></textarea>
-      </div>
-      <div>
+      </section>
+      <section>
 
         <input type="hidden" id="postId" th:value="${postId}">
         <input id="tags" th:field="*{tags}" name="tags" th:value="${editPostsForm.tags}" class="tags" placeholder="#태그입력">
         <button type="button" class="btn btn-secondary" onclick="location.href='/'" style="float: right;margin-top: 1px;margin-left: 10px">Cancel</button>
         <button type="submit" class="btn btn-primary"  data-bitwarden-clicked="1" style="float: right;margin-top: 1px">Submit</button>
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-      </div>
+      </section>
     </form>
-  </div>
+  </section>
   <script src="/js/summernote.js"></script>
   <script src="/js/settingTagify.js"></script>
   <script src="/js/refreshAlert.js"></script>
-</div>
+</main>
 </body>
 </html>
 
