@@ -815,3 +815,7 @@ button.close {
 .list-group {
   margin-top: 10px;
 }
+
+.card-text {
+  color: black;
+}

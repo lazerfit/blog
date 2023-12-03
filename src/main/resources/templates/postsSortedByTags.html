@@ -19,16 +19,16 @@
             </h1>
           </section>
           <section class="content-inner">
-            <div class="post-item" th:each="post:${postsListPlainText}">
+            <section class="post-item" th:each="post:${postsListPlainText}">
               <a href="#" th:href="@{/post/{id}(id=${post.getId()})}">
-                <span class="thum">
-                <img th:if="${post.getThumbnail()!=null}" th:src="${post.getThumbnail()}" alt="">
-                </span>
+                <figure class="thum">
+                  <img th:if="${post.getThumbnail()!=null}" th:src="${post.getThumbnail()}" alt="썸네일 이미지">
+                </figure>
                 <span class="title" th:text="${post.getTitle()}"></span>
                 <span class="excerpt" id="index-page-content" th:utext="${post.getContent()}"></span>
                 <span class="meta" th:text="${#temporals.format(post.getCreatedDate(),'yyyy-MM-dd')}"></span>
               </a>
-            </div>
+            </section>
           </section>
         </article>
       </div>
