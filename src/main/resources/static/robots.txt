@@ -2,6 +2,7 @@ User-agent: *
 Disallow: /login
 Disallow: /admin/
 Disallow: /post/comment/subComment/new
+Sitemap: https://gomdolog.store/sitemap.xml
 
 
 
