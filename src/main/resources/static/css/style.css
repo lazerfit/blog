@@ -68,6 +68,20 @@ input[type=text], input[type=email], input[type=password], input[type=submit], t
   -webkit-appearance: none;
 }
 
+.content-wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+
+}
+
+.wrap .header > h4 {
+  margin-top: 25px;
+}
+
+.wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+}
 
 /* Create two unequal columns that floats next to each other */
 /* Left column */
@@ -360,15 +374,25 @@ a:hover{
   margin: 0 auto 13px;
   font-size: 0.875em;
   color: #fff;
+  padding-left: 4px;
 }
 
-@media screen and (max-width: 767px) {
-  .post-card-header .inner {
-    padding-bottom: 38px;
-    vertical-align: bottom;
-  }
+.post-card-header .inner .meta{
+  margin-top: 33px;
+  font-size: 0.8125em;
+  display: block;
+  max-width: 1080px;
+  color: #d6d3c6;
+  padding-left: 4px;
 }
 
+.post-card-header .inner .meta > a{
+  color: #d6d3c6;
+}
+
+.post-card-header .inner .meta > button {
+  color: #d6d3c6;
+}
 
 .post-card-header .inner .post-card-title {
   display: -webkit-box;
@@ -378,41 +402,8 @@ a:hover{
   font-size: 2.215em;
   line-height: 1.2352;
   color: #fff;
-}
-
-.post-card-header .inner .meta{
-  margin-top: 33px;
-  font-size: 0.8125em;
-  display: block;
   max-width: 1080px;
-  color: #d6d3c6;
-}
-
-.content-wrap {
-  max-width: 1080px;
-  margin: 0 auto;
-
-}
-
-.wrap .header > h4 {
-  margin-top: 25px;
-}
-
-.wrap {
-  max-width: 1080px;
-  margin: 0 auto;
-}
-
-.post-card-header .inner .meta {
-  color: #d6d3c6;
-}
-
-.post-card-header .inner .meta > a{
-  color: #d6d3c6;
-}
-
-.post-card-header .inner .meta > button {
-  color: #d6d3c6;
+  width: 100vw;
 }
 
 #content .inner:after {
