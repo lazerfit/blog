@@ -16,7 +16,7 @@
 
 <body>
 <div class="wrap">
-  <div class="header" style="text-align: left;padding-left: 20px">
+  <header class="header" style="text-align: left;padding-left: 20px">
     <h4><a class="navbar-brand" th:href="@{/}">Gran Aventura</a></h4>
     <div th:if="${#authorization.expression('isAuthenticated()')}">
       <div class="dropdown" data-bs-target="dropdownContent">
@@ -34,7 +34,7 @@
       <img src="/img/cat2.png" alt="Profile Picture" class="profile">
     </button>
   </div>
-</div>
+</header>
   <!-- nav -->
 <nav class="navbar navbar-expand-lg bg-light" data-bs-theme="light">
   <div class="container-fluid">
@@ -56,10 +56,10 @@
 <div class="row" layout:fragment="post-card-head"></div>
 
 <div class="row">
-  <div class="leftcolumn" layout:fragment="leftcolumn">
-  </div>
+  <main class="leftcolumn" layout:fragment="leftcolumn">
+  </main>
 
-  <div class="rightcolumn" layout:fragment="rightcolumn">
+  <aside class="rightcolumn" layout:fragment="rightcolumn">
     <div class="card">
       <form class="d-flex" id="searchPostsForm" name="searchPostsForm" th:action="@{/post/search}" th:method="GET">
         <input class="form-control me-sm-2" id="searchKeyword" type="search" placeholder="Search" name="q" required>
@@ -86,16 +86,16 @@
         </th:block>
       </ul>
     </div>
-  </div>
+  </aside>
 </div>
 
-<div class="footer">
+<footer class="footer">
     <a href="" title="My github"><img src="/img/github.png" class="social-media-icon" alt="github" onclick="github()"></a>
     <a href="" title="My Linkedin"><img src="/img/linkedin.png" class="social-media-icon" alt="linkedin" onclick="linkedin()"
     style="margin-left: 10px"></a>
     <a href=""><img src="/img/angle.png" class="social-media-icon" alt="topScroll" onclick="topScroll()"
     style="float: right;width: 20px;height: 20px;margin-top: 5px"></a>
-</div>
+</footer>
 </div>
 <script src="/js/login/login.js"></script>
 <script src="/js/layout/footer.js"></script>

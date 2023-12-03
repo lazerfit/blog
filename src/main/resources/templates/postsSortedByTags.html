@@ -7,17 +7,17 @@
 </head>
 <body class="list-type-thumbnail">
 
-<div layout:fragment="leftcolumn">
+<main layout:fragment="leftcolumn">
     <div class="container">
       <div class="content-wrap">
         <article id="content">
-          <div class="post-header">
+          <section class="post-header">
             <h1>
               <span th:text="${keyword}">전체 글</span>
               <em th:text="${postsByTags.getTotalElements()}">21</em>
             </h1>
-          </div>
-          <div class="content-inner">
+          </section>
+          <section class="content-inner">
             <div class="post-item" th:each="post:${postsListPlainText}">
               <a href="#" th:href="@{/post/{id}(id=${post.getId()})}">
                 <span class="thum">
@@ -28,7 +28,7 @@
                 <span class="meta" th:text="${#temporals.format(post.getCreatedDate(),'yyyy-MM-dd')}"></span>
               </a>
             </div>
-          </div>
+          </section>
         </article>
       </div>
     </div>
@@ -55,6 +55,6 @@
       </ul>
     </div>
   <!-- /pagination -->
-  </div>
+  </main>
 </body>
 </html>

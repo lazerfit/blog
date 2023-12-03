@@ -14,70 +14,70 @@
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body id="modify">
-<div class="wrap">
-<div class="header header-title">
-  <h1 style="text-align: center">댓글 수정/삭제</h1>
-</div>
+<section class="wrap">
+<header class="header header-title">
+  <h1 class="comment-header">댓글 수정/삭제</h1>
+</header>
   <button type="button" class="btn btn-md"  onclick="$('#editCommentModal').modal('show');" style="margin-left: 175px;margin-top: 20px">수정</button>
   <button type="button" class="btn btn-md " th:data-commentId="${comment.id}" onclick="$('#deleteCommentModal').modal('show')" style="margin-top: 20px">삭제</button>
-</div>
+</section>
 <!-- edit Modal -->
-<div class="modal fade" id="editCommentModal" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-labelledby="ModalLabel" aria-hidden="true">
+<section class="modal fade" id="editCommentModal" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-labelledby="ModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
-      <div class="modal-header">
+      <header class="modal-header">
         <h5 class="modal-title fs-5" id="editModalLabel">댓글 수정</h5>
         <button type="button" class="close" onclick="$('#editCommentModal').modal('hide')" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-      </div>
+      </header>
       <form>
-      <div class="modal-body">
+      <section class="modal-body">
         <input type="hidden" id="editCommentId" value="">
-        <div class="modal-body">
+        <section class="modal-body">
           <input type="hidden" id="commentId" th:value="${comment.getId()}">
           <div class="comment-username" id="comment-username" th:text="${comment.getUsername()}">물소</div>
           <textarea class="edit-comment" id="content-area" th:text="${comment.getContent()}"></textarea>
           <input type="password" class="edit-comment-password comment-pwd" id="edit-password" placeholder="비밀번호">
-        </div>
-        <div class="modal-footer">
+        </section>
+        <footer class="modal-footer">
           <button type="button" class="btn btn-secondary" onclick="cancel()">나가기</button>
           <button type="button" class="btn btn-secondary comment-del-btn" onclick="userEditComment()">수정</button>
           <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-        </div>
-      </div>
+        </footer>
+      </section>
       </form>
     </div>
   </div>
-</div>
+</section>
 <!-- /edit Modal -->
 <!-- delete Modal -->
-<div class="modal fade" id="deleteCommentModal" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-labelledby="ModalLabel" aria-hidden="true">
+<section class="modal fade" id="deleteCommentModal" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-labelledby="ModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
-      <div class="modal-header">
+      <header class="modal-header">
         <h5 class="modal-title fs-5" id="deleteModalLabel">댓글 삭제</h5>
         <button type="button" class="close" onclick="$('#deleteCommentModal').modal('hide')" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-      </div>
+      </header>
       <form id="deleteForm" th:object="${commentPasswordCheckForm}" method="post" th:action="@{/post/comment/manage/delete}">
-      <div class="modal-body">
+      <section class="modal-body">
         <input type="hidden" id="comment-id" value="" th:field="*{commentId}"/>
         <div class="modal-body">
           <p style="color: black;font-size: 20px">정말 삭제하시겠습니까?</p>
           <input type="password" class="comment-pwd" id="comment-pwd" placeholder="비밀번호" style="margin-top: 5px" th:field="*{password}">
         </div>
-        <div class="modal-footer" th:data-commentId="${comment.id}">
+        <footer class="modal-footer" th:data-commentId="${comment.id}">
           <button type="button" class="btn btn-secondary" onclick="backToMainModel()">나가기</button>
           <button type="button" class="btn btn-secondary comment-del-btn"
           onclick="userDeleteComment(this)">삭제</button>
-        </div>
-      </div>
+        </footer>
+      </section>
       </form>
     </div>
   </div>
-</div>
+</section>
 <!-- /delete Modal -->
 <script src="/js/comment/userDeleteComment.js"></script>
 <script src="/js/comment/userEditComment.js"></script>
