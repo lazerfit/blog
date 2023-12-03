@@ -16,24 +16,26 @@
   <meta property="og:description" th:if="${plainTextContent.length()<100}" th:content="${plainTextContent}">
 </head>
 <body>
+<div layout:fragment="post-card-head">
+  <div class="post-card-header">
+    <div class="inner">
+      <form name="deletePost" id="deletePosts" th:action="@{/post/delete/{postId}(postId=${postId})}" method="post">
+        <span class="category" th:if="${postFindById.getCategoryTitle()}" th:text="${postFindById.getCategoryTitle()}"></span>
+        <span class="post-card-title" th:text="${postFindById.getTitle()}">Header</span>
+        <input type="hidden" id="postFindById_title" th:value="${postFindById.getTitle()}">
+        <span class="meta">
+        <span  th:text="${#temporals.format(postFindById.getCreatedDate(),'yyyy-MM-dd')}">Date</span>
+        <a th:href="@{/post/edit/{postId}(postId=${postId})}" sec:authorize="hasRole('ROLE_ADMIN')">· 수정 ·</a>
+          <button id="del-button" class="del-button" sec:authorize="hasRole('ROLE_ADMIN')">삭제</button>
+          </span>
+      </form>
+      <script src="/js/post/deletePost.js"></script>
+    </div>
+  </div>
+</div>
 <div layout:fragment="leftcolumn">
   <div class="container post-inner">
     <div class="card bg-light mb-3 content-wrap">
-      <div class="post-card-header">
-        <div class="inner">
-        <form name="deletePost" id="deletePosts" th:action="@{/post/delete/{postId}(postId=${postId})}" method="post">
-          <span class="category" th:if="${postFindById.getCategoryTitle()}" th:text="${postFindById.getCategoryTitle()}" style="padding-left: 2px"></span>
-          <span class="post-card-title" th:text="${postFindById.getTitle()}">Header</span>
-          <input type="hidden" id="postFindById_title" th:value="${postFindById.getTitle()}">
-          <span class="meta">
-        <span  th:text="${#temporals.format(postFindById.getCreatedDate(),'yyyy-MM-dd')}">Date</span>
-        <a th:href="@{/post/edit/{postId}(postId=${postId})}" sec:authorize="hasRole('ROLE_ADMIN')" style="text-decoration-line: none">· 수정 ·</a>
-          <button id="del-button" class="del-button" sec:authorize="hasRole('ROLE_ADMIN')" style="text-decoration-line: none">삭제</button>
-          </span>
-        </form>
-        <script src="/js/post/deletePost.js"></script>
-        </div>
-        </div>
       <div class="card-body">
         <p class="card-text" style="color: black" th:utext="${postFindById.getContent()}">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
       </div>
