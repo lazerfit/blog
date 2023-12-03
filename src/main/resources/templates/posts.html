@@ -7,13 +7,13 @@
   <title th:text="${postFindById.getTitle()}"></title>
   <meta name="title" th:content="${postFindById.getTitle()}">
   <meta name="robots" content="all">
-  <meta name="description" th:if="${plainTextContent.length()>100}" th:content="${#strings.substring(plainTextContent,0,100)}">
-  <meta name="description" th:if="${plainTextContent.length()<100}" th:content="${plainTextContent}">
+  <meta name="description" th:if="${plainTextContent.length()>200}" th:content="${#strings.substring(plainTextContent,0,200)}">
+  <meta name="description" th:if="${plainTextContent.length()<200}" th:content="${plainTextContent}">
   <meta property="og:type" content="website"/>
   <meta property="og:title" th:content="${postFindById.getTitle()}"/>
   <meta property="og:image" th:content="${postFindById.getThumbnail()}" th:if="${postFindById.getThumbnail()!=null}"/>
-  <meta property="og:description" th:if="${plainTextContent.length()>100}" th:content="${#strings.substring(plainTextContent,0,100)}">
-  <meta property="og:description" th:if="${plainTextContent.length()<100}" th:content="${plainTextContent}">
+  <meta property="og:description" th:if="${plainTextContent.length()>200}" th:content="${#strings.substring(plainTextContent,0,200)}">
+  <meta property="og:description" th:if="${plainTextContent.length()<200}" th:content="${plainTextContent}">
 </head>
 <body>
 <div layout:fragment="post-card-head">
