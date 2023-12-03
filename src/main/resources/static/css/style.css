@@ -1,8 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
+@import url('./common.css');
 @font-face {
   font-family: 'AppleSDGothicNeoR';
   src: local("/font/AppleSDGothicNeoR.tff");
 }
+
 * {
   box-sizing: border-box;
   font-family: AppleSDGothicNeoR,'Noto Sans KR', sans-serif;
@@ -218,7 +220,7 @@ a:hover{
 }
 
 .dropdown-content a:hover {
-  color: #eb6864 ;
+  color: var(--color-main) ;
 }
 
 .show{
@@ -251,7 +253,7 @@ a:hover{
 }
 
 .categoryList a:hover {
-  color: #eb6864;
+  color: var(--color-main);
 }
 
 #category_modal_btn, #add_category_btn {
@@ -266,7 +268,7 @@ a:hover{
 }
 
 .tag-btn:hover {
-  background-color: #eb6864;
+  background-color: var(--color-main);
   color: white;
 }
 
@@ -345,7 +347,7 @@ a:hover{
 }
 
 .card-title a:hover {
-  color: #eb6864;
+  color: var(--color-main);
 }
 
 .post-card-header {
@@ -616,7 +618,7 @@ a:hover{
 }
 
 .comment-modal-btn, .comment-del-btn{
-  background-color: #eb6864;
+  background-color: var(--color-main);
   border: none;
   color: white;
   float: left;
@@ -665,7 +667,7 @@ button.close {
 }
 
 .btn-confirm:hover {
-  background-color: #eb6864;
+  background-color: var(--color-main);
   border: none;
 }
 
@@ -715,7 +717,7 @@ button.close {
 .post-item a:hover .title,
 .post-item a:focus .title {
   text-decoration: underline;
-  color: #eb6864;
+  color: var(--color-main);
 }
 
 @media screen and (max-width: 767px)
