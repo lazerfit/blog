@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+<url>
+  <loc>https://gomdolog.store/</loc>
+  <lastmod>2023-12-03T16:17:45+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://gomdolog.store/post/3</loc>
+  <lastmod>2023-12-03T16:17:45+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://gomdolog.store/post/1</loc>
+  <lastmod>2023-12-03T16:17:45+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://gomdolog.store/post/category?q=%EC%9E%90%EB%A3%8C%EA%B5%AC%EC%A1%B0/%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98</loc>
+  <lastmod>2023-12-03T16:17:45+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://gomdolog.store/post/category?q=%EA%B8%B0%ED%83%80</loc>
+  <lastmod>2023-12-03T16:17:45+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://gomdolog.store/tag?q=%EC%9E%90%EB%A3%8C%EA%B5%AC%EC%A1%B0</loc>
+  <lastmod>2023-12-03T16:17:45+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://gomdolog.store/tag?q=Array</loc>
+  <lastmod>2023-12-03T16:17:45+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://gomdolog.store/tag?q=%EC%B2%AB%ED%8E%98%EC%9D%B4%EC%A7%80</loc>
+  <lastmod>2023-12-03T16:17:45+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+</urlset>
