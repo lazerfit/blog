@@ -73,6 +73,7 @@ input[type=text], input[type=email], input[type=password], input[type=submit], t
 .content-wrap {
   max-width: 1080px;
   margin: 0 auto;
+  width: 100%;
 
 }
 
@@ -83,6 +84,7 @@ input[type=text], input[type=email], input[type=password], input[type=submit], t
 .wrap {
   max-width: 1080px;
   margin: 0 auto;
+  width: 100%;
 }
 
 /* Create two unequal columns that floats next to each other */
@@ -166,7 +168,7 @@ input[type=text], input[type=email], input[type=password], input[type=submit], t
 }
 
 a:hover{
-  text-decoration-color: indianred;
+  text-decoration-color: var(--color-main);
 }
 
 .card > .card-body-index{
@@ -355,9 +357,21 @@ a:hover{
   display: table;
   height: 340px;
   background-color: #989898;
-  background-position: 50% 50%;
+  background-position: 0 75%;
   background-size: cover;
   box-sizing: border-box;
+  max-width: 101.2vw;
+  width: 1080px;
+  background-image: url("/img/pexels-vlad-bagacian-1061623.jpg");
+}
+
+.row-post-header {
+  max-width: 100%;
+  width: 1080px;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  display: flex;
 }
 
 .post-card-header .inner {
@@ -368,6 +382,9 @@ a:hover{
   vertical-align: bottom;
   padding-left: 24px;
   padding-right: 24px;
+  max-width: 1080px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .post-card-header .category {
@@ -375,8 +392,12 @@ a:hover{
   max-width: 1080px;
   margin: 0 auto 13px;
   font-size: 0.875em;
-  color: #fff;
+  color: white;
   padding-left: 4px;
+}
+
+.post-card-title {
+  color: white !important;
 }
 
 .post-card-header .inner .meta{
@@ -384,16 +405,16 @@ a:hover{
   font-size: 0.8125em;
   display: block;
   max-width: 1080px;
-  color: #d6d3c6;
+  color: white;
   padding-left: 4px;
 }
 
 .post-card-header .inner .meta > a{
-  color: #d6d3c6;
+  color: white;
 }
 
 .post-card-header .inner .meta > button {
-  color: #d6d3c6;
+  color: white;
 }
 
 .post-card-header .inner .post-card-title {
@@ -405,7 +426,11 @@ a:hover{
   line-height: 1.2352;
   color: #fff;
   max-width: 1080px;
-  width: 100vw;
+  width: 100%;
+}
+
+.row {
+  width: 100% !important;
 }
 
 #content .inner:after {
