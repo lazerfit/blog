@@ -935,4 +935,18 @@ button.close {
   text-decoration: none;
 }
 
+.new_category img{
+  vertical-align: middle;
+  padding-top: 4px;
+  padding-left: 3px;
+  width: 15px;
+  height: 15px;
+}
+
+.category_li_wrap {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
 
