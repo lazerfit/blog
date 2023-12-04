@@ -3,6 +3,7 @@ package com.blog.domain.category;
 import static com.blog.domain.category.QCategory.category;
 import static com.blog.domain.posts.QPost.post;
 
+import com.blog.web.dto.category.CategoryAndPostCreatedDateResponse;
 import com.blog.web.dto.posts.PostsResponse;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -33,5 +34,25 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom{
             .where(QCategory.category.title.eq(q)).fetch().size();
 
         return new PageImpl<>(categorizedPostsList, pageable, totalCount);
+    }
+
+    @Override
+    public List<CategoryAndPostCreatedDateResponse> getAllCategoryAndPostCreatedDate() {
+
+        return jpaQueryFactory
+            .select(
+                Projections.constructor(
+                    CategoryAndPostCreatedDateResponse.class,
+                    category.id,
+                    category.listOrder,
+                    category.title,
+                    post.generationTimeStamp.max()
+                )
+            )
+            .from(category)
+            .leftJoin(post)
+            .on(category.id.eq(post.category.id))
+            .groupBy(category.id, category.title)
+            .fetch();
     }
 }

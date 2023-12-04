@@ -4,9 +4,12 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 import com.blog.domain.category.Category;
 import com.blog.domain.category.CategoryRepository;
+import com.blog.domain.posts.Post;
 import com.blog.domain.posts.PostsRepository;
 import com.blog.exception.CategoryNotFound;
 import jakarta.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -62,6 +65,31 @@ class CategoryServiceTest {
             .orElseThrow(CategoryNotFound::new);
 
         assertThat(category.getTitle()).isEqualTo("Spring2");
+    }
+
+    @Test
+    void 사이드바_카테고리_불러오기() {
+        makeCategory("java",2);
+
+        Category category = categoryRepository.findCategoryByTitle("java")
+            .orElseThrow(CategoryNotFound::new);
+
+        postsRepository.save(Post.builder()
+            .content("내용")
+            .title("제목")
+            .views(0L)
+            .category(category)
+            .tag("[{\"value\":\"Spring\"},{\"value\":\"Java\"}]")
+            .build()
+        );
+
+        var allCategoryAndPostCreatedDate = categoryRepository.getAllCategoryAndPostCreatedDate();
+
+        assertThat(allCategoryAndPostCreatedDate.get(1).getPostCreatedDate().format(
+            DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+            .isEqualTo(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        assertThat(allCategoryAndPostCreatedDate.get(1).getCategoryTitle()).isEqualTo("java");
+        assertThat(allCategoryAndPostCreatedDate.get(1).getListOrder()).isEqualTo(2);
     }
 
 

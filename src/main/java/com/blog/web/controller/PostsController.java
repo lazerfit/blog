@@ -34,6 +34,8 @@ public class PostsController {
     private final PostsService postsService;
     private final CategoryService categoryService;
     private final CommentService commentService;
+    private static final String SIDEBAR_CATEGORY="sidebarCategory";
+    private static final String KEYWORD="keyword";
 
     @PreAuthorize("permitAll()")
     @GetMapping("/post/{postId}")
@@ -51,6 +53,10 @@ public class PostsController {
         model.addAttribute("plainTextContent", contentPlainText);
         model.addAttribute("commentForm", new CommentForm());
         model.addAttribute("commentPasswordCheckForm", new CommentPasswordCheckForm());
+
+        // sidebar
+        var allCategoryAndPostCreatedDate = categoryService.getAllCategoryAndPostCreatedDate();
+        model.addAttribute(SIDEBAR_CATEGORY, allCategoryAndPostCreatedDate);
         return "posts";
     }
 
@@ -121,11 +127,14 @@ public class PostsController {
             pageable, q);
         // Add attributes about category, popular post
         populateRelatedSidebar(model);
-        model.addAttribute("keyword", q);
+        model.addAttribute(KEYWORD, q);
         model.addAttribute("searchedPostsByKeyword", posts);
 
         getPlainTextContentAndSendView(model, posts);
 
+        // sidebar
+        var allCategoryAndPostCreatedDate = categoryService.getAllCategoryAndPostCreatedDate();
+        model.addAttribute(SIDEBAR_CATEGORY, allCategoryAndPostCreatedDate);
         return "postsSearchedByKeyword";
     }
 
@@ -137,7 +146,11 @@ public class PostsController {
             pageable, q);
         populateRelatedSidebar(model);
         model.addAttribute("categorizedPosts", categorizedPosts);
-        model.addAttribute("keyword", q);
+        model.addAttribute(KEYWORD, q);
+
+        // sidebar
+        var allCategoryAndPostCreatedDate = categoryService.getAllCategoryAndPostCreatedDate();
+        model.addAttribute(SIDEBAR_CATEGORY, allCategoryAndPostCreatedDate);
 
         getPlainTextContentAndSendView(model, categorizedPosts);
         return "postsSortedByCategory";
@@ -149,9 +162,12 @@ public class PostsController {
         , @RequestParam String q, Model model) {
         Page<PostsResponse> postsByTags = postsService.getPostsByTag(pageable, q);
         model.addAttribute("postsByTags", postsByTags);
-        model.addAttribute("keyword", q);
+        model.addAttribute(KEYWORD, q);
         populateRelatedSidebar(model);
         getPlainTextContentAndSendView(model, postsByTags);
+        // sidebar
+        var allCategoryAndPostCreatedDate = categoryService.getAllCategoryAndPostCreatedDate();
+        model.addAttribute(SIDEBAR_CATEGORY, allCategoryAndPostCreatedDate);
         return "postsSortedByTags";
     }
 

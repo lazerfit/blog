@@ -2,7 +2,6 @@ package com.blog.web.controller;
 
 import com.blog.service.CategoryService;
 import com.blog.service.PostsService;
-import com.blog.web.dto.category.CategoryResponse;
 import com.blog.web.dto.posts.PostsIndexContent;
 import com.blog.web.dto.posts.PostsResponse;
 import java.util.List;
@@ -38,8 +37,9 @@ public class MainController {
         model.addAttribute("postsListPlainText", postsIndexContents);
 
         //sidebar
-        List<CategoryResponse> allCategory = categoryService.findAllCategory();
-        model.addAttribute("allCategorizedPosts", allCategory);
+        var allCategoryAndPostCreatedDate = categoryService.getAllCategoryAndPostCreatedDate();
+        model.addAttribute("sidebarCategory", allCategoryAndPostCreatedDate);
+
         List<PostsResponse> popularPosts = postsService.getPopularPosts();
         model.addAttribute("popularPosts", popularPosts);
         return "index";
