@@ -67,31 +67,31 @@
   </main>
 
   <aside class="rightcolumn" layout:fragment="rightcolumn">
-    <div class="card">
-<!--      <form class="d-flex" id="searchPostsForm" name="searchPostsForm" th:action="@{/post/search}" th:method="GET">-->
-<!--        <input class="form-control me-sm-2" id="searchKeyword" type="search" placeholder="Search" name="q" required>-->
-<!--        <button class="btn btn-secondary my-2 my-sm-0" type="submit" onclick="document.searchPostsForm.submit()">Search</button>-->
-<!--      </form>-->
-    </div>
-    <div class="card" th:if="${allCategorizedPosts}">
-      <ul class="list-group list-group-light">
-        <li class="list-group-item d-flex justify-content-between align-items-center border-0 categoryList"><a th:href="@{/}">전체 글</a></li>
-    <th:block th:each="category:${allCategorizedPosts}">
-          <li th:if="${category.getListOrder()>0}" class="list-group-item d-flex justify-content-between align-items-center border-0 categoryList" style="padding-top: 0">
-            <a th:href="@{/post/category(q=${category.getTitle()})}" th:text="${category.getTitle()}" style="color: rgb(128,128,128)"></a>
-          </li>
-    </th:block>
-      </ul>
-    </div>
-    <div class="card">
-      <h6 style="margin-left: 11px;margin-bottom: 13px">인기글</h6>
-      <ul class="list-group list-group-light">
-        <th:block th:each="post:${popularPosts}">
-          <li class="list-group-item d-flex justify-content-between align-items-center border-0 categoryList" style="padding-top: 0">
-            <a th:href="@{/post/{id}(id=${post.getId()})}" th:text="${post.getTitle()}" style="color: rgb(128,128,128)"></a>
+    <nav class="category" th:if="${allCategorizedPosts}">
+      <ul class="list-group">
+        <li class="category-first"><a th:href="@{/}">분류 전체보기</a></li>
+        <th:block th:each="category:${allCategorizedPosts}">
+          <li th:if="${category.getListOrder()>0}">
+            <a th:href="@{/post/category(q=${category.getTitle()})}" th:text="${category.getTitle()}"></a>
           </li>
         </th:block>
       </ul>
+    </nav>
+    <div class="post-list">
+      <h2>인기글</h2>
+    <section class="popular">
+      <ul>
+        <th:block th:each="post:${popularPosts}">
+          <li>
+            <a th:href="@{/post/{id}(id=${post.getId()})}">
+              <img class="popular_thumbnail" th:src="${post.getThumbnail()}" th:if="${post.getThumbnail != null}" alt="썸네일">
+              <span class="aside_title" th:text="${post.getTitle()}"></span>
+              <span class="aside_date" th:text="${#temporals.format(post.getCreatedDate(),'yyyy-MM-dd')}" style="display: flex"></span>
+            </a>
+          </li>
+        </th:block>
+      </ul>
+    </section>
     </div>
   </aside>
 </div>
