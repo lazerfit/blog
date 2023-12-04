@@ -67,13 +67,20 @@
   </main>
 
   <aside class="rightcolumn" layout:fragment="rightcolumn">
-    <nav class="category" th:if="${allCategorizedPosts}">
+    <nav class="category">
       <ul class="list-group">
         <li class="category-first"><a th:href="@{/}">분류 전체보기</a></li>
-        <th:block th:each="category:${allCategorizedPosts}">
+        <th:block th:each="category:${sidebarCategory}">
+          <div class="category_li_wrap">
           <li th:if="${category.getListOrder()>0}">
-            <a th:href="@{/post/category(q=${category.getTitle()})}" th:text="${category.getTitle()}"></a>
+            <div class="category-url">
+              <a th:href="@{/post/category(q=${category.getCategoryTitle()})}" th:text="${category.getCategoryTitle()}"></a>
+            </div>
           </li>
+            <div class="new_category" th:if="${category.getPostCreatedDate() != null}">
+              <img src="/img/category_new.png" th:if="${#temporals.format(category.getPostCreatedDate(),'yyyy-MM-dd')}==${#calendars.format(#calendars.createNow(),'yyyy-MM-dd')}" alt="새로운 카테고리 표시">
+            </div>
+          </div>
         </th:block>
       </ul>
     </nav>

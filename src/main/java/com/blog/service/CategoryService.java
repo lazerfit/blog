@@ -3,6 +3,7 @@ package com.blog.service;
 import com.blog.domain.category.Category;
 import com.blog.domain.category.CategoryRepository;
 import com.blog.exception.CategoryNotFound;
+import com.blog.web.dto.category.CategoryAndPostCreatedDateResponse;
 import com.blog.web.dto.category.CategoryEditRequest;
 import com.blog.web.dto.category.CategoryResponse;
 import com.blog.web.dto.category.CategorySaveRequest;
@@ -46,5 +47,9 @@ public class CategoryService {
         Category category = categoryRepository.findById(categoryId)
             .orElseThrow(CategoryNotFound::new);
         category.edit(form.getTitle(), form.getListOrder());
+    }
+
+    public List<CategoryAndPostCreatedDateResponse> getAllCategoryAndPostCreatedDate() {
+        return categoryRepository.getAllCategoryAndPostCreatedDate();
     }
 }
