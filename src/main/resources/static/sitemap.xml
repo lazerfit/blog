@@ -25,6 +25,11 @@
   <lastmod>2023-12-03T16:17:45+00:00</lastmod>
   <priority>0.80</priority>
 </url>
+  <url>
+    <loc>https://gomdolog.store/post/4</loc>
+    <lastmod>2023-12-04T16:17:45+00:00</lastmod>
+    <priority>0.8</priority>
+  </url>
 <url>
   <loc>https://gomdolog.store/post/category?q=%EA%B8%B0%ED%83%80</loc>
   <lastmod>2023-12-03T16:17:45+00:00</lastmod>
@@ -45,4 +50,10 @@
   <lastmod>2023-12-03T16:17:45+00:00</lastmod>
   <priority>0.64</priority>
 </url>
+
+
+
+
+
+
 </urlset>
