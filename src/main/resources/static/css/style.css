@@ -210,7 +210,6 @@ a:hover{
   animation-duration: 200ms;
   background-color: var(--color-main);
   border-style: unset;
-  border-color: var(--color-main) !important;
 }
 
 .card > .card-body-index{
@@ -838,6 +837,15 @@ button.close {
 }
 
 .loginId img:hover {
+  animation-name: scale-out;
+  animation-duration: 200ms;
+}
+
+img.profile {
+  margin-right: 5px;
+}
+
+img.profile:hover {
   animation-name: scale-out;
   animation-duration: 200ms;
 }
