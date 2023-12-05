@@ -107,6 +107,10 @@ input[type=text], input[type=email], input[type=password], input[type=submit], t
   width: 75%;
 }
 
+.leftcolumn .container {
+  margin-top: 15px;
+}
+
 .card-header{
   background-color: white;
 }
@@ -115,8 +119,9 @@ input[type=text], input[type=email], input[type=password], input[type=submit], t
 .rightcolumn {
   float: left;
   width: 25%;
-  padding-left: 20px;
+  padding-top: 50px !important;
   border-left: thin solid #f1f1f1;
+  padding-left: 20px;
 }
 
 /* Fake image */
@@ -242,13 +247,13 @@ a:hover{
   position: relative;
   display: inline-block;
   text-decoration: none;
+  padding-top: unset;
 }
 
 .navbar-brand::before {
-  content:'Gran Aventura';
+  content: url("/img/cat.png");
   display: inline-block;
 }
-
 
 .del-button {
   border: none;
@@ -1022,9 +1027,14 @@ button.close {
   height: 35px;
 }
 
+.github {
+  width:28px;
+  height: 28px;
+}
+
 .icon_reference>span {
   text-align: center;
-  padding-right: 10px;
+  padding-right: 20px;
   font-size: 12px;
 }
 
