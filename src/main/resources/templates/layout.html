@@ -20,7 +20,7 @@
 <body>
 <div class="wrap">
   <header class="wrap__header">
-    <h4><a class="navbar-brand" th:href="@{/}">Gran Aventura</a></h4>
+    <h4><a class="navbar-brand" th:href="@{/}"></a></h4>
     <div th:if="${#authorization.expression('isAuthenticated()')}">
       <div class="dropdown" data-bs-target="dropdownContent">
         <img src="/img/cat2.png" alt="Profile Picture" class="profile" onclick="toggleDropdown('dropdownContent')">
@@ -105,10 +105,14 @@
 
 <footer class="footer">
     <a href="" title="My github"><img src="/img/github.png" class="social-media-icon" alt="github" onclick="github()"></a>
-    <a href="" title="My Linkedin"><img src="/img/linkedin.png" class="social-media-icon" alt="linkedin" onclick="linkedin()"
-    style="margin-left: 10px"></a>
-    <a href=""><img src="/img/angle.png" class="social-media-icon" alt="topScroll" onclick="topScroll()"
+    <a href="" title="My Linkedin"><img src="/img/linkedin.png" class="social-media-icon" alt="linkedin" onclick="linkedin()"></a>
+    <a href=""><img src="/img/angle.png" class="top_scroll" alt="topScroll" onclick="topScroll()"
     style="float: right;width: 20px;height: 20px;margin-top: 5px"></a>
+    <div class="icon_reference">
+      <span>
+        Icons By <a target="_blank" href="https://icons8.com">@Icons8</a>
+      </span>
+    </div>
 </footer>
 </div>
 <script src="/js/login/login.js"></script>
