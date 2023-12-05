@@ -68,6 +68,9 @@ public class PostsController {
         populateRelatedSidebar(model);
 
         model.addAttribute("createPostsForm", new PostCreateForm());
+        // sidebar
+        var allCategoryAndPostCreatedDate = categoryService.getAllCategoryAndPostCreatedDate();
+        model.addAttribute(SIDEBAR_CATEGORY, allCategoryAndPostCreatedDate);
         return "form/createPostsForm";
     }
 
@@ -88,6 +91,9 @@ public class PostsController {
 
         PostEditForm postEditForm = createEditPostForm(postId);
         model.addAttribute("editPostsForm", postEditForm);
+        // sidebar
+        var allCategoryAndPostCreatedDate = categoryService.getAllCategoryAndPostCreatedDate();
+        model.addAttribute(SIDEBAR_CATEGORY, allCategoryAndPostCreatedDate);
         return "form/editPostForm";
     }
 
