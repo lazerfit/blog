@@ -845,11 +845,6 @@ img.profile {
   margin-right: 5px;
 }
 
-img.profile:hover {
-  animation-name: scale-out;
-  animation-duration: 200ms;
-}
-
 .note-editor .dropdown-toggle::after {
   all: unset
 }
