@@ -1,5 +1,6 @@
 package com.blog.web.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -63,12 +64,13 @@ class PostControllerTest {
 
     @Test
     @DisplayName("글 저장")
+    @Transactional
     void savePost() throws Exception{
-        makeCategory("Spring",1);
+        makeCategory("Spring2",2);
 
         String title = "제목";
         String content = "내용";
-        String categoryTitle = "Spring";
+        String categoryTitle = "Spring2";
         String tag="[{\"value\":\"Spring\"},{\"value\":\"Java\"}]";
 
         mockMvc.perform(post("/post/new")
@@ -78,8 +80,11 @@ class PostControllerTest {
                 .param("categoryTitle", categoryTitle)
                 .param("tags", tag))
             .andDo(print())
-
         .andExpect(status().is3xxRedirection());
+
+        assertThat(postsRepository.findAll().get(1).getCategory().getTitle()).isEqualTo("Spring2");
+        assertThat(postsRepository.findAll().get(1).getTitle()).isEqualTo("제목");
+        assertThat(postsRepository.findAll().get(1).getContent()).isEqualTo("내용");
     }
     @Test
     @DisplayName("글 저장 - 실패")
