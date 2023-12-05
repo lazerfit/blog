@@ -49,6 +49,7 @@ public class CategoryService {
         category.edit(form.getTitle(), form.getListOrder());
     }
 
+    @Transactional(readOnly = true)
     public List<CategoryAndPostCreatedDateResponse> getAllCategoryAndPostCreatedDate() {
         return categoryRepository.getAllCategoryAndPostCreatedDate();
     }
