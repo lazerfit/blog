@@ -4,6 +4,7 @@ import static com.blog.domain.category.QCategory.category;
 import static com.blog.domain.posts.QPost.post;
 
 import com.blog.web.dto.category.CategoryAndPostCreatedDateResponse;
+import com.blog.web.dto.category.QCategoryAndPostCreatedDateResponse;
 import com.blog.web.dto.posts.PostsResponse;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -41,8 +42,7 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom{
 
         return jpaQueryFactory
             .select(
-                Projections.constructor(
-                    CategoryAndPostCreatedDateResponse.class,
+                new QCategoryAndPostCreatedDateResponse(
                     category.id,
                     category.listOrder,
                     category.title,
@@ -53,6 +53,7 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom{
             .leftJoin(post)
             .on(category.id.eq(post.category.id))
             .groupBy(category.id, category.title)
+            .orderBy(category.listOrder.asc())
             .fetch();
     }
 }

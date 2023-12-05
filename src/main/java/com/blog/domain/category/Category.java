@@ -28,7 +28,7 @@ public class Category {
     @OneToMany(mappedBy = "category")
     private List<Post> posts = new ArrayList<>();
 
-    @Column
+    @Column(unique = true)
     private Integer listOrder;
 
     @Builder
