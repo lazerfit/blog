@@ -5,6 +5,7 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
 @import url('https://cdn.jsdelivr.net/gh/sun-typeface/SUIT/fonts/static/woff2/SUIT.css');
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap');
+@import url('./animation.css');
 @font-face {
   font-family: AppleSDGothicNeoR;
   src: local("/font/AppleSDGothicNeoR.tff");
@@ -17,12 +18,14 @@
 
 body {
   font-family: 'Noto Sans KR',"Pretendard Variable",Pretendard ,'SUIT Variable','SUIT',AppleSDGothicNeoR, sans-serif;
-  padding: 5px;
   background: white;
-  /*#f1f1f1*/
   width: 100%;
   height: 100%;
   box-sizing: border-box;
+}
+
+.footer {
+  margin-top: 5px;
 }
 
 h2 {
@@ -163,7 +166,6 @@ input[type=text], input[type=email], input[type=password], input[type=submit], t
 }
 
 .profile{
-  /*border-radius: 90%;*/
   width: 40px;
   height: 40px;
   float: right;
@@ -182,6 +184,30 @@ a:hover{
   text-decoration-color: var(--color-main);
 }
 
+.category-url:hover > a {
+  color: var(--color-main) !important;
+  text-decoration-color: var(--color-main);
+  text-decoration: underline;
+}
+
+.category-first:hover > a {
+  color: var(--color-main) !important;
+  text-decoration-color: var(--color-main);
+  text-decoration: underline;
+}
+
+.animated-button{
+  transition: all 200ms;
+}
+
+.animated-button:hover {
+  animation-name: button-scale-out;
+  animation-duration: 200ms;
+  background-color: var(--color-main);
+  border-style: unset;
+  border-color: var(--color-main) !important;
+}
+
 .card > .card-body-index{
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 4;
@@ -195,12 +221,34 @@ a:hover{
 .navbar{
   border-color: white;
   font-family: 'Oswald','SUIT Variable','SUIT',sans-serif;
-  /*border-bottom-color: #f1f1f1;*/
 }
 
 .nav-item {
   font-family: 'Oswald','SUIT Variable','SUIT',sans-serif;
+  transition: all 200ms;
 }
+
+.nav-item:hover {
+  background-color: black;
+  border-radius: 8px;
+  animation: button-scale-out 200ms;
+}
+
+.nav-item:hover .nav-link {
+  color: white;
+}
+
+.navbar-brand{
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.navbar-brand::before {
+  content:'Gran Aventura';
+  display: inline-block;
+}
+
 
 .del-button {
   border: none;
@@ -221,7 +269,7 @@ a:hover{
   display: none;
   position: absolute;
   z-index: 100;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
   width: 75px;
   top: 100%;
   left: -70px;
@@ -635,7 +683,6 @@ a:hover{
 .reply-btn {
   background-color: #333;
   color: #fff;
-  /*float: right;*/
   margin-top: 0;
   margin-right: 25px;
   width: 100px;
@@ -786,8 +833,8 @@ button.close {
 }
 
 .loginId img:hover {
-  -webkit-transform-style: preserve-3d;
-  transform: scale(1.3);
+  animation-name: scale-out;
+  animation-duration: 200ms;
 }
 
 .note-editor .dropdown-toggle::after {
@@ -963,4 +1010,32 @@ button.close {
   justify-content: flex-start;
 }
 
+.top_scroll {
+  float: right;
+  width: 20px;
+  height: 20px;
+  margin-top: 5px
+}
+
+.social-media-icon {
+  width: 35px;
+  height: 35px;
+}
+
+.icon_reference>span {
+  text-align: center;
+  padding-right: 10px;
+  font-size: 12px;
+}
+
+.facebook {
+  width: 40px;
+  height: 40px;
+}
+
+.twitter {
+  width: 30px;
+  height: 30px;
+  margin-left: 0;
+}
 
