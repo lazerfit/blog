@@ -877,6 +877,7 @@ button.close {
   overflow-clip-margin: content-box;
   overflow: clip;
   display: inline-block;
+  max-width: 412px !important;
   width: 100% !important;
   margin: 0;
   height: auto;
