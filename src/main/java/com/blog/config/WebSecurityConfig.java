@@ -29,7 +29,6 @@ import org.springframework.session.security.web.authentication.SpringSessionReme
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
-    private static final String ROLE_ADMIN="ADMIN";
     private final ObjectMapper objectMapper;
     private final CustomUserDetailsService customUserDetailsService;
 
