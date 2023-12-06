@@ -69,7 +69,6 @@ public class WebSecurityConfig {
             .exceptionHandling(e ->
                 e.authenticationEntryPoint(new Http401Handler(objectMapper))
             )
-//            .csrf(AbstractHttpConfigurer::disable)
             .rememberMe(rm -> rm.rememberMeParameter("remember")
                 .alwaysRemember(false)
                 .tokenValiditySeconds(2592000));
