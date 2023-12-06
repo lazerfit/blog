@@ -31,52 +31,84 @@
 <div class="wrap">
   <header class="wrap__header">
     <h4><a class="navbar-brand" th:href="@{/}"></a></h4>
-    <div th:if="${#authorization.expression('isAuthenticated()')}">
-      <div class="dropdown" data-bs-target="dropdownContent">
-        <img src="/img/cat2.png" alt="Profile Picture" class="profile" onclick="toggleDropdown('dropdownContent')">
-        <div id="dropdownContent" class="dropdown-content">
-          <a th:href="@{/admin/setting}" sec:authorize="hasRole('ROLE_ADMIN')">관리</a>
-          <a th:href="@{/post/new}" sec:authorize="hasRole('ROLE_ADMIN')">글쓰기</a>
-          <a href="#" onclick="logout()" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_USER')">로그아웃</a>
-          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+    <!-- nav -->
+    <nav class="navbar navbar-expand-lg bg-light" data-bs-theme="light">
+      <div class="container-fluid">
+        <div class="collapse navbar-collapse" id="navbarColor03">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link active" th:href="@{/}">Home
+                <span class="visually-hidden">(current)</span>
+              </a>
+            </li>
+          </ul>
+          <form class="d-flex" id="searchPostsForm" name="searchPostsForm" th:action="@{/post/search}" th:method="GET">
+            <input class="form-control search-input" id="searchKeyword" type="search" placeholder="Search" name="q" required>
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit" id="submit">Search</button>
+          </form>
+            <div th:if="${#authorization.expression('isAuthenticated()')}">
+              <div class="dropdown" data-bs-target="dropdownContent">
+                <img src="/img/cat2.png" alt="Profile Picture" class="profile" onclick="toggleDropdown('dropdownContent')">
+                <div id="dropdownContent" class="dropdown-content">
+                  <a th:href="@{/admin/setting}" sec:authorize="hasRole('ROLE_ADMIN')">관리</a>
+                  <a th:href="@{/post/new}" sec:authorize="hasRole('ROLE_ADMIN')">글쓰기</a>
+                  <a href="#" onclick="logout()" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_USER')">로그아웃</a>
+                  <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                </div>
+              </div>
+            </div>
+            <div th:unless="${#authorization.expression('isAuthenticated()')}">
+              <button class="loginId" th:href="@{/login}" onclick="login()">
+                <img src="/img/cat2.png" alt="Profile Picture" class="profile">
+              </button>
+            </div>
+
+        </div>
+      </div>
+    </nav>
+    <!-- /nav -->
+    <button class="offcanvas-toggler" id="offcanvas-toggler" type="button" aria-controls="offcanvasExample">
+    </button>
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+      <div class="offcanvas__wrap">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="offcanvasExampleLabel">메뉴</h5>
+          <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          <div class="offcanvas-search">
+            <form class="d-flex" id="offCanvas-searchForm" name="searchPostsForm" th:action="@{/post/search}" th:method="GET">
+              <input class="form-control search-input" id="offCanvas-searchForm-input" type="search" placeholder="Search" name="q" required>
+              <button class="offcanvas-search-button">
+                <input type="submit" name="" value="">
+              </button>
+            </form>
+          </div>
+          <div class="aside-content" id="aside-content">
+
+          </div>
+        </div>
+        <div class="offcanvas-footer" th:if="${#authorization.expression('isAuthenticated()')}">
+          <div class="footer-item">
+            <a th:href="@{/admin/setting}" sec:authorize="hasRole('ROLE_ADMIN')">관리</a>
+          </div>
+          <div class="footer-item">
+            <a th:href="@{/post/new}" sec:authorize="hasRole('ROLE_ADMIN')">글쓰기</a>
+          </div>
+          <div class="footer-item">
+            <a href="#" onclick="logout()" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_USER')">로그아웃</a>
+          </div>
         </div>
       </div>
     </div>
-    <div th:unless="${#authorization.expression('isAuthenticated()')}">
-    <button class="loginId" th:href="@{/login}" onclick="login()">
-      <img src="/img/cat2.png" alt="Profile Picture" class="profile">
-    </button>
-  </div>
-
 </header>
-  <!-- nav -->
-<nav class="navbar navbar-expand-lg bg-light" data-bs-theme="light">
-  <div class="container-fluid">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarColor03">
-      <ul class="navbar-nav me-auto">
-        <li class="nav-item">
-          <a class="nav-link active" th:href="@{/}">Home
-            <span class="visually-hidden">(current)</span>
-          </a>
-      </ul>
-      <form class="d-flex" id="searchPostsForm" name="searchPostsForm" th:action="@{/post/search}" th:method="GET">
-        <input class="form-control search-input" id="searchKeyword" type="search" placeholder="Search" name="q" required>
-        <button class="btn btn-secondary my-2 my-sm-0" type="submit" id="submit">Search</button>
-      </form>
-    </div>
-  </div>
-</nav>
-  <!-- /nav -->
 <div class="row" layout:fragment="post-card-head"></div>
 
 <div class="row">
   <main class="leftcolumn" layout:fragment="leftcolumn">
   </main>
 
-  <aside class="rightcolumn" layout:fragment="rightcolumn">
+  <aside class="rightcolumn" id="rightColumn" layout:fragment="rightcolumn">
     <nav class="category">
       <ul class="list-group">
         <li class="category-first"><a th:href="@{/}">분류 전체보기</a></li>
@@ -130,5 +162,6 @@
 <script type="text/javascript" src="/js/login/logout.js"></script>
 <script type="text/javascript" src="/js/layout/toggleDropdown.js"></script>
 <script src="/js/search.js"></script>
+<script src="/js/layout/offcanvas.js"></script>
 </body>
 </html>

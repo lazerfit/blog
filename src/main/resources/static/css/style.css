@@ -87,7 +87,58 @@ input[type=text], input[type=email], input[type=password], input[type=submit], t
 
 .wrap__header {
   text-align: left;
-  padding-left: 20px;
+  padding-left: 5px;
+  display: flex;
+  flex-direction: column;
+  border-bottom: thin solid #f1f1f1;
+}
+
+@media (max-width: 768px) {
+  .wrap__header {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+  .offcanvas-toggler {
+    display: inline-block;
+  }
+  .rightcolumn .category {
+    display: none;
+  }
+  .rightcolumn .post-list {
+    display: none;
+  }
+}
+
+@media (min-width: 769px){
+  .wrap__header {
+    flex-direction: column;
+  }
+  .offcanvas-toggler {
+    display: none;
+  }
+  .offcanvas__wrap {
+    display: none;
+  }
+  #navbarColor03{
+    display: inherit;
+  }
+}
+
+.offcanvas .offcanvas__wrap .offcanvas-body .category,
+.offcanvas .offcanvas__wrap .offcanvas-body .post-list{
+  padding-left: 0;
+}
+
+.offcanvas .offcanvas__wrap .offcanvas-body .category {
+  margin-top: 20px;
+}
+
+#offCanvas-searchForm-input {
+  max-width: 200px !important;
+}
+
+.offcanvas-search-button input {
+  margin-left: 3px;
 }
 
 .wrap__header > h4 {
@@ -264,9 +315,12 @@ a:hover{
   position: relative;
   right: 0;
   display: inline-block;
-  float: right;
   cursor: pointer;
   border: none;
+}
+
+.dropdown .profile {
+  margin-bottom: 3px;
 }
 
 .dropdown-content {
@@ -841,6 +895,10 @@ button.close {
   animation-duration: 200ms;
 }
 
+.loginId img {
+  margin-bottom: 8px;
+}
+
 img.profile {
   margin-right: 5px;
 }
@@ -1052,3 +1110,59 @@ img.profile {
   margin-left: 0;
 }
 
+#searchPostsForm {
+  margin-right: 5px;
+}
+
+.navbar-toggler {
+  margin-left: auto;
+}
+
+.offcanvas-footer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  bottom: 0;
+  justify-content: space-around;
+}
+
+.footer-item {
+  flex: 1;
+  text-align: center;
+}
+
+.offcanvas-search-button {
+  color: unset;
+  padding: unset;
+  border: unset;
+  background: unset;
+}
+
+.offcanvas-search-button input {
+  background: url("/img/search.png") no-repeat;
+  background-size: 33px;
+  width: 33px;
+  height: 33px;
+  cursor: pointer;
+  border: none;
+  right: 0;
+}
+
+.offcanvas-toggler {
+  width: 35px;
+  height: 35px;
+  margin-left: auto;
+  margin-right: 5px;
+  border: unset;
+  background: url("/img/list.png");
+  background-size: cover;
+}
+
+.offcanvas {
+  width: 278px !important;
+}
+
+.search-input {
+  width: 100%;
+}
