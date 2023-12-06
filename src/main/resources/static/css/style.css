@@ -415,7 +415,6 @@ a:hover{
   margin-top: 15px;
   display: block;
   max-width: 1080px;
-
 }
 
 .another_category h4 {
@@ -423,9 +422,17 @@ a:hover{
   color: #737373;
 }
 
-.another_category a {
+.another_category table a {
+  display: block;
   text-decoration: none;
   color: black;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.another_category table tbody tr td {
+  margin-left: auto;
 }
 
 @media screen and (max-width: 767px) {
