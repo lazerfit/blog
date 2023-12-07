@@ -29,11 +29,13 @@ public class PostsService {
     private final PostsRepository postsRepository;
 
     @Transactional
+    @CacheEvict(value = {"pagePost","postCached"},allEntries = true)
     public void save(PostSaveRequest request) {
         postsRepository.save(request.toEntity());
     }
 
     @Transactional
+    @CacheEvict(value = {"pagePost","postCached"},allEntries = true)
     public void edit(Long postId, PostsUpdateRequest request) {
         Post post = postsRepository.findById(postId).orElseThrow(PostNotFound::new);
         post.edit(request);
@@ -46,7 +48,7 @@ public class PostsService {
     }
 
     @Transactional
-    @CacheEvict(value = "postCached", key = "{#postId}")
+    @CacheEvict(value = {"pagePost","pagePost"},allEntries = true)
     public void delete(Long postId) {
         PostsResponse post = postsRepository.getPostById(postId).orElseThrow(PostNotFound::new);
         postsRepository.deleteById(post.getId());
