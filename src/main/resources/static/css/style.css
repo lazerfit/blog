@@ -671,23 +671,20 @@ a:hover{
 }
 
 .comment-list {
+  display: flex;
   margin: -3px 0 -1px;
-  padding: 0 24px;
   border: 0;
-}
-
-.tag-btn {
-  margin-bottom: 21px;
-}
-
-.comment-list ul li {
-  display: inline-block;
   width: 100%;
   padding: 32px 0 28px;
   border-bottom: 1px solid #eee;
   vertical-align: top;
   box-sizing: border-box;
 }
+
+.tag-btn {
+  margin-bottom: 21px;
+}
+
 
 .comment-list ul li .author-meta {
   position: relative;
@@ -768,7 +765,7 @@ a:hover{
 .more {
   width: 20px;
   height: 20px;
-  float: right;
+  margin-left: auto;
   cursor: pointer;
 }
 

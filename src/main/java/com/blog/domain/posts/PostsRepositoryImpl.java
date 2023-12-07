@@ -1,11 +1,7 @@
 package com.blog.domain.posts;
 
-import static com.blog.domain.comments.QComment.comment;
 import static com.blog.domain.posts.QPost.post;
 
-import com.blog.exception.PostNotFound;
-import com.blog.web.dto.comments.CommentsResponse;
-import com.blog.web.dto.comments.QCommentsResponse;
 import com.blog.web.dto.posts.PostsResponse;
 import com.blog.web.dto.posts.QPostsResponse;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -24,7 +20,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<PostsResponse> fetchPostsExcludingComment(Pageable pageable) {
+    public Page<PostsResponse> getPosts(Pageable pageable) {
         List<PostsResponse> postsList = jpaQueryFactory
             .select(
                 new QPostsResponse(
@@ -152,57 +148,7 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom{
     }
 
     @Override
-    public PostsResponse getPostsByIdIncludingComments(Long postId) {
-        PostsResponse postsResponse = jpaQueryFactory
-            .select(new QPostsResponse(
-                post.id,
-                post.title,
-                post.content,
-                post.generationTimeStamp,
-                post.category.title,
-                post.tag,
-                post.views,
-                post.thumbnail))
-            .from(post)
-            .where(post.id.eq(postId))
-            .fetchOne();
-
-        List<CommentsResponse> parentComment = jpaQueryFactory
-            .select(new QCommentsResponse(
-                comment.id,
-                comment.username,
-                comment.content,
-                comment.generationTimeStamp,
-                comment.parent.id,
-                comment.modificationTimeStamp))
-            .from(comment)
-            .where(post.id.eq(postId).and(comment.parent.id.isNull()))
-            .orderBy(comment.id.asc())
-            .fetch();
-
-        List<CommentsResponse> childComment = jpaQueryFactory
-            .select(new QCommentsResponse(
-                comment.id,
-                comment.username,
-                comment.content,
-                comment.generationTimeStamp,
-                comment.parent.id,
-                comment.modificationTimeStamp))
-            .from(comment)
-            .where(post.id.eq(postId).and(comment.parent.id.isNotNull()))
-            .orderBy(comment.id.asc())
-            .fetch();
-
-        parentComment.forEach(p-> p.insertChildComment(childComment.stream().filter(c->c.getParentId().equals(p.getId())).toList()));
-        if (postsResponse == null) {
-            throw new PostNotFound();
-        }
-        postsResponse.insertComment(parentComment);
-        return postsResponse;
-    }
-
-    @Override
-    public Optional<PostsResponse> findPostById(Long postId) {
+    public Optional<PostsResponse> getPostById(Long postId) {
         PostsResponse response = jpaQueryFactory.select(
                 new QPostsResponse(
                     post.id,

@@ -1,15 +1,12 @@
 package com.blog.web.controller;
 
 import com.blog.service.CategoryService;
-import com.blog.service.CommentService;
 import com.blog.service.PostsService;
 import com.blog.web.dto.category.CategoryResponse;
 import com.blog.web.dto.posts.PostSaveRequest;
 import com.blog.web.dto.posts.PostsIndexContent;
 import com.blog.web.dto.posts.PostsResponse;
 import com.blog.web.dto.posts.PostsUpdateRequest;
-import com.blog.web.form.CommentForm;
-import com.blog.web.form.CommentPasswordCheckForm;
 import com.blog.web.form.PostCreateForm;
 import com.blog.web.form.PostEditForm;
 import jakarta.validation.Valid;
@@ -33,7 +30,6 @@ public class PostsController {
 
     private final PostsService postsService;
     private final CategoryService categoryService;
-    private final CommentService commentService;
     private static final String SIDEBAR_CATEGORY="sidebarCategory";
     private static final String KEYWORD="keyword";
 
@@ -41,7 +37,7 @@ public class PostsController {
     @GetMapping("/post/{postId}")
     public String getPostDetail(@PathVariable Long postId, Model model) {
         postsService.addViews(postId);
-        PostsResponse postsResponse = postsService.getPostsByIdIncludingComments(postId);
+        PostsResponse postsResponse = postsService.getPostsById(postId);
         String contentPlainText = postsService.getContentPlainText(postsResponse.getContent());
 
         // Add attributes about category, popular post
@@ -51,8 +47,6 @@ public class PostsController {
 
         model.addAttribute("postFindById", postsResponse);
         model.addAttribute("plainTextContent", contentPlainText);
-        model.addAttribute("commentForm", new CommentForm());
-        model.addAttribute("commentPasswordCheckForm", new CommentPasswordCheckForm());
 
         // sidebar
         var allCategoryAndPostCreatedDate = categoryService.getAllCategoryAndPostCreatedDate();
@@ -203,9 +197,6 @@ public class PostsController {
             postsResponse.getCategoryTitle());
         model.addAttribute("anotherCategory",anotherCategory);
 
-        int totalCommentSize = commentService.findByPostId(postId).size();
-        model.addAttribute("commentSize", totalCommentSize);
-
         List<String> tagList = postsService.getTags(postId);
         model.addAttribute("tagList", tagList);
     }
@@ -228,7 +219,7 @@ public class PostsController {
     public PostEditForm createEditPostForm(Long postId) {
 
         //comment 안 불러와도 될 듯
-        PostsResponse originalPost = postsService.getPostsByIdIncludingComments(postId);
+        PostsResponse originalPost = postsService.getPostsById(postId);
         String title=originalPost.getTitle();
         String content=originalPost.getContent();
         String categoryTitle=originalPost.getCategoryTitle();

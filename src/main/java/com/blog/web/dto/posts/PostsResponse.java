@@ -1,10 +1,8 @@
 package com.blog.web.dto.posts;
 
 import com.blog.domain.posts.Post;
-import com.blog.web.dto.comments.CommentsResponse;
 import com.querydsl.core.annotations.QueryProjection;
 import java.time.LocalDateTime;
-import java.util.List;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -19,7 +17,6 @@ public class PostsResponse {
     private final String categoryTitle;
     private final String tag;
     private final Long views;
-    private List<CommentsResponse> comments;
     private final String thumbnail;
 
     public PostsResponse(Post post) {
@@ -30,7 +27,6 @@ public class PostsResponse {
         this.categoryTitle = post.getCategory().getTitle();
         this.tag = post.getTag();
         this.views = post.getViews();
-        this.comments= post.getComments().stream().map(CommentsResponse::new).toList();
         this.thumbnail=post.getThumbnail();
     }
 
@@ -45,9 +41,5 @@ public class PostsResponse {
         this.tag = tag;
         this.views = views;
         this.thumbnail=thumbnail;
-    }
-
-    public void insertComment(List<CommentsResponse> commentResponse) {
-        this.comments=commentResponse;
     }
 }
