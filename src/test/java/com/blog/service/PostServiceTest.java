@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.blog.config.QdslConfig;
 import com.blog.domain.category.Category;
 import com.blog.domain.category.CategoryRepository;
-import com.blog.domain.comments.CommentsRepository;
 import com.blog.domain.posts.Post;
 import com.blog.domain.posts.PostsRepository;
 import com.blog.exception.CategoryNotFound;
@@ -35,8 +34,6 @@ class PostServiceTest {
     private PostsRepository postsRepository;
     @Autowired
     private CategoryRepository categoryRepository;
-    @Autowired
-    private CommentsRepository commentsRepository;
 
     @BeforeEach
     void tearDown() {

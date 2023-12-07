@@ -41,13 +41,13 @@ public class PostsService {
 
     @Transactional(readOnly = true)
     public Page<PostsResponse> getPostsExcludingComment(Pageable pageable) {
-        return postsRepository.fetchPostsExcludingComment(pageable);
+        return postsRepository.getPosts(pageable);
     }
 
     @Transactional
     @CacheEvict(value = "postCached", key = "{#postId}")
     public void delete(Long postId) {
-        PostsResponse post = postsRepository.findPostById(postId).orElseThrow(PostNotFound::new);
+        PostsResponse post = postsRepository.getPostById(postId).orElseThrow(PostNotFound::new);
         postsRepository.deleteById(post.getId());
     }
 
@@ -94,15 +94,14 @@ public class PostsService {
 
     @Transactional(readOnly = true)
     @Cacheable(value = "postCached",key = "{#id}" , unless = "#result==null")
-    public PostsResponse getPostsByIdIncludingComments(Long id) {
-        return postsRepository.getPostsByIdIncludingComments(id);
+    public PostsResponse getPostsById(Long id) {
+        return postsRepository.getPostById(id).orElseThrow(PostNotFound::new);
     }
 
     public String getContentPlainText(String content) {
         Document document = Jsoup.parse(content);
         return document.text();
     }
-
 
     public String getThumbnail(String content) {
         String img="";

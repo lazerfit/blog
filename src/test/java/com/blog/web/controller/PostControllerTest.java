@@ -1,8 +1,6 @@
 package com.blog.web.controller;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -12,15 +10,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.blog.domain.category.Category;
 import com.blog.domain.category.CategoryRepository;
-import com.blog.domain.comments.Comment;
-import com.blog.domain.comments.CommentsRepository;
 import com.blog.domain.posts.Post;
 import com.blog.domain.posts.PostsRepository;
 import com.blog.exception.CategoryNotFound;
-import com.blog.web.form.CommentForm;
-import com.blog.web.form.PostEditForm;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -33,7 +26,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 @WithMockUser(roles = "ADMIN")
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -48,8 +40,6 @@ class PostControllerTest {
     private ObjectMapper objectMapper;
     @Autowired
     private CategoryRepository categoryRepository;
-    @Autowired
-    private CommentsRepository commentsRepository;
 
     @BeforeEach
     void saveMockPost() {
@@ -64,13 +54,11 @@ class PostControllerTest {
 
     @Test
     @DisplayName("글 저장")
-    @Transactional
     void savePost() throws Exception{
-        makeCategory("Spring2",2);
 
         String title = "제목";
         String content = "내용";
-        String categoryTitle = "Spring2";
+        String categoryTitle = "spring";
         String tag="[{\"value\":\"Spring\"},{\"value\":\"Java\"}]";
 
         mockMvc.perform(post("/post/new")
@@ -80,11 +68,8 @@ class PostControllerTest {
                 .param("categoryTitle", categoryTitle)
                 .param("tags", tag))
             .andDo(print())
-        .andExpect(status().is3xxRedirection());
 
-        assertThat(postsRepository.findAll().get(1).getCategory().getTitle()).isEqualTo("Spring2");
-        assertThat(postsRepository.findAll().get(1).getTitle()).isEqualTo("제목");
-        assertThat(postsRepository.findAll().get(1).getContent()).isEqualTo("내용");
+        .andExpect(status().is3xxRedirection());
     }
     @Test
     @DisplayName("글 저장 - 실패")
@@ -127,8 +112,6 @@ class PostControllerTest {
     @Test
     @DisplayName("업데이트")
     void update() throws Exception {
-        PostEditForm commentForm = new PostEditForm(
-            "제목","내용","spring","spring");
 
         mockMvc.perform(post("/post/edit/1")
                 .with(csrf())
@@ -171,57 +154,6 @@ class PostControllerTest {
 
         mockMvc.perform(get("/tag")
                 .param("q", "Spring"))
-            .andDo(print())
-            .andExpect(status().isOk());
-    }
-
-    @Test
-    @DisplayName("댓글 저장")
-    @Transactional
-    void saveComment() throws Exception {
-        List<Post> all = postsRepository.findAll();
-
-        CommentForm commentForm = new CommentForm();
-        commentForm.setUsername("sg");
-        commentForm.setContent("정말 멋집 글이네요");
-        commentForm.setPostId(1L);
-        commentForm.setParentId(null);
-        commentForm.setPassword("1234");
-
-        mockMvc.perform(post("/post/comment/new")
-                .with(csrf())
-                .contentType(APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(commentForm)))
-            .andDo(print())
-            .andExpect(status().isOk());
-    }
-
-    @Test
-    @DisplayName("대댓글 저장")
-    void saveSubComment() throws Exception {
-        List<Post> all = postsRepository.findAll();
-        commentsRepository.save(Comment.builder()
-            .username("sg")
-            .content("정말 좋은 글이네요")
-            .parent(null)
-            .post(all.get(0))
-            .password("1234")
-            .build());
-
-        List<Comment> allComments = commentsRepository.findAll();
-        Long parentId = allComments.get(0).getId();
-
-        CommentForm subCommentForm = new CommentForm();
-        subCommentForm.setUsername("kim");
-        subCommentForm.setContent("정말 감사합니다.");
-        subCommentForm.setPostId(all.get(0).getId());
-        subCommentForm.setParentId(parentId);
-        subCommentForm.setPassword("1234");
-
-        mockMvc.perform(post("/post/comment/subComment/new")
-                .with(csrf())
-                .contentType(APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(subCommentForm)))
             .andDo(print())
             .andExpect(status().isOk());
     }

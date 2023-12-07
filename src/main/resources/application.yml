@@ -1,4 +1,6 @@
 spring:
+  cache:
+    cache-names: postCached, categoryCache
   jpa:
     open-in-view: false
     hibernate:
