@@ -50,6 +50,7 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "categoryList")
     public List<CategoryAndPostCreatedDateResponse> getAllCategoryAndPostCreatedDate() {
         return categoryRepository.getAllCategoryAndPostCreatedDate();
     }

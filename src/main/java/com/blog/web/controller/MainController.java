@@ -23,7 +23,7 @@ public class MainController {
     @PreAuthorize("permitAll()")
     @GetMapping("/")
     public String index(Pageable pageable, Model model) {
-        Page<PostsResponse> posts = postsService.getPostsExcludingComment(pageable);
+        Page<PostsResponse> posts = postsService.getPosts(pageable);
         List<PostsIndexContent> postsIndexContents = posts.stream()
             .map(r -> PostsIndexContent.builder()
                 .title(r.getTitle())
