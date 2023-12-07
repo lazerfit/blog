@@ -9,6 +9,7 @@ import com.blog.web.dto.category.CategoryResponse;
 import com.blog.web.dto.category.CategorySaveRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
     @Transactional
+    @CacheEvict(value = {"categoryList","categoryCache"},allEntries = true)
     public void save(CategorySaveRequest requestDto) {
         categoryRepository.save(requestDto.toEntity());
     }
@@ -38,11 +40,13 @@ public class CategoryService {
     }
 
     @Transactional
+    @CacheEvict(value = {"categoryList","categoryCache"},allEntries = true)
     public void delete(Long id) {
         categoryRepository.deleteById(id);
     }
 
     @Transactional
+    @CacheEvict(value = {"categoryList","categoryCache"},allEntries = true)
     public void edit(Long categoryId, CategoryEditRequest form) {
         Category category = categoryRepository.findById(categoryId)
             .orElseThrow(CategoryNotFound::new);
