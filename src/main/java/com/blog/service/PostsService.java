@@ -40,7 +40,8 @@ public class PostsService {
     }
 
     @Transactional(readOnly = true)
-    public Page<PostsResponse> getPostsExcludingComment(Pageable pageable) {
+    @Cacheable(cacheNames = "pagePost", key = "#pageable.pageNumber")
+    public Page<PostsResponse> getPosts(Pageable pageable) {
         return postsRepository.getPosts(pageable);
     }
 
