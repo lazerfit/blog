@@ -55,20 +55,4 @@ document.querySelector('#post-save').addEventListener('click', function () {
 
   const form=document.querySelector('.post-save-from');
   form.submit()
-
-  // $.ajax({
-  //   url: '/post/new/',
-  //   type: 'POST',
-  //   data: JSON.stringify(postSave),
-  //   contentType: 'application/json; charset=utf-8',
-  //   headers: {
-  //     'X-CSRF-TOKEN': _token.value
-  //   }
-  // }).done(function () {
-  //   window.location.href = "/"
-  // }).fail(function (response) {
-  //   const error = JSON.parse(response.responseText)
-  //   alert(error.message)
-  // });
-
 });
