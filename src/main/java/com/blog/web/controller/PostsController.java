@@ -21,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Slf4j
@@ -70,7 +71,7 @@ public class PostsController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping("/post/new")
-    public String savePost(@Valid PostCreateForm form) {
+    public String savePost(@Valid @RequestBody PostCreateForm form) {
         PostSaveRequest saveRequest = createPostSaveRequest(form);
         postsService.save(saveRequest);
         return "redirect:/";
@@ -93,7 +94,7 @@ public class PostsController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping("/post/edit/{postId}")
-    public String editPost(@PathVariable Long postId, @Valid PostEditForm form) {
+    public String editPost(@PathVariable Long postId, @Valid @RequestBody PostEditForm form) {
         PostsUpdateRequest request = createPostEditRequest(form);
         postsService.edit(postId, request);
         return "redirect:/post/{postId}";

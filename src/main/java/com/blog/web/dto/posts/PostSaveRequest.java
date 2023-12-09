@@ -20,7 +20,6 @@ public class PostSaveRequest {
     private final Long views;
     @NotNull(message = "썸네일은 필수입니다.")
     private final String thumbnail;
-    private final TagHandler tagHandler=new TagHandler();
 
     @Builder
     public PostSaveRequest(String title, String content, Category category, String tags, Long views,
@@ -38,7 +37,7 @@ public class PostSaveRequest {
             .title(title)
             .content(content)
             .category(category)
-            .tag(tagHandler.setDefaultValueOrTransformJsonArrayToString(tags))
+            .tag(tags)
             .views(views)
             .thumbnail(thumbnail)
             .build();
