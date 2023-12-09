@@ -15,7 +15,7 @@ const main = {
     const _token=$('input[name="_csrf"]').val()
 
     $.ajax({
-      url: '/auth/login',
+      url: '/auth/login/',
       method: 'post',
       data: JSON.stringify(data),
       headers: {

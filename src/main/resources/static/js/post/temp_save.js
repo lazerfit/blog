@@ -54,7 +54,7 @@ document.querySelector('#post-save').addEventListener('click', function () {
   localStorage.clear();
 
   $.ajax({
-    url: '/post/new',
+    url: '/post/new/',
     type: 'POST',
     data: JSON.stringify(postSave),
     contentType: 'application/json; charset=utf-8',
