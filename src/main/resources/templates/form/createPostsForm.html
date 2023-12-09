@@ -34,7 +34,7 @@
   <section>
     <input id="tags" th:field="*{tags}" name="tags" class="tags" placeholder="#태그입력">
     <button type="button" class="btn btn-secondary" onclick="location.href='/'" style="float: right;margin-top: 1px;margin-left: 10px">Cancel</button>
-    <button id="post-save" type="button" class="btn btn-primary" data-bitwarden-clicked="1" style="float: right;margin-top: 1px">Submit</button>
+    <button id="post-save" type="submit" onclick="localStorage.clear();" class="btn btn-primary" data-bitwarden-clicked="1" style="float: right;margin-top: 1px">Submit</button>
     <input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
   </section>
   </form>

@@ -38,22 +38,3 @@ document.addEventListener('DOMContentLoaded', function () {
   setInterval(saveData,30000)
 });
 
-document.querySelector('#post-save').addEventListener('click', function () {
-  const title=document.querySelector('#inputDefault');
-  const categoryTitle=document.querySelector('#exampleSelect1');
-  const tags=document.querySelector('#tags');
-  const _token=document.querySelector('#csrf');
-  const postId=document.querySelector('#postId').value;
-
-  const postSave={
-    'categoryTitle':categoryTitle.value,
-    'title':title.value,
-    'content':$('#summernote').summernote('code'),
-    'tags':tags.value,
-  }
-
-  localStorage.clear();
-
-  const form=document.querySelector('.post-edit-from');
-  form.submit()
-});
