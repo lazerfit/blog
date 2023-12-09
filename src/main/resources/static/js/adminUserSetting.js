@@ -1,15 +1,16 @@
 const main = {
   init: function () {
     const _this = this;
-    $('#login-submit').on('click', function () {
-      _this.signIn();
-    });
+      document.querySelector('#login-submit').addEventListener('click',
+          function () {
+        _this.signIn();
+          });
   },
 
   signIn: function () {
     const data={
-      "email":$('#username').val(),
-      "password":$('#password').val(),
+      "email":document.querySelector('#username').value,
+      "password":document.querySelector('#password').value,
     };
 
     $.post(

@@ -13,14 +13,13 @@ public class PostsUpdateRequest {
     private final String content;
     private final String tag;
     private final Category category;
-    private final TagHandler tagHandler=new TagHandler();
     private final String thumbnail;
 
     @Builder
     public PostsUpdateRequest(String title, String content, String tag, Category category,String thumbnail) {
         this.title = title;
         this.content = content;
-        this.tag = tagHandler.setDefaultValueOrTransformJsonArrayToString(tag);
+        this.tag = tag;
         this.category = category;
         this.thumbnail=thumbnail;
     }
