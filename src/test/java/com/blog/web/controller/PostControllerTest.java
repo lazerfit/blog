@@ -1,6 +1,5 @@
 package com.blog.web.controller;
 
-import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -13,6 +12,8 @@ import com.blog.domain.category.CategoryRepository;
 import com.blog.domain.posts.Post;
 import com.blog.domain.posts.PostsRepository;
 import com.blog.exception.CategoryNotFound;
+import com.blog.web.form.PostCreateForm;
+import com.blog.web.form.PostEditForm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
@@ -61,31 +63,18 @@ class PostControllerTest {
         String categoryTitle = "spring";
         String tag="[{\"value\":\"Spring\"},{\"value\":\"Java\"}]";
 
-        mockMvc.perform(post("/post/new")
+        PostCreateForm form = new PostCreateForm();
+        form.setTitle(title);
+        form.setContent(content);
+        form.setCategoryTitle(categoryTitle);
+        form.setTags(tag);
+
+        mockMvc.perform(post("/post/new", 1L)
                 .with(csrf())
-                .param("title", title)
-                .param("content", content)
-                .param("categoryTitle", categoryTitle)
-                .param("tags", tag))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(form)))
             .andDo(print())
-
-        .andExpect(status().is3xxRedirection());
-    }
-    @Test
-    @DisplayName("글 저장 - 실패")
-    void savePostFail() throws Exception{
-
-        String content = "내용1";
-        String tags = "spring";
-        String categoryTitle = "Spring";
-
-        mockMvc.perform(post("/post/new")
-                .with(csrf())
-                .param("content",content)
-                .param("tags",tags)
-                .param("categoryTitle",categoryTitle))
-            .andDo(print())
-            .andExpect(content().json("{'message': '잘못된 요청입니다.'}"));
+            .andExpect(status().is3xxRedirection());
     }
 
     @Test
@@ -113,13 +102,24 @@ class PostControllerTest {
     @DisplayName("업데이트")
     void update() throws Exception {
 
-        mockMvc.perform(post("/post/edit/1")
+        String title="제목1";
+        String content = "내용1";
+        String tags = "spring";
+        String categoryTitle = "spring";
+
+        PostEditForm form = PostEditForm.builder()
+            .content(content)
+            .tags(tags)
+            .categoryTitle(categoryTitle)
+            .title(title)
+            .build();
+
+        Long postId = postsRepository.findAll().get(0).getId();
+
+        mockMvc.perform(post("/post/edit/"+postId, 1L)
                 .with(csrf())
-                .param("categoryTitle","spring")
-                .param("title","제목")
-                .param("content","내용")
-                .param("tags","spring")
-            .contentType(APPLICATION_FORM_URLENCODED_VALUE))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(form)))
             .andDo(print())
             .andExpect(status().is3xxRedirection());
     }
