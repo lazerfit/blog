@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
 document.querySelector('#post-save').addEventListener('click', function () {
   localStorage.clear();
 
-  const form = document.querySelector('#post-save');
+  const form = document.querySelector('.post-edit-from');
   form.submit();
 });
 
