@@ -15,7 +15,7 @@
 <body>
 <main layout:fragment="leftcolumn">
 <section class="container">
-  <form th:object="${createPostsForm}" method="post">
+  <form th:object="${createPostsForm}" method="post" class="post-save-from">
   <section class="card card-summernote-title">
     <div class="form-group" style="padding: 1px">
       <select class="form-select" id="exampleSelect1" th:field="*{categoryTitle}" style="margin-bottom: 5px;width: 20%">

@@ -54,19 +54,22 @@ document.querySelector('#post-save').addEventListener('click', function () {
 
   localStorage.clear();
 
-  $.ajax({
-    url: '/post/edit/'+postId+"/",
-    type: 'POST',
-    data: JSON.stringify(postSave),
-    contentType: 'application/json; charset=utf-8',
-    headers: {
-      'X-CSRF-TOKEN': _token.value
-    }
-  }).done(function () {
-    window.location.href = "/post/"+postId
-  }).fail(function (response) {
-    const error = JSON.parse(response.responseText)
-    alert(error.message)
-  });
+  const form=document.querySelector('.post-edit-from');
+  form.submit()
+
+  // $.ajax({
+  //   url: '/post/edit/'+postId+"/",
+  //   type: 'POST',
+  //   data: JSON.stringify(postSave),
+  //   contentType: 'application/json; charset=utf-8',
+  //   headers: {
+  //     'X-CSRF-TOKEN': _token.value
+  //   }
+  // }).done(function () {
+  //   window.location.href = "/post/"+postId
+  // }).fail(function (response) {
+  //   const error = JSON.parse(response.responseText)
+  //   alert(error.message)
+  // });
 
 });
