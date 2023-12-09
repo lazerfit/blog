@@ -27,5 +27,3 @@ spring:
             descriptor:
               sql:
                 BasicBinder: trace
-  profiles:
-    active: local
