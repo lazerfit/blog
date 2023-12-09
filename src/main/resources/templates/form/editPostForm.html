@@ -15,7 +15,7 @@
 <body>
 <main layout:fragment="leftcolumn">
   <section class="container">
-    <form th:object="${editPostsForm}" method="post" class="post-edit-from">
+    <form th:object="${editPostsForm}" th:action="@{post/edit/{postId}(postId=${postId})}" method="post" class="post-edit-from">
       <section class="card card-summernote-title">
         <div class="form-group" style="padding: 1px">
           <select class="form-select" id="exampleSelect1" th:value="${editPostsForm.categoryTitle}" th:field="*{categoryTitle}" style="margin-bottom: 5px;width: 20%">
