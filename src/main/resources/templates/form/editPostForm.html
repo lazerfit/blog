@@ -15,7 +15,7 @@
 <body>
 <main layout:fragment="leftcolumn">
   <section class="container">
-    <form th:object="${editPostsForm}" method="post" class="post-edit-from">
+    <form th:object="${editPostsForm}" th:action="@{/post/edit/{postId}(postId=${postId})}" method="post" class="post-edit-from">
       <section class="card card-summernote-title">
         <div class="form-group" style="padding: 1px">
           <select class="form-select" id="exampleSelect1" th:value="${editPostsForm.categoryTitle}" th:field="*{categoryTitle}" style="margin-bottom: 5px;width: 20%">
@@ -35,7 +35,7 @@
         <input type="hidden" id="postId" th:value="${postId}">
         <input id="tags" name="tags" th:field="*{tags}" th:value="${editPostsForm.tags}" class="tags" placeholder="#태그입력">
         <button type="button" class="btn btn-secondary" onclick="location.href='/'" style="float: right;margin-top: 1px;margin-left: 10px">Cancel</button>
-        <button id="post-save" type="submit" onclick="localStorage.clear();" class="btn btn-primary"  data-bitwarden-clicked="1" style="float: right;margin-top: 1px">Submit</button>
+        <button id="post-save" type="button" class="btn btn-primary"  data-bitwarden-clicked="1" style="float: right;margin-top: 1px">Submit</button>
         <input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
       </section>
     </form>

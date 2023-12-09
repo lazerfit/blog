@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'com.blog'
-version = '1.0.1-SNAPSHOT-'+new Date().format("yyyyMMddHHmmss")
+version = '2.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
 configurations {

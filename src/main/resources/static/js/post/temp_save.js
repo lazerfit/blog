@@ -36,4 +36,11 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   setInterval(saveData,30000)
+
+  document.querySelector('#post-save').addEventListener('click', function () {
+    localStorage.clear();
+
+    const form = document.querySelector('.post-save-from');
+    form.submit();
+  });
 });

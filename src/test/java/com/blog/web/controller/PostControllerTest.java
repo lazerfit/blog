@@ -23,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
@@ -71,8 +70,10 @@ class PostControllerTest {
 
         mockMvc.perform(post("/post/new", 1L)
                 .with(csrf())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(form)))
+                .param("categoryTitle",categoryTitle)
+                .param("content",content)
+                .param("title",title)
+                .param("tags",tag))
             .andDo(print())
             .andExpect(status().is3xxRedirection());
     }
@@ -118,8 +119,10 @@ class PostControllerTest {
 
         mockMvc.perform(post("/post/edit/"+postId, 1L)
                 .with(csrf())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(form)))
+                .param("categoryTitle",categoryTitle)
+                .param("content",content)
+                .param("title",title)
+                .param("tags",tags))
             .andDo(print())
             .andExpect(status().is3xxRedirection());
     }

@@ -2,6 +2,7 @@ spring:
   cache:
     cache-names: postCached, categoryCache, pagePost, categoryList
   jpa:
+    open-in-view: false
     hibernate:
       dialect: org.hibernate.dialect.MySQL8InnoDBDialect
       naming:
@@ -26,5 +27,3 @@ spring:
             descriptor:
               sql:
                 BasicBinder: trace
-  profiles:
-    active: local
