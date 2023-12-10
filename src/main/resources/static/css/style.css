@@ -1178,3 +1178,7 @@ img.profile {
 .search-input {
   width: 100%;
 }
+
+.card-footer span {
+  margin-left: 5px;
+}

@@ -44,7 +44,13 @@
         <a href="#" title="facebook" onclick="facebook()"><img src="/img/facebook.png" class="share-button facebook" alt="facebook"/></a>
         <a href="#" title="twitter" onclick="twitter()"><img src="/img/twitter.png" class="share-button twitter" alt="twitter"  /></a>
         <a href="#" title="kakaoTalk"><img src="/img/kakao-talk3.png" class="share-button" alt="twitter" style="margin-left: 5px" /></a>
-          <a href="#" title="clipboard" id="clipboard"><img src="/img/clothespin.png" class="share-button" alt="clip" style="margin-left: 5px" /></a>
+        <span>
+	        <script type="text/javascript" src="https://ssl.pstatic.net/share/js/naver_sharebutton.js"></script>
+	        <script type="text/javascript">
+	          new ShareNaver.makeButton({"type": "b"});
+	        </script>
+        </span>
+        <a href="#" title="clipboard" id="clipboard"><img src="/img/clothespin.png" class="share-button" alt="clip" style="margin-left: 5px" /></a>
         <script type="text/javascript" src="/js/copyUrl.js"></script>
         <script type="text/javascript" src="/js/snsShare.js"></script>
       </section>
