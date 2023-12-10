@@ -370,7 +370,7 @@ a:hover{
 .share-button {
   width: 25px;
   height: 25px;
-  margin-left: 13px;
+  margin-left: 2px;
 }
 
 .categoryList a{
@@ -1177,4 +1177,8 @@ img.profile {
 
 .search-input {
   width: 100%;
+}
+
+.card-footer span {
+  margin-left: 5px;
 }
