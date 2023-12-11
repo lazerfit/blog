@@ -25,12 +25,13 @@ import org.springframework.session.security.web.authentication.SpringSessionReme
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true,securedEnabled = true,jsr250Enabled = true)
+@EnableMethodSecurity(securedEnabled = true,jsr250Enabled = true)
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
     private final ObjectMapper objectMapper;
     private final CustomUserDetailsService customUserDetailsService;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -71,7 +72,10 @@ public class WebSecurityConfig {
             )
             .rememberMe(rm -> rm.rememberMeParameter("remember")
                 .alwaysRemember(false)
-                .tokenValiditySeconds(2592000));
+                .tokenValiditySeconds(2592000))
+            .oauth2Login(oauth2Login ->
+                oauth2Login
+                    .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService)));
         return http.build();
     }
 

@@ -1,23 +1,25 @@
 const main = {
   init: function () {
     const _this = this;
-    $('#login-submit').on('click', function () {
+    document.querySelector('#login-submit').addEventListener('click',
+        function () {
       _this.signIn();
-    });
+        });
   },
 
   signIn: function () {
-    const data={
-      "email":$('#username').val(),
-      "password":$('#password').val(),
+    const data = {
+      "email": document.querySelector('#username').value,
+      "password": document.querySelector('#password').value,
     };
 
-    const _token=$('input[name="_csrf"]').val()
+    const _token = document.querySelector('input[name="_csrf"]').value;
 
     $.ajax({
-      url: '/auth/login/',
+      url: '/auth/login',
       method: 'post',
       data: JSON.stringify(data),
+      contentType:'application/json; charset=utf-8',
       headers: {
         'X-CSRF-TOKEN': _token
       }

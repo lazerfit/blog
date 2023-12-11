@@ -21,7 +21,7 @@ public class AuthController {
     @PreAuthorize("permitAll()")
     @GetMapping("/login")
     public String login() {
-        return "form/loginForm";
+        return "form/login";
     }
 
     @PreAuthorize("permitAll()")
