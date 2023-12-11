@@ -50,6 +50,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-devtools'
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.2.1'
 
+    implementation('org.springframework.boot:spring-boot-starter-oauth2-client')
 
     implementation('org.jsoup:jsoup:1.16.1')
 

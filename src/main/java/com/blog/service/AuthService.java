@@ -1,5 +1,6 @@
 package com.blog.service;
 
+import com.blog.domain.user.Role;
 import com.blog.domain.user.SiteUser;
 import com.blog.domain.user.UserRepository;
 import com.blog.exception.AlreadyExistsEmailException;
@@ -30,6 +31,7 @@ public class AuthService {
             .name(siteUserDto.getName())
             .password(encryptedPassword)
             .createdDate(LocalDateTime.now())
+            .role(Role.USER)
             .build();
 
         userRepository.save(user);
