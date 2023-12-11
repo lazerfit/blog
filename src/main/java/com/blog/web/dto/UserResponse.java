@@ -16,10 +16,12 @@ public class UserResponse implements Serializable {
     private final String name;
     private final String email;
     private final LocalDateTime createdDate;
+    private final String role;
 
     public UserResponse(SiteUser user) {
         this.name = user.getName();
         this.email = user.getEmail();
         this.createdDate = user.getCreatedDate();
+        this.role=user.getRoleKey();
     }
 }
