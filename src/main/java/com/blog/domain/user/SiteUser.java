@@ -39,7 +39,7 @@ public class SiteUser {
     private String picture;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, columnDefinition = "default USER")
+    @Column(nullable = false)
     private Role role;
 
     @Builder
@@ -66,6 +66,10 @@ public class SiteUser {
 
     public void changePassword(String newPassword) {
         this.password=newPassword;
+    }
+
+    public void editRole(Role role) {
+        this.role=role;
     }
 
 }
