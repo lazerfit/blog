@@ -5,16 +5,17 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
-        ddl-auto: create-drop
-#    database-platform: org.hibernate.dialect.H2Dialect
-#  h2:
-#    console:
-#      enabled: true
-#  datasource:
-#    url: jdbc:h2:mem:test;DB_CLOSE_ON_EXIT=FALSE
-#    username: sa
-#    password:
-#    driverClassName: org.h2.Driver
+        ddl-auto: none
+    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
+  h2:
+    console:
+      enabled: true
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+    driverClassName: org.h2.Driver
 
   #Test OAuth
   security:
@@ -27,3 +28,6 @@ spring:
             scope:
               - profile
               - email
+  sql:
+    init:
+      mode: always
