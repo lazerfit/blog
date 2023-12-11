@@ -21,6 +21,8 @@ spring:
   logging:
     level:
       org:
+        springframework:
+          security: DEBUG
         hibernate:
           SQL: debug
           type:
@@ -28,4 +30,4 @@ spring:
               sql:
                 BasicBinder: trace
   profiles:
-    active: local
+    active: local, oauth
