@@ -14,6 +14,19 @@ function openPasswordModal() {
   $('#change-password-modal').modal('show');
 }
 
+function openRoleModal() {
+  const user_email = document.getElementById('user-email').innerText;
+  const userEmailElement = document.querySelector('.user-email');
+  userEmailElement.value=user_email;
+
+  $('#change-role-modal').modal('show');
+}
+
+function editRole() {
+  const form = document.querySelector('#edit-role-form');
+  form.submit();
+}
+
 function passwordCheck() {
   if (document.getElementById('new-password').value === document.getElementById('new-password-check').value) {
     document.getElementById('password-check').innerHTML = "비밀번호가 일치합니다.";
