@@ -1,4 +1,4 @@
-package com.blog.config;
+package com.blog.config.user;
 
 import com.blog.domain.user.SiteUser;
 import java.io.Serializable;

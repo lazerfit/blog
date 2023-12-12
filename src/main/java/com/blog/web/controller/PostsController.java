@@ -218,7 +218,6 @@ public class PostsController {
 
     public PostEditForm createEditPostForm(Long postId) {
 
-        //comment 안 불러와도 될 듯
         PostsResponse originalPost = postsService.getPostsById(postId);
         String title=originalPost.getTitle();
         String content=originalPost.getContent();

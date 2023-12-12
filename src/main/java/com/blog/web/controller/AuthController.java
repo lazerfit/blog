@@ -1,7 +1,7 @@
 package com.blog.web.controller;
 
 import com.blog.service.AuthService;
-import com.blog.web.dto.SiteUserDto;
+import com.blog.web.dto.user.SiteUserDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

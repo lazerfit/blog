@@ -1,4 +1,4 @@
-package com.blog.web.dto;
+package com.blog.web.dto.user;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;

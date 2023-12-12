@@ -4,7 +4,7 @@ import com.blog.domain.user.Role;
 import com.blog.domain.user.SiteUser;
 import com.blog.domain.user.UserRepository;
 import com.blog.exception.AlreadyExistsEmailException;
-import com.blog.web.dto.SiteUserDto;
+import com.blog.web.dto.user.SiteUserDto;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;

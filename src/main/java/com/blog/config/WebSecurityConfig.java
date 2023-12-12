@@ -3,6 +3,8 @@ package com.blog.config;
 import com.blog.config.filter.EmailPasswordAuthFilter;
 import com.blog.config.handler.Http401Handler;
 import com.blog.config.handler.LoginFailHandler;
+import com.blog.config.user.CustomOAuth2UserService;
+import com.blog.config.user.CustomUserDetailsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
