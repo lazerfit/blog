@@ -34,6 +34,6 @@ public class AuthController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/admin/setting")
     public String adminManagePage() {
-        return "adminSetting";
+        return "admin/adminSetting";
     }
 }

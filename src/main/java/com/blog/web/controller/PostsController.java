@@ -51,7 +51,7 @@ public class PostsController {
         // sidebar
         var allCategoryAndPostCreatedDate = categoryService.getAllCategoryAndPostCreatedDate();
         model.addAttribute(SIDEBAR_CATEGORY, allCategoryAndPostCreatedDate);
-        return "posts";
+        return "post/posts";
     }
 
     // Create
@@ -135,7 +135,7 @@ public class PostsController {
         // sidebar
         var allCategoryAndPostCreatedDate = categoryService.getAllCategoryAndPostCreatedDate();
         model.addAttribute(SIDEBAR_CATEGORY, allCategoryAndPostCreatedDate);
-        return "postsSearchedByKeyword";
+        return "post/postsSearchedByKeyword";
     }
 
     @PreAuthorize("permitAll()")
@@ -153,7 +153,7 @@ public class PostsController {
         model.addAttribute(SIDEBAR_CATEGORY, allCategoryAndPostCreatedDate);
 
         getPlainTextContentAndSendView(model, categorizedPosts);
-        return "postsSortedByCategory";
+        return "post/postsSortedByCategory";
     }
 
     @PreAuthorize("permitAll()")
@@ -168,7 +168,7 @@ public class PostsController {
         // sidebar
         var allCategoryAndPostCreatedDate = categoryService.getAllCategoryAndPostCreatedDate();
         model.addAttribute(SIDEBAR_CATEGORY, allCategoryAndPostCreatedDate);
-        return "postsSortedByTags";
+        return "post/postsSortedByTags";
     }
 
     // Method

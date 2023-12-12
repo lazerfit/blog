@@ -1,13 +1,12 @@
 package com.blog.web.controller;
 
-import com.blog.domain.user.UserRepository;
 import com.blog.service.CategoryService;
 import com.blog.service.UserService;
-import com.blog.web.dto.user.UserPasswordEditRequest;
-import com.blog.web.dto.user.UserResponse;
 import com.blog.web.dto.category.CategoryEditRequest;
 import com.blog.web.dto.category.CategoryResponse;
 import com.blog.web.dto.category.CategorySaveRequest;
+import com.blog.web.dto.user.UserPasswordEditRequest;
+import com.blog.web.dto.user.UserResponse;
 import com.blog.web.form.CategoryEditForm;
 import com.blog.web.form.CategoryForm;
 import com.blog.web.form.UserRoleEditForm;
@@ -34,7 +33,6 @@ public class AdminManageController {
     private final CategoryService categoryService;
     private final UserService userService;
     private static final String REDIRECT_HOME_URL = "redirect:/admin/setting/category";
-    private final UserRepository userRepository;
 
     @GetMapping("/admin/setting/category")
     public String manageCategory(Model model) {
@@ -77,7 +75,7 @@ public class AdminManageController {
         List<UserResponse> allUsers = userService.findAllUser();
         model.addAttribute("allUsers", allUsers);
         model.addAttribute("roleEditForm", new UserRoleEditForm());
-        return "adminUserSetting";
+        return "admin/adminUserSetting";
     }
 
     @PostMapping("/admin/setting/account/edit/password")
