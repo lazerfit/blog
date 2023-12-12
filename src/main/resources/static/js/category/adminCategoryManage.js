@@ -22,9 +22,30 @@ function openRoleModal() {
   $('#change-role-modal').modal('show');
 }
 
-function editRole() {
-  const form = document.querySelector('#edit-role-form');
-  form.submit();
+function editRole(button) {
+  const email=button.getAttribute('data-email');
+  const role = button.parentNode.parentNode.firstElementChild.firstElementChild.value;
+  const _token = document.getElementById('layout-csrf').value;
+
+  const data={
+    "email":email,
+    "role":role
+  }
+
+  $.ajax({
+    url: '/admin/setting/account/edit/role',
+    type: 'POST',
+    data: JSON.stringify(data),
+    contentType: 'application/json; charset=utf-8',
+    headers: {
+      'X-CSRF-TOKEN': _token
+    },
+  }).done(function () {
+    alert('수정이 완료되었습니다.')
+  }).fail(function (result) {
+    const error = JSON.parse(result);
+    alert(error.message);
+  });
 }
 
 function passwordCheck() {
