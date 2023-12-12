@@ -13,6 +13,7 @@
   <meta property="og:type" content="website"/>
   <meta property="og:title" th:content="${postFindById.getTitle()}"/>
   <meta property="og:image" th:content="${postFindById.getThumbnail()}" th:if="${postFindById.getThumbnail()!=null}"/>
+  <meta property="og:image" content="https://drive.google.com/uc?export=download&id=10N4Yv5PgVo4j5o0pVUYxmSxWUTrJjYKm" th:unless="${postFindById.getThumbnail()!=null}"/>
   <meta property="og:description" th:if="${plainTextContent.length()>200}" th:content="${#strings.substring(plainTextContent,0,200)}">
   <meta property="og:description" th:if="${plainTextContent.length()<200}" th:content="${plainTextContent}">
 </head>
