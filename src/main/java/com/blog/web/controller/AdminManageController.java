@@ -77,7 +77,7 @@ public class AdminManageController {
         List<UserResponse> allUsers = userService.findAllUser();
         model.addAttribute("allUsers", allUsers);
         model.addAttribute("roleEditForm", new UserRoleEditForm());
-        return "adminUserSetting";
+        return "admin/adminUserSetting";
     }
 
     @PostMapping("/admin/setting/account/edit/password")
