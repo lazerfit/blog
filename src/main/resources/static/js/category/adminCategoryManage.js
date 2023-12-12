@@ -14,6 +14,40 @@ function openPasswordModal() {
   $('#change-password-modal').modal('show');
 }
 
+function openRoleModal() {
+  const user_email = document.getElementById('user-email').innerText;
+  const userEmailElement = document.querySelector('.user-email');
+  userEmailElement.value=user_email;
+
+  $('#change-role-modal').modal('show');
+}
+
+function editRole(button) {
+  const email=button.getAttribute('data-email');
+  const role = button.parentNode.parentNode.firstElementChild.firstElementChild.value;
+  const _token = document.getElementById('layout-csrf').value;
+
+  const data={
+    "email":email,
+    "role":role
+  }
+
+  $.ajax({
+    url: '/admin/setting/account/edit/role',
+    type: 'POST',
+    data: JSON.stringify(data),
+    contentType: 'application/json; charset=utf-8',
+    headers: {
+      'X-CSRF-TOKEN': _token
+    },
+  }).done(function () {
+    alert('수정이 완료되었습니다.')
+  }).fail(function (result) {
+    const error = JSON.parse(result);
+    alert(error.message);
+  });
+}
+
 function passwordCheck() {
   if (document.getElementById('new-password').value === document.getElementById('new-password-check').value) {
     document.getElementById('password-check').innerHTML = "비밀번호가 일치합니다.";

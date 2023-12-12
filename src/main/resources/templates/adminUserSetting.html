@@ -12,19 +12,30 @@
   <table class="user-table">
     <thead>
       <tr>
-        <th scope="col">name</th>
-        <th scope="col">email</th>
-        <th scope="col">created Date</th>
-        <th scope="col">change password</th>
+        <th scope="col">권한</th>
+        <th scope="col">이름</th>
+        <th scope="col">이메일</th>
+        <th scope="col">생성 날짜</th>
+        <th scope="col">change pwd</th>
+        <th scope="col">change role</th>
       </tr>
     </thead>
     <tbody>
-      <th:block th:each="user:${allUsers}">
+      <th:block th:each="user:${allUsers}" th:with="email=${user.getEmail()}">
         <tr>
+          <td>
+            <select class="form-select exampleSelect1">
+            <option th:if="${user.getRole()=='ROLE_ADMIN'}" value="관리자" selected>관리자</option>
+            <option th:unless="${user.getRole()=='ROLE_ADMIN'}" value="일반" selected>일반</option>
+            <option th:if="${user.getRole()=='ROLE_ADMIN'}" value="일반">일반</option>
+            <option th:unless="${user.getRole()=='ROLE_ADMIN'}" value="관리자">관리자</option>
+          </select>
+          </td>
           <td th:text="${user.getName()}"></td>
-          <td id="user-email" th:text="${user.getEmail()}"></td>
+          <td class="user-email" th:text="${user.getEmail()}"></td>
           <td th:text="${#temporals.format(user.getCreatedDate(),'yyyy-MM-dd')}"></td>
-          <td><button class="btn" onclick="openPasswordModal()" id="change-password" type="button" data-bs-toggle="modal" data-bs-target="#change-password-modal">비밀번호 변경</button> </td>
+          <td><button th:if="${user.getCreatedDate()}" class="btn" onclick="openPasswordModal()" id="change-password" type="button" data-bs-toggle="modal" data-bs-target="#change-password-modal">비밀번호 변경</button> </td>
+          <td><button class="btn change-role" onclick="editRole(this)" th:data-email="${user.getEmail()}">역할 변경</button></td>
         </tr>
       </th:block>
     </tbody>

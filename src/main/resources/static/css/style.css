@@ -1182,3 +1182,37 @@ img.profile {
 .card-footer span {
   margin-left: 5px;
 }
+
+.change-role {
+  padding: 0;
+}
+
+.change-role:hover {
+  background-color: var(--color-main);
+  color: white;
+}
+
+.exampleSelect1 {
+  width: 100%;
+  max-width: 110px;
+  padding-top: 0;
+  padding-bottom: 5px;
+}
+
+.user-table {
+  table-layout: fixed;
+  width: 100%;
+  text-align: center;
+}
+
+.user-table td, .user-table th {
+  padding:10px 20px;
+  word-break: break-all;
+}
+ .user-table td {
+    height: 42px;
+ }
+
+ .list-group-item {
+   text-align: center;
+ }
