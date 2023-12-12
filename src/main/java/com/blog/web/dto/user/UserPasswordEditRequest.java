@@ -1,4 +1,4 @@
-package com.blog.web.dto;
+package com.blog.web.dto.user;
 
 import lombok.Builder;
 import lombok.Getter;
