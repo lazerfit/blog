@@ -1,7 +1,15 @@
-# lazerfit's blog   
+# [gomdolog](https://gomdolog.store)
 
 lazerfit 의 개인 blog 프로젝트입니다.   
 개발/블록체인/음식점 리뷰 등을 Post 합니다.
+
+- 위지윅(summernote), Tagify(태그 입력 모듈), utternace(댓글 모듈) 사용 
+- 구글, 네이버 간편 로그인 사용
+- 카카오, 네이버, 페이스북, X 공유하기 사용
+- 모바일 화면 최적화 
+- Github Action, nginx 이용한 CI/CD pipeline 구축
+- Cloudflare 서비스 사용
+- Let's encrypt 툥한 SSL 인증서 발급 및 자동 갱신
 
 ## *Development Environment*   
 
