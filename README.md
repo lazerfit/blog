@@ -3,6 +3,8 @@
 lazerfit 의 개인 blog 프로젝트입니다.   
 개발/블록체인/음식점 리뷰 등을 Post 합니다.
 
+- MVC 프레임워크 기반 백엔드 서버 구축
+- Thymeleaf 기반 SSR 구축
 - 위지윅(summernote), Tagify(태그 입력 모듈), utternaces(댓글 모듈) 사용
 - 게시글 임시저장 기능 구현 (HTML5 localStorage 사용)
 - 캐싱 구현 
@@ -22,16 +24,9 @@ lazerfit 의 개인 blog 프로젝트입니다.
 - MySQL
 
 ## *Tech Stack*   
-<img alt="Spring_Boot" src ="https://img.shields.io/badge/Spring_Boot-6DB33F.svg?&style=for-the-badge&logo=Spring-Boot&logoColor=white"/>
-<img alt="Spring_Security" src ="https://img.shields.io/badge/Spring Security-6DB33F.svg?&style=for-the-badge&logo=Spring Security&logoColor=white"/>
-<img alt="JPA" src ="https://img.shields.io/badge/JPA-59666C.svg?&style=for-the-badge&logo=Hibernate&logoColor=white"/>
+<img alt="Spring_Boot" src ="https://img.shields.io/badge/Spring_Boot-6DB33F.svg?&style=for-the-badge&logo=Spring-Boot&logoColor=white"/><img alt="Spring_Security" src ="https://img.shields.io/badge/Spring Security-6DB33F.svg?&style=for-the-badge&logo=Spring Security&logoColor=white"/><img alt="JPA" src ="https://img.shields.io/badge/JPA-59666C.svg?&style=for-the-badge&logo=Hibernate&logoColor=white"/>
 
-<img alt="Thymeleaf" src ="https://img.shields.io/badge/Thymeleaf-005F0F.svg?&style=for-the-badge&logo=Thymeleaf&logoColor=white"/>
-<img alt="Bootstrap" src ="https://img.shields.io/badge/Bootstrap-7952B3.svg?&style=for-the-badge&logo=Bootstrap&logoColor=white"/>
-<img alt="Amazon_AWS" src ="https://img.shields.io/badge/Amazon_AWS-232F3E.svg?&style=for-the-badge&logo=Amazon-AWS&logoColor=white"/>
-<img alt="Amazon_RDB" src ="https://img.shields.io/badge/ Amazon RDB-232F3E.svg?&style=for-the-badge&logo=Amazon DynamoDB&logoColor=white"/>
-<img alt="Amazon S3" src ="https://img.shields.io/badge/ Amazon S3-569A31.svg?&style=for-the-badge&logo=Amazon S3&logoColor=white"/>
-<img alt="NGINX" src ="https://img.shields.io/badge/NGINX-009639.svg?&style=for-the-badge&logo=NGINX&logoColor=white"/>
+<img alt="Thymeleaf" src ="https://img.shields.io/badge/Thymeleaf-005F0F.svg?&style=for-the-badge&logo=Thymeleaf&logoColor=white"/><img alt="Bootstrap" src ="https://img.shields.io/badge/Bootstrap-7952B3.svg?&style=for-the-badge&logo=Bootstrap&logoColor=white"/><img alt="Amazon_AWS" src ="https://img.shields.io/badge/Amazon_AWS-232F3E.svg?&style=for-the-badge&logo=Amazon-AWS&logoColor=white"/><img alt="Amazon_RDB" src ="https://img.shields.io/badge/ Amazon RDB-232F3E.svg?&style=for-the-badge&logo=Amazon DynamoDB&logoColor=white"/><img alt="Amazon S3" src ="https://img.shields.io/badge/ Amazon S3-569A31.svg?&style=for-the-badge&logo=Amazon S3&logoColor=white"/><img alt="NGINX" src ="https://img.shields.io/badge/NGINX-009639.svg?&style=for-the-badge&logo=NGINX&logoColor=white"/>
 
 #### Build Tool   
 
@@ -40,8 +35,7 @@ lazerfit 의 개인 blog 프로젝트입니다.
 
 #### Database   
 
-<img alt="MariaDB" src ="https://img.shields.io/badge/MariaDB-003545.svg?&style=for-the-badge&logo=MariaDB&logoColor=white"/>
-<img alt="mysql" src ="https://img.shields.io/badge/mysql-4479A1.svg?&style=for-the-badge&logo=MariaDB&logoColor=white"/>
+<img alt="MariaDB" src ="https://img.shields.io/badge/MariaDB-003545.svg?&style=for-the-badge&logo=MariaDB&logoColor=white"/><img alt="mysql" src ="https://img.shields.io/badge/mysql-4479A1.svg?&style=for-the-badge&logo=MariaDB&logoColor=white"/>
 ***
 
 
@@ -59,9 +53,8 @@ lazerfit 의 개인 blog 프로젝트입니다.
   - ~~Search~~ [V] / [230628]
   - ~~조회수~~ [V] / [230709]
   - ~~댓글~~ [V] / [230718]
-  - Admin 페이지 개선
-  - 대댓글 작성 후 페이지에 바로 보이지 않음
   - ~~댓글 수정시 (수정) 표시~~ [V] [231122]
+  - Admin 페이지 개선
 ***
 
 ## *개발 일지*
