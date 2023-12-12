@@ -3,13 +3,15 @@ package com.blog.web.controller;
 import com.blog.domain.user.Role;
 import com.blog.domain.user.SiteUser;
 import com.blog.domain.user.UserRepository;
-import com.blog.service.UserService;
+import com.blog.web.form.UserRoleEditForm;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
@@ -24,13 +26,13 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 class AdminManageControllerTest {
 
     @Autowired
-    private UserService userService;
-    @Autowired
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @AfterEach
     void tearDown() {
@@ -48,9 +50,13 @@ class AdminManageControllerTest {
             .build()
         );
 
+        UserRoleEditForm form = new UserRoleEditForm();
+        form.setEmail(newUser.getEmail());
+        form.setRole("관리자");
+
         mockMvc.perform(MockMvcRequestBuilders.post("/admin/setting/account/edit/role")
-                .param("email", newUser.getEmail())
-                .param("role", "관리자")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(form))
                 .with(SecurityMockMvcRequestPostProcessors.csrf()))
             .andDo(MockMvcResultHandlers.print())
             .andExpect(MockMvcResultMatchers.status().isOk());

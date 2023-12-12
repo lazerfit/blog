@@ -10,10 +10,11 @@ import com.blog.web.dto.UserResponse;
 import com.blog.web.form.UserRoleEditForm;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -41,6 +42,7 @@ public class UserService {
 
     @Transactional
     public void editRole(UserRoleEditForm form) {
+        log.info(form.getEmail());
         SiteUser siteUser = userRepository.findByEmail(form.getEmail())
             .orElseThrow(UserNotFound::new);
         if (form.getRole().equals("관리자")) {

@@ -88,7 +88,7 @@ public class AdminManageController {
 
     @PostMapping("/admin/setting/account/edit/role")
     @ResponseBody
-    public ResponseEntity<String> editRole(@Valid UserRoleEditForm form) {
+    public ResponseEntity<String> editRole(@RequestBody @Valid UserRoleEditForm form) {
         userService.editRole(form);
         return new ResponseEntity<>(HttpStatus.OK);
     }
