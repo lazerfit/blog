@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin_custom.css">
+  <title>Dashboard</title>
+</head>
+<body>
+    <input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+    <div class="container">
+      <!-- Sidebar Section-->
+      <aside>
+        <div class="toggle">
+          <div class="logo">
+            <img src="/img/cat2.png" alt="로고 사진">
+            <h2>gomdolog</h2>
+          </div>
+          <div class="close" id="close-btn">
+            <span class="material-icons-sharp">
+              close
+            </span>
+          </div>
+        </div>
+        <div class="sidebar">
+          <a href="#" class="dashboard" type="button">
+            <span class="material-icons-sharp">
+              dashboard
+            </span>
+            <h3>Dashboard</h3>
+          </a>
+          <a href="#" class="users active" type="button">
+            <span class="material-icons-sharp">
+              person_outline
+            </span>
+            <h3>Users</h3>
+          </a>
+          <a href="#" class="analytics" type="button">
+            <span class="material-icons-sharp">
+              insights
+            </span>
+            <h3>Analytics</h3>
+          </a>
+          <a href="#" class="category-sidebar" type="button">
+            <span class="material-icons-sharp">
+              category
+            </span>
+            <h3>Category</h3>
+          </a>
+          <a href="#" class="setting" type="button">
+            <span class="material-icons-sharp">
+              settings
+            </span>
+            <h3>Settings</h3>
+          </a>
+          <a href="#">
+            <span class="material-icons-sharp">
+              add
+            </span>
+            <h3>New Login</h3>
+          </a>
+          <a href="#">
+            <span class="material-icons-sharp">
+              logout
+            </span>
+            <h3>Logout</h3>
+          </a>
+        </div>
+      </aside>
+      <!-- End of Sidebar Section-->
+
+      <!-- Main Content -->
+      <main>
+        <!-- Category -->
+        <div class="category">
+          <h1>Category</h1>
+          <div class="category-list">
+            <table class="category-table">
+              <thead>
+              <tr>
+                <th>이름</th>
+                <th>순서</th>
+              </tr>
+              </thead>
+              <tbody>
+              <th:block th:each="category:${allCategory}">
+                <tr class="drag-item" draggable="true">
+                  <td th:text="${category.getTitle()}"></td>
+                  <td>
+                    <input type="text" class="order-num" th:value="${category.getListOrder()}">
+                  </td>
+                  <td>
+                    <a href="#" class="category-edit-btn" type="button" th:data-title="${category.getTitle()}" onclick="submitCategory(this)">
+                    <span class="material-icons-sharp">
+                      send
+                    </span>
+                    </a>
+                  </td>
+                </tr>
+              </th:block>
+              </tbody>
+            </table>
+          </div>
+          <div class="category-insertRow">
+            <a type="button" onclick="insertRow()">
+              <span class="material-icons-sharp">
+                add
+              </span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Analyses -->
+        <div class="analyse">
+          <h1>Analytics</h1>
+        </div>
+        <!-- End of Analyses -->
+
+        <!-- User Section -->
+        <div class="new-users">
+          <h2>Users</h2>
+          <div class="user-list">
+            <th:block th:each="user:${allUsers}">
+            <div class="user">
+              <img th:if="${user.getProfilePicture()}" th:src="${user.getProfilePicture()}" alt="유저 프로필 사진">
+              <img th:unless="${user.getProfilePicture()}" src="/img/cat2.png" alt="유저 프로필 사진">
+              <h3 th:text="${user.getName()}">Meow</h3>
+            </div>
+            </th:block>
+          </div>
+        </div>
+        <div class="user-info">
+          <h2>유저 정보</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>이름</th>
+                <th>email</th>
+                <th>권한</th>
+              </tr>
+            </thead>
+            <tbody>
+              <th:block th:each="user:${allUsers}">
+              <tr>
+                <td th:text="${user.getName()}"></td>
+                <td th:text="${user.getEmail()}"></td>
+                <td>
+                  <select class="user-role-selection">
+                    <option th:if="${user.getRole()=='ROLE_ADMIN'}" value="관리자" selected>관리자</option>
+                    <option th:unless="${user.getRole()=='ROLE_ADMIN'}" value="일반" selected>일반</option>
+                    <option th:if="${user.getRole()=='ROLE_ADMIN'}" value="일반">일반</option>
+                    <option th:unless="${user.getRole()=='ROLE_ADMIN'}" value="관리자">관리자</option>
+                  </select>
+                </td>
+                <td>
+                  <a href="#" class="user-edit-role-btn" type="button" th:data-email="${user.getEmail()}" onclick="editRole(this)">
+                    <span class="material-icons-sharp">
+                      send
+                    </span>
+                  </a>
+                </td>
+              </tr>
+              </th:block>
+            </tbody>
+          </table>
+        </div>
+        <!-- End of User Section -->
+      </main>
+      <!-- End of Main Content -->
+
+      <!-- Right Section -->
+      <div class="right-section">
+        <!-- Nav section -->
+        <div class="nav">
+          <button id="menu-btn">
+            <span class="material-icons-sharp">
+              menu
+            </span>
+          </button>
+          <div class="dark-mode">
+            <span class="material-icons-sharp
+            active">
+              light_mode
+            </span>
+            <span class="material-icons-sharp">
+              dark_mode
+            </span>
+          </div>
+          <div class="profile">
+            <div class="info">
+              <p>Hey, <b>ddoddi</b></p>
+              <small class="text-muted">Admin</small>
+            </div>
+            <div class="profile-photo">
+              <img src="/img/cat2.png" alt="관리자 프로필 사진">
+            </div>
+          </div>
+        </div>
+        <!-- End of Nav Section -->
+        <div class="user-profile">
+          <div class="logo">
+            <img src="/img/cat2.png" alt="user profile">
+            <h2>ddoddi</h2>
+            <p>반갑습니다.</p>
+          </div>
+        </div>
+
+        <div class="reminders">
+          <div class="header">
+            <h2>Reminders</h2>
+            <span class="material-icons-sharp">
+              notifications_none
+            </span>
+          </div>
+
+          <div class="notification">
+            <div class="icon">
+              <span class="material-icons-sharp">
+                volume_up
+              </span>
+            </div>
+            <div class="content">
+              <div class="info">
+                <h3>Workshop</h3>
+                <small class="text_muted">
+                  08:00 - 12:00 PM
+                </small>
+              </div>
+              <span class="material-icons-sharp">
+                more_vert
+              </span>
+            </div>
+          </div>
+
+          <div class="notification deactive">
+            <div class="icon">
+              <span class="material-icons-sharp">
+                edit
+              </span>
+            </div>
+            <div class="content">
+              <div class="info">
+                <h3>Workshop</h3>
+                <small class="text_muted">
+                  08:00 - 12:00 PM
+                </small>
+              </div>
+              <span class="material-icons-sharp">
+                more_vert
+              </span>
+            </div>
+          </div>
+
+          <div class="notification add-reminder">
+            <div>
+              <span class="material-icons-sharp">
+                add
+              </span>
+              <h3>Add Reminder</h3>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script src="/js/utils/dragging.js"></script>
+    <script src="/js/utils/admin.js"></script>
+</body>
+</html>
+

@@ -16,6 +16,7 @@ public class UserResponse implements Serializable {
     private final String name;
     private final String email;
     private final LocalDateTime createdDate;
+    private final String profilePicture;
     private final String role;
 
     public UserResponse(SiteUser user) {
@@ -23,5 +24,6 @@ public class UserResponse implements Serializable {
         this.email = user.getEmail();
         this.createdDate = user.getCreatedDate();
         this.role=user.getRoleKey();
+        this.profilePicture=user.getPicture();
     }
 }
