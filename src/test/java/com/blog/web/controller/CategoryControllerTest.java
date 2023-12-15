@@ -46,10 +46,14 @@ class CategoryControllerTest {
     @WithMockUser(roles = {"ADMIN"})
     void saveCategory() throws Exception {
 
-        mockMvc.perform(post("/admin/setting/category")
+        CategoryEditForm form = new CategoryEditForm();
+        form.setTitle("spring");
+        form.setListOrder(1);
+
+        mockMvc.perform(post("/admin/setting/category/edit")
                 .with(csrf())
-                .param("title", "spring")
-                .param("listOrder", "1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(form))
             )
             .andDo(print())
             .andExpect(status().is3xxRedirection());
@@ -73,13 +77,14 @@ class CategoryControllerTest {
     @WithMockUser(roles = {"ADMIN"})
     void updateCategory() throws Exception {
 
-        makeCategory("spring",1);
+        Category category = makeCategory("spring", 1);
 
         CategoryEditForm categoryEditForm = new CategoryEditForm();
-        categoryEditForm.setTitle("고양이");
-        categoryEditForm.setListOrder(1);
+        categoryEditForm.setTitle("spring");
+        categoryEditForm.setListOrder(2);
+        categoryEditForm.setId(category.getId());
 
-        mockMvc.perform(post("/admin/setting/category/edit/{categoryId}", 1L)
+        mockMvc.perform(post("/admin/setting/category/edit")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(categoryEditForm)))
@@ -87,11 +92,11 @@ class CategoryControllerTest {
             .andExpect(status().is3xxRedirection());
     }
 
-    private void makeCategory(String categoryTitle, int listOrder) {
+    private Category makeCategory(String categoryTitle, int listOrder) {
         Category category = Category.builder()
             .title(categoryTitle)
             .listOrder(listOrder)
             .build();
-        categoryRepository.save(category);
+        return categoryRepository.save(category);
     }
 }
