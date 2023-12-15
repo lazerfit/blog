@@ -7,6 +7,7 @@ lazerfit 의 개인 blog 프로젝트입니다.
 - Thymeleaf 기반 SSR 구축
 - 위지윅(summernote), Tagify(태그 입력 모듈), utternaces(댓글 모듈) 사용
 - 게시글 임시저장 기능 구현 (HTML5 localStorage 사용)
+- 중복없는 조회수 구현(HTML5 localStorage)+OptimisticLock 적용
 - 캐싱 구현 
 - 구글, 네이버 간편 로그인 사용
 - 카카오, 네이버, 페이스북, X 공유하기 사용
