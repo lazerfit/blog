@@ -88,8 +88,25 @@ function editRole(button) {
   const role=button.parentNode.parentNode
   .querySelector('td:nth-child(3)').querySelector('select').value;
 
-  console.log(email);
-  console.log(role);
+  const data={
+    "email":email,
+    "role":role
+  }
+
+  $.ajax({
+    url: '/admin/setting/account/edit/role',
+    type: 'POST',
+    data: JSON.stringify(data),
+    contentType: 'application/json; charset=utf-8',
+    headers: {
+      'X-CSRF-TOKEN': _token
+    },
+  }).done(function () {
+    alert('수정이 완료되었습니다.')
+  }).fail(function (result) {
+    const error = JSON.parse(result);
+    alert(error.messages);
+  });
 }
 
 // add new row in the category table
@@ -133,7 +150,6 @@ function submitCategory(button) {
     contentType: "application/json; charset=utf-8"
   }).done(function () {
     alert('수정이 완료되었습니다.')
-    document.location.reload();
   }).fail(function (result) {
     const error = JSON.parse(result);
     alert(error.message);
