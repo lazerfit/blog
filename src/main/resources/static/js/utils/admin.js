@@ -113,13 +113,14 @@ function insertRow() {
 }
 
 function submitCategory(button) {
-  const title=button.getAttribute('data-title');
+  const title=button.parentNode.parentNode.querySelector('td:nth-child(1)').firstElementChild.value;
   const listOrder = button.parentNode.parentNode.querySelector('td:nth-child(2)').firstElementChild.value;
-
+  const id=button.getAttribute("data-id");
 
   const data={
     "title":title,
-    "listOrder":listOrder
+    "listOrder":listOrder,
+    "id":id
   }
 
   $.ajax({
@@ -132,9 +133,29 @@ function submitCategory(button) {
     contentType: "application/json; charset=utf-8"
   }).done(function () {
     alert('수정이 완료되었습니다.')
+    document.location.reload();
   }).fail(function (result) {
     const error = JSON.parse(result);
     alert(error.message);
+  });
+}
+
+function deleteCategory(button) {
+  const id=button.getAttribute("data-id");
+
+  $.ajax({
+    url: '/admin/setting/category/delete/' + id,
+    type: 'POST',
+    headers: {
+      'X-CSRF-TOKEN': _token
+    },
+  }).done(function () {
+    alert('삭제하였습니다.')
+    document.location.reload();
+  })
+  .fail(function (result) {
+    const error = JSON.parse(result);
+    alert(error.messages);
   });
 }
 

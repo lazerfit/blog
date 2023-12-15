@@ -16,8 +16,10 @@
       <aside>
         <div class="toggle">
           <div class="logo">
+            <a href="/" style="display: flex;gap: 5px">
             <img src="/img/cat2.png" alt="로고 사진">
             <h2>gomdolog</h2>
+            </a>
           </div>
           <div class="close" id="close-btn">
             <span class="material-icons-sharp">
@@ -88,15 +90,24 @@
               <tbody>
               <th:block th:each="category:${allCategory}">
                 <tr class="drag-item" draggable="true">
-                  <td th:text="${category.getTitle()}"></td>
+                  <td>
+                    <input type="text" class="row-id" th:value="${category.getTitle()}">
+                  </td>
                   <td>
                     <input type="text" class="order-num" th:value="${category.getListOrder()}">
                   </td>
-                  <td>
-                    <a href="#" class="category-edit-btn" type="button" th:data-title="${category.getTitle()}" onclick="submitCategory(this)">
-                    <span class="material-icons-sharp">
-                      send
-                    </span>
+                  <td class="category-btn-list">
+                    <a href="#" class="category-delete-btn" type="button" th:data-id="${category.getId()}" th:data-title="${category.getTitle()}"
+                    onclick="deleteCategory(this)">
+                      <span class="material-icons-sharp">
+                        delete_forever
+                      </span>
+                    </a>
+                    <a href="#" class="category-edit-btn" type="button" th:data-id="${category.getId()}"
+                       onclick="submitCategory(this)">
+                      <span class="material-icons-sharp">
+                        send
+                      </span>
                     </a>
                   </td>
                 </tr>
@@ -112,7 +123,7 @@
             </a>
           </div>
         </div>
-
+        <!-- End of Category -->
         <!-- Analyses -->
         <div class="analyse">
           <h1>Analytics</h1>

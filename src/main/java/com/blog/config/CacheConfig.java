@@ -16,8 +16,6 @@ public class CacheConfig {
     public Caffeine<Object,Object> caffeineConfig() {
         return Caffeine.newBuilder()
             .expireAfterWrite(60, TimeUnit.MINUTES)
-            // TODO 성능 테스트와 모니터링 배우면 성능에 어떤 영향을 미치는지 알아 볼 것
-            .refreshAfterWrite(15, TimeUnit.MINUTES)
             .initialCapacity(10);
     }
 

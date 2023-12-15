@@ -395,7 +395,7 @@ main .category .category-insertRow button {
 
 main .category .category-table .row-id {
   border-bottom: 1px var(--color-primary) solid;
-  width: 30%;
+  width: 40%;
   text-align: center;
 }
 
@@ -405,6 +405,10 @@ main .category .category-table .order-num {
   text-align: center;
 }
 
+main .category-btn-list {
+  display: flex;
+  flex-direction: row;
+}
 
 main .user-info {
   margin-top: 1.3rem;

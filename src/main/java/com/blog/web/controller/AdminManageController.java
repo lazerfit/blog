@@ -4,7 +4,6 @@ import com.blog.service.CategoryService;
 import com.blog.service.UserService;
 import com.blog.web.dto.category.CategoryEditRequest;
 import com.blog.web.dto.category.CategoryResponse;
-import com.blog.web.dto.category.CategorySaveRequest;
 import com.blog.web.dto.user.UserPasswordEditRequest;
 import com.blog.web.dto.user.UserResponse;
 import com.blog.web.form.CategoryEditForm;
@@ -25,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+
 @Controller
 @RequiredArgsConstructor
 @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
@@ -32,7 +32,7 @@ public class AdminManageController {
 
     private final CategoryService categoryService;
     private final UserService userService;
-    private static final String REDIRECT_HOME_URL = "redirect:/admin/setting/category";
+    private static final String REDIRECT_HOME_URL = "redirect:/admin/setting";
 
 
     @GetMapping("/admin/setting/category")
@@ -43,14 +43,6 @@ public class AdminManageController {
         model.addAttribute("categoryForm", new CategoryForm());
         model.addAttribute("categoryEditForm", new CategoryEditForm());
         return "form/manageCategoryForm";
-    }
-
-    @PostMapping("/admin/setting/category")
-    public String saveCategory(@Valid CategoryForm categoryForm) {
-        CategorySaveRequest categorySaveRequest =
-            new CategorySaveRequest(categoryForm.getTitle(), categoryForm.getListOrder());
-        categoryService.save(categorySaveRequest);
-        return REDIRECT_HOME_URL;
     }
 
     @PostMapping("/admin/setting/category/delete/{categoryId}")
@@ -65,9 +57,10 @@ public class AdminManageController {
             CategoryEditRequest.builder()
                 .title(editForm.getTitle())
                 .listOrder(editForm.getListOrder())
+                .id(editForm.getId())
                 .build();
         categoryService.edit(editRequest);
-        return "redirect:/admin/setting";
+        return REDIRECT_HOME_URL;
     }
 
     @GetMapping("/admin/setting/account")

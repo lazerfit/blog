@@ -47,16 +47,16 @@ public class CategoryService {
 
     @Transactional
     @CacheEvict(value = {"categoryList","categoryCache"},allEntries = true)
-    public void edit(CategoryEditRequest form) {
+    public void edit(CategoryEditRequest request) {
 
-        if (categoryRepository.findCategoryByTitle(form.getTitle()).orElse(null) != null) {
-            Category category = categoryRepository.findCategoryByTitle(form.getTitle())
+        if (request.getId() != null) {
+            Category category = categoryRepository.findById(request.getId())
                 .orElseThrow(CategoryNotFound::new);
-            category.edit(form.getTitle(), form.getListOrder());
+            category.edit(request.getTitle(), request.getListOrder());
         } else {
             categoryRepository.save(Category.builder()
-                .title(form.getTitle())
-                .listOrder(form.getListOrder())
+                .title(request.getTitle())
+                .listOrder(request.getListOrder())
                 .build());
         }
     }
