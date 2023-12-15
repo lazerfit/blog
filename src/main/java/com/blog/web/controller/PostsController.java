@@ -15,7 +15,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,9 +37,21 @@ public class PostsController {
     private static final String KEYWORD="keyword";
 
     @PreAuthorize("permitAll()")
+    @GetMapping("/increase-view/{postId}")
+    public ResponseEntity<String> increaseView(@PathVariable Long postId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication.getAuthorities().stream()
+            .noneMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"))){
+            postsService.addViews(postId);
+        }
+        return ResponseEntity.ok("조회수 증가가 성공적으로 수행되었습니다.");
+    }
+
+
+    @PreAuthorize("permitAll()")
     @GetMapping("/post/{postId}")
     public String getPostDetail(@PathVariable Long postId, Model model) {
-        postsService.addViews(postId);
         PostsResponse postsResponse = postsService.getPostsById(postId);
         String contentPlainText = postsService.getContentPlainText(postsResponse.getContent());
 

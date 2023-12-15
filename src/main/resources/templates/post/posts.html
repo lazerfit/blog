@@ -45,7 +45,7 @@
         <a href="#" title="facebook" onclick="facebook()"><img src="/img/facebook.png" class="share-button facebook" alt="facebook"/></a>
         <a href="#" title="twitter" onclick="twitter()"><img src="/img/twitter.png" class="share-button twitter" alt="twitter"  /></a>
         <a id="kakaotalk-sharing-btn" href="javascript:;" onclick="sendKakao()" title="kakaoTalk"><img src="https://developers.kakao.com/assets/img/about/logos/kakaotalksharing/kakaotalk_sharing_btn_medium.png"
-                                                              class="share-button kakaoTalk"  alt="카카오톡 공유 보내기 버튼" /></a>
+                                                              class="share-button kakaoTalk"  alt="카카오톡 공유 보내기 버튼"/></a>
         <span>
 	        <script type="text/javascript" src="https://ssl.pstatic.net/share/js/naver_sharebutton.js"></script>
 	        <script type="text/javascript">
@@ -55,7 +55,7 @@
         <a href="#" title="clipboard" id="clipboard"><img src="/img/clothespin.png" class="share-button" alt="clip" style="margin-left: 5px" /></a>
         <script type="text/javascript" src="/js/utils/copyUrl.js"></script>
         <script type="text/javascript" src="/js/utils/snsShare.js"></script>
-        <input name="post-id" type="hidden" th:value="${postId}">
+        <input name="post-id" class="post-id" type="hidden" th:value="${postId}">
         <script type="text/JavaScript" src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
         <script src="/js/post/kakao_share.js"></script>
       </section>
@@ -98,5 +98,6 @@
       <!-- /Utterance -->
     </section>
     </article>
+  <script src="/js/post/post.js"></script>
 </main>
 </body>
