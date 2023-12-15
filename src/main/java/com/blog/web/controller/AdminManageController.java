@@ -46,7 +46,7 @@ public class AdminManageController {
     }
 
     @PostMapping("/admin/setting/category")
-    public String saveCategory(CategoryForm categoryForm) {
+    public String saveCategory(@Valid CategoryForm categoryForm) {
         CategorySaveRequest categorySaveRequest =
             new CategorySaveRequest(categoryForm.getTitle(), categoryForm.getListOrder());
         categoryService.save(categorySaveRequest);

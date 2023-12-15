@@ -76,10 +76,10 @@ class CategoryControllerTest {
         makeCategory("spring",1);
 
         CategoryEditForm categoryEditForm = new CategoryEditForm();
-        categoryEditForm.setTitle("고양이");
-        categoryEditForm.setListOrder(1);
+        categoryEditForm.setTitle("spring");
+        categoryEditForm.setListOrder(2);
 
-        mockMvc.perform(post("/admin/setting/category/edit/{categoryId}", 1L)
+        mockMvc.perform(post("/admin/setting/category/edit")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(categoryEditForm)))
