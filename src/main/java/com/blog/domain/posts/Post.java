@@ -48,7 +48,6 @@ public class Post extends BaseTimeEntity {
     @Column(length = 500)
     private String thumbnail;
 
-
     @Version
     private long version;
 
