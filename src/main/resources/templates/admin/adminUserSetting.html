@@ -29,7 +29,7 @@
             <option th:unless="${user.getRole()=='ROLE_ADMIN'}" value="일반" selected>일반</option>
             <option th:if="${user.getRole()=='ROLE_ADMIN'}" value="일반">일반</option>
             <option th:unless="${user.getRole()=='ROLE_ADMIN'}" value="관리자">관리자</option>
-          </select>
+            </select>
           </td>
           <td th:text="${user.getName()}"></td>
           <td class="user-email" th:text="${user.getEmail()}"></td>

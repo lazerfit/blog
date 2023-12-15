@@ -11,11 +11,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Version;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.ColumnDefault;
+
 @Slf4j
 @Getter
 @NoArgsConstructor
@@ -45,6 +47,10 @@ public class Post extends BaseTimeEntity {
 
     @Column(length = 500)
     private String thumbnail;
+
+
+    @Version
+    private long version;
 
     @Builder
     public Post(String title, String content, String tag, Category category, Long views, String thumbnail) {
