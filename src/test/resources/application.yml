@@ -29,5 +29,16 @@ spring:
               - profile
               - email
   sql:
-    init:
       mode: always
+  logging:
+    level:
+      root: debug
+      org:
+        springframework:
+          security: DEBUG
+        hibernate:
+          SQL: debug
+          type:
+            descriptor:
+              sql:
+                BasicBinder: trace

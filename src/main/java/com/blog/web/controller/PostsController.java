@@ -1,5 +1,6 @@
 package com.blog.web.controller;
 
+import com.blog.domain.facade.OptimisticLockPostFacade;
 import com.blog.service.CategoryService;
 import com.blog.service.PostsService;
 import com.blog.web.dto.category.CategoryResponse;
@@ -33,21 +34,22 @@ public class PostsController {
 
     private final PostsService postsService;
     private final CategoryService categoryService;
+    private final OptimisticLockPostFacade optimisticLockPostFacade;
     private static final String SIDEBAR_CATEGORY="sidebarCategory";
     private static final String KEYWORD="keyword";
 
     @PreAuthorize("permitAll()")
     @GetMapping("/increase-view/{postId}")
-    public ResponseEntity<String> increaseView(@PathVariable Long postId) {
+    public ResponseEntity<String> increaseView(@PathVariable Long postId)
+        throws InterruptedException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication.getAuthorities().stream()
             .noneMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"))){
-            postsService.addViews(postId);
+            optimisticLockPostFacade.addViews(postId);
         }
         return ResponseEntity.ok("조회수 증가가 성공적으로 수행되었습니다.");
     }
-
 
     @PreAuthorize("permitAll()")
     @GetMapping("/post/{postId}")

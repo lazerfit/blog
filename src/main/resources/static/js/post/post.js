@@ -18,8 +18,6 @@ document.addEventListener('DOMContentLoaded', function () {
     localStorage.setItem('visitedPosts', JSON.stringify(visitedPosts));
   }
 
-  console.log("localStorage: ",localStorage.getItem('visitedPosts'));
-  console.log("localStorage expirationTime",localStorage.getItem('expirationTime'))
   if (!expirationTime || new Date().getTime() - parseInt(expirationTime)
       >= oneDayMilliseconds) {
     localStorage.removeItem('visitedPosts');
