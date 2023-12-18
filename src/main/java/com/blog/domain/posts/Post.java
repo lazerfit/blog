@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Version;
 import lombok.Builder;
@@ -31,7 +32,8 @@ public class Post extends BaseTimeEntity {
     @Column(length = 100, nullable = false)
     private String title;
 
-    @Column(length = 10000, nullable = false)
+    @Lob
+    @Column(nullable = false)
     private String content;
 
     @Column(length = 500, nullable = false)
