@@ -302,9 +302,9 @@ a:hover{
   padding-top: unset;
 }
 
-.navbar-brand::before {
-  content: url("/img/cat.png");
-  display: inline-block;
+.navbar-brand img {
+  max-width: 150px;
+  width: 100%;
 }
 
 .del-button {
@@ -885,7 +885,7 @@ button.close {
   overflow-clip-margin: content-box;
   overflow: clip;
   display: inline-block;
-  max-width: 412px !important;
+  max-width: 648px !important;
   width: 100% !important;
   margin: 0;
   height: auto;

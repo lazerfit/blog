@@ -56,6 +56,6 @@ public class AdminManageController {
     @ResponseBody
     public ResponseEntity<String> editRole(@RequestBody @Valid UserRoleEditForm form) {
         userService.editRole(form);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>("수정이 완료되었습니다.",HttpStatus.OK);
     }
 }
