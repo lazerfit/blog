@@ -302,9 +302,9 @@ a:hover{
   padding-top: unset;
 }
 
-.navbar-brand::before {
-  content: url("/img/cat.png");
-  display: inline-block;
+.navbar-brand img {
+  max-width: 150px;
+  width: 100%;
 }
 
 .del-button {
