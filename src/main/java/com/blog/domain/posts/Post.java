@@ -74,4 +74,5 @@ public class Post extends BaseTimeEntity {
         this.category=request.getCategory();
         this.thumbnail=request.getThumbnail();
     }
+
 }
