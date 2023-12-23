@@ -59,81 +59,71 @@ lazerfit 의 개인 blog 프로젝트입니다.
 ## 핵심 기능
 
 ### 반응형 웹
-부트스트랩과 css를 활용하여 모바일 친화 페이지 생성
+모바일 친화적인 UI를 부트스트랩과 CSS를 통해 개발하여 사용자 경험을 향상시켰습니다.  
+
 <img src="https://drive.google.com/uc?export=download&id=1-YhSO0owQpL2KfWwHmsV1vRK4apEB10Z">
 
 ### 소셜 로그인
-Spring security OAuth2 활용  
+Spring security OAuth2 활용하여 다양한 소셜 플랫폼의 로그인을 지원합니다.
 [OAuthAttributes](https://github.com/lazerfit/blog/blob/main/src/main/java/com/blog/config/user/OAuthAttributes.java)
-활용하여 각 플랫폼마다 다른 attribute 를 회원 정보로 가져올 수 있음
+클래스를 통해 플랫폼별로 다른 속성을 효과적으로 수집합니다.
 
-### 모듈 사용
-높은 생산성과 유지보수성을 위하여 위지윅([summernote](https://summernote.org/)), [Tagify](https://yaireo.github.io/tagify/)(태그 입력 모듈), [utterances](https://utteranc.es/)(댓글 모듈) 사용
+### 외부 모듈 사용
+위지윅 에디터([summernote](https://summernote.org/)), 태그 입력 모듈([Tagify](https://yaireo.github.io/tagify/)), 댓글 모듈([utterances](https://utteranc.es/))을 통해 생산성을 높이고 사용자 경험을 향상시켰습니다.
+
 <img src="https://drive.google.com/uc?export=download&id=116A4jv6rd0wAaW9CSUHbwWRfjOjC8GNG">
 
 ### LocalStorage 활용  
-#### (손쉬운 구현, 5MB 넉넉한 저장 공간)
-- 중복없는 조회수 카운팅 시 로컬 스토리지 활용
-  - 'visitedPosts' 배열에 해당 postId가 없다면 서버에 조회수 증가 요청 + 배열에 현재 postId 입력
-  - 'expiredDate' 에 처음 배열이 생성된 날짜 입력
-    - 생성 날짜가 하루 이상 지나게 되면 삭제
-  - OptimisticLock을 사용하여 혹시 발생할 수 있는 동시성 문제 예방
-- 게시글 임시저장 구현 시 로컬 스토리지 활용
-  - 30초 단위로 자동 저장되며 글쓰기 제출 시 삭제
+- 브라우저의 LocalStorage를 이용하여 중복 없는 조회수 카운팅 및 게시글 임시저장 기능을 구현했습니다.
+- 동시성 문제를 예방하기 위해 Optimistic Lock을 통해 안정성을 확보했습니다.
 
 ### 게시글 CRUD, Pageable
-- 기본적인 CRUD와 페이징을 구현
-- 게시글 수정/삭제/생성은 csrf 토큰과 ADMIN role을 가진 유저만 데이터를 전송할 수 있음
-- thymeleaf와 spring security 연동하여 ADMIN role을 가진 사람만 게시글 수정/삭제 버튼이 보임
+- Thymeleaf와 Spring Security를 결합하여 ADMIN 권한을 가진 사용자만이 게시글 수정/삭제를 수행할 수 있도록 구현했습니다.
+- 기본적인 CRUD와 페이징 기능을 제공하여 웹 페이지의 유연한 데이터 관리를 지원합니다.
+
 <img src="https://drive.google.com/uc?export=download&id=117gVBNUL0ex8UE9xUcLW5E8ZUSLNLu-k">
 <img src="https://drive.google.com/uc?export=download&id=116dSBO_lqeOo-pF4lDvPAyqK2aaSgBpT">
 
 ### 소셜 공유하기
-- Facebook, X(twitter), 카카오톡, 네이버, url복사 기능 구현
+- Facebook, Twitter, 카카오톡, 네이버 등 다양한 플랫폼에 대한 소셜 공유 기능을 구현했습니다.
+- URL 복사 기능도 함께 제공하여 사용자의 편의성을 고려했습니다.
 
 ### Cache
-- 간단한 단계로 구현할 수 있고 뛰어난 성능을 제공하는 Caffeine cache 사용
-- 페이징된 포스트와 포스트, 카테고리를 캐싱
-- 깔끔하고 충돌없이 캐싱하기 위하여 포스트 게시/수정/삭제 시 캐시 삭제
+- Caffeine Cache를 활용하여 페이징된 포스트, 포스트, 카테고리를 효율적으로 캐싱합니다.
+- 게시글 생성, 수정, 삭제 시에는 캐시를 적절히 관리하여 일관된 데이터를 제공합니다.
 
 ### 카테고리/태그/검색어 별 게시글 검색 기능
-- 카테고리/태그/검색어 모두 SELECT ~ WHERE 통하여 검색
-- 검색어는 LIKE %검색어% 사용하여 검색하기 때문에 검색 성능 낮을 수 있음
+- 카테고리, 태그, 검색어에 대한 검색 기능을 각각의 SELECT ~ WHERE 문을 통해 구현했습니다.
+- 검색어는 LIKE %검색어% 를 사용하므로 성능에 주의가 필요합니다.
 
 ### 에러 처리
-- ExceptionHandler 통해 에러코드와 메시지를 responseEntity로 반환하도록 함
-- ajax로 통신한 경우 에러 메시지를 alert으로 반환
-- 401/403 커스텀 에러페이지 생성
+- ExceptionHandler를 활용하여 발생 가능한 에러에 대한 세밀한 예외 처리를 수행합니다.
+- Ajax 통신 시 에러 메시지를 간결하게 제공하여 사용자에게 명확한 정보를 전달합니다.
+- 401/403 커스텀 에러페이지 생성하였습니다.
 
 ### ADMIN 페이지 구현
-- [AsmrProg](https://github.com/AsmrProg-YT) Theme Custom
-- *Method Security* 활용하여 ADMIN role 가진 사람만 접속 가능
-- User 편집
-- Category 편집 구현
+- [AsmrProg](https://github.com/AsmrProg-YT) 테마를 커스터마이징하여 사용합니다.
+- *Method Security* 활용하여 ADMIN role 가진 사람만 접속할 수 있습니다.
+
 <img src="https://drive.google.com/uc?export=download&id=11ApD1yFt4wnBJlDIqtLvyg_ECLqaBmrN">
 
 ### AWS
-- EC2 / RDS(MariaDB) / S3 / CodeDeploy 사용
-- EC2의 부족한 램 용량을 극복하기 위하여 메모리 swap 설정
-- RDS 인텔리제이와 연동하여 사용
+- Amazon EC2, RDS(MariaDB), S3, CodeDeploy를 통해 안정적이고 확장 가능한 클라우드 환경을 구축했습니다.
+- 메모리 부족 문제를 극복하기 위해 EC2에 메모리 스왑을 설정했습니다.
 
-### HTTPS
-- 가비아 도메인 구입
-- cloudflare DNS 사용
-- Let's encrypt certbot 사용하여 SSL 발급 및 자동 갱신
-- nginx SSL 적용
+### HTTPS 적용
+- 가비아 도메인 구입과 Cloudflare DNS를 활용하여 보안 강화를 위한 전문적인 HTTPS 프로토콜을 구성했습니다.
+- Let's Encrypt Certbot을 활용하여 SSL 인증서를 발급하고 자동 갱신하도록 구성했습니다.
+- Nginx에 SSL을 적용하여 데이터의 기밀성과 무결성을 유지했습니다.
 
-
-### CI/CD
-- Github action 사용하여 main branch push 시 build 한 후 zip 파일 압축
-- 압축 파일 AWS S3 업로드
-- codeDeploy 스크립트 실행
-- nginx와 연결되어 있지 않은 스프링 부트를 중지
-- nginx와 연결되어 있지 않는 port로 새 스프링 부트를 실행
+### CI/CD Pipeline
+- Github Action을 활용하여 지속적 통합 및 배포 파이프라인을 자동화했습니다.
+- 빌드 후에는 S3에 업로드하고 CodeDeploy 스크립트를 실행하여 신속한 배포를 구현했습니다.
+- Nginx와 연결되지 않은 스프링 부트를 중지하고, 새로운 포트로 스프링 부트를 실행하여 롤링 업데이트를 수행합니다.
 
 ### EC2 모니터링
-- EC2 인스턴스의 CPU 사용량, 램 사용량, 네트워크 트래픽 등을 모니터링
-- 오픈소스 Prometheus grafana 사용
+- Prometheus Grafana를 활용하여 EC2 인스턴스의 CPU 사용량, 램 사용량, 네트워크 트래픽 등을 모니터링하고 시각화했습니다.
+
 <img src="https://drive.google.com/uc?export=download&id=10zKiLGhsY7HwTLb2nW3L68Ae-FmoXkMw">
 
 ***
