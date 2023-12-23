@@ -65,17 +65,17 @@ lazerfit 의 개인 blog 프로젝트입니다.
 ## 핵심 기능
 
 ### 반응형 웹
-모바일 친화적인 UI를 부트스트랩과 CSS를 통해 개발하여 사용자 경험을 향상시켰습니다.  
+- 모바일 친화적인 UI를 부트스트랩과 CSS를 통해 개발하여 사용자 경험을 향상시켰습니다.  
 
 <img src="https://drive.google.com/uc?export=download&id=1-YhSO0owQpL2KfWwHmsV1vRK4apEB10Z">
 
 ### 소셜 로그인
-Spring security OAuth2 활용하여 다양한 소셜 플랫폼의 로그인을 지원합니다.
+- Spring security OAuth2 활용하여 다양한 소셜 플랫폼의 로그인을 지원합니다.
 [OAuthAttributes](https://github.com/lazerfit/blog/blob/main/src/main/java/com/blog/config/user/OAuthAttributes.java)
-클래스를 통해 플랫폼별로 다른 속성을 효과적으로 수집합니다.
+- 클래스를 통해 플랫폼별로 다른 속성을 효과적으로 수집합니다.
 
 ### 외부 모듈 사용
-위지윅 에디터([summernote](https://summernote.org/)), 태그 입력 모듈([Tagify](https://yaireo.github.io/tagify/)), 댓글 모듈([utterances](https://utteranc.es/))을 통해 생산성을 높이고 사용자 경험을 향상시켰습니다.
+- 위지윅 에디터([summernote](https://summernote.org/)), 태그 입력 모듈([Tagify](https://yaireo.github.io/tagify/)), 댓글 모듈([utterances](https://utteranc.es/))을 통해 생산성을 높이고 사용자 경험을 향상시켰습니다.
 
 <img src="https://drive.google.com/uc?export=download&id=116A4jv6rd0wAaW9CSUHbwWRfjOjC8GNG">
 
