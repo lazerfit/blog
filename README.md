@@ -71,8 +71,8 @@ lazerfit 의 개인 blog 프로젝트입니다.
 
 ### 소셜 로그인
 - Spring security OAuth2 활용하여 다양한 소셜 플랫폼의 로그인을 지원합니다.
-[OAuthAttributes](https://github.com/lazerfit/blog/blob/main/src/main/java/com/blog/config/user/OAuthAttributes.java)
-- 클래스를 통해 플랫폼별로 다른 속성을 효과적으로 수집합니다.
+- [OAuthAttributes](https://github.com/lazerfit/blog/blob/main/src/main/java/com/blog/config/user/OAuthAttributes.java)
+클래스를 통해 플랫폼별로 다른 속성을 효과적으로 수집합니다.
 
 ### 외부 모듈 사용
 - 위지윅 에디터([summernote](https://summernote.org/)), 태그 입력 모듈([Tagify](https://yaireo.github.io/tagify/)), 댓글 모듈([utterances](https://utteranc.es/))을 통해 생산성을 높이고 사용자 경험을 향상시켰습니다.
@@ -100,7 +100,7 @@ lazerfit 의 개인 blog 프로젝트입니다.
 
 ### 카테고리/태그/검색어 별 게시글 검색 기능
 - 카테고리, 태그, 검색어에 대한 검색 기능을 각각의 SELECT ~ WHERE 문을 통해 구현했습니다.
-- 검색어는 LIKE %검색어% 를 사용하므로 성능에 주의가 필요합니다.
+- 검색어는 LIKE %검색어% 를 사용하고 있어 성능이 좋지 못한 상태입니다. 추후 성능 개선이 필요합니다.
 
 ### 에러 처리
 - ExceptionHandler를 활용하여 발생 가능한 에러에 대한 세밀한 예외 처리를 수행합니다.
