@@ -56,6 +56,12 @@ lazerfit 의 개인 blog 프로젝트입니다.
 <img src="https://drive.google.com/uc?export=download&id=115m-ELiFnMAlrOsmdr8KvBrn-js6cInL">
 
 ***
+## 개선 사항
+
+### summernote 코드 블럭 추가
+- Summernote에 코드 블록을 추가하기 위해 code-prettify와 highlight 플러그인을 활용하여 코드의 가독성을 개선했습니다. 이를 통해 사용자가 작성한 코드가 보다 명확하게 표현되고 하이라이팅되어 더욱 시각적으로 잘 구분되도록 하였습니다.
+
+***
 ## 핵심 기능
 
 ### 반응형 웹
