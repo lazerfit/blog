@@ -3,7 +3,6 @@ package com.blog.web.dto.posts;
 import com.blog.domain.category.Category;
 import com.blog.domain.posts.Post;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,12 +17,12 @@ public class PostSaveRequest {
     private final Category category;
     private final String tags;
     private final Long views;
-    @NotNull(message = "썸네일은 필수입니다.")
+
     private final String thumbnail;
 
     @Builder
     public PostSaveRequest(String title, String content, Category category, String tags, Long views,
-        @NotNull(message = "썸네일은 필수입니다.") String thumbnail) {
+        String thumbnail) {
         this.title = title;
         this.content = content;
         this.category = category;

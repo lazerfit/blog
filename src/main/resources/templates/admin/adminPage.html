@@ -52,6 +52,12 @@
             </span>
             <h3>Category</h3>
           </a>
+          <a href="#" class="recycle-bin-sidebar" type="button">
+            <span class="material-icons-sharp">
+              delete
+            </span>
+            <h3>Recycle Bin</h3>
+          </a>
           <a href="#" class="setting" type="button">
             <span class="material-icons-sharp">
               settings
@@ -124,6 +130,52 @@
           </div>
         </div>
         <!-- End of Category -->
+        <!-- Recycle Bin -->
+        <div class="recycle-bin">
+          <h2>Recycle Bin</h2>
+          <div class="deletedPost-list">
+            <table class="deletedPost-table">
+              <thead>
+                <tr>
+                  <th>제목</th>
+                  <th>삭제한 날짜</th>
+                </tr>
+              </thead>
+              <tbody>
+                <th:block th:each="post:${recycleBinList}">
+                  <tr>
+                    <td>
+                      <p th:text="${post.getTitle()}" class="recycle-bin-title"></p>
+                    </td>
+                    <td th:text="${#temporals.format(post.getDeletedDate(),'yyyy-MM-dd HH:mm')}">
+                    </td>
+                    <td class="recycle-btn">
+                      <a href="#" type="button" th:data-id="${post.getId()}"
+                      onclick="deletePost(this)">
+                        <span class="material-icons-sharp">
+                          delete_forever
+                        </span>
+                      </a>
+                      <a href="#" type="button"
+                         th:data-id="${post.getId()}"
+                         th:data-title="${post.getTitle()}"
+                         th:data-content="${post.getContent()}"
+                         th:data-categoty="${post.getCategory()}"
+                         th:data-tag="${post.getTag()}"
+                         th:data-thumbnail="${post.getThumbnail()}"
+                         onclick="restorePost(this)">
+                        <span class="material-icons-sharp">
+                          recycling
+                        </span>
+                      </a>
+                    </td>
+                  </tr>
+                </th:block>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- End of Recycle Bin -->
         <!-- Analyses -->
         <div class="analyse">
           <h1>Analytics</h1>

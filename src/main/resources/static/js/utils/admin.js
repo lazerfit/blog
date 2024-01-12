@@ -3,11 +3,13 @@ document.addEventListener('DOMContentLoaded',()=>{
   const userInfo = document.querySelector('.user-info');
   const users = document.querySelector('.new-users');
   const category = document.querySelector('.category');
+  const recycleBin = document.querySelector('.recycle-bin');
 
   analytics.style.display = 'none';
   userInfo.style.display ='none'
   category.style.display ='none'
   users.style.display = 'grid';
+  recycleBin.style.display = 'none';
 })
 const _token = document.getElementById('csrf').value;
 
@@ -40,12 +42,16 @@ const categoryBtn = document.querySelector('.category-sidebar');
 const analytics = document.querySelector('.analyse');
 const users = document.querySelector('.new-users');
 const categoryList = document.querySelector('.category');
+const recycleBin = document.querySelector('.recycle-bin');
 const userInfo = document.querySelector('.user-info');
+const recycleBinBtn=document.querySelector('.recycle-bin-sidebar')
 userBtn.addEventListener('click', () =>{
   analytics.style.display = 'none';
   categoryList.style.display = 'none';
   userInfo.style.display = 'none';
   users.style.display = 'grid';
+  recycleBin.style.display = 'none';
+  recycleBin.classList.remove('active')
   anaylseBtn.classList.remove('active');
   categoryBtn.classList.remove('active');
   userBtn.className = 'users active';
@@ -56,6 +62,8 @@ anaylseBtn.addEventListener('click', () =>{
   users.style.display = 'none';
   categoryList.style.display = 'none';
   userInfo.style.display = 'none';
+  recycleBin.style.display = 'none';
+  recycleBin.classList.remove('active')
   userBtn.classList.remove('active');
   categoryBtn.classList.remove('active');
   anaylseBtn.className = 'analytics active';
@@ -66,10 +74,26 @@ categoryBtn.addEventListener('click', () =>{
   users.style.display = 'none';
   userInfo.style.display = 'none';
   categoryList.style.display='block'
+  recycleBin.style.display = 'none';
+  recycleBin.classList.remove('active')
   anaylseBtn.classList.remove('active');
   userBtn.classList.remove('active');
   categoryBtn.className = 'category-sidebar active'
 })
+
+recycleBinBtn.addEventListener('click', () =>{
+  analytics.style.display = 'none';
+  users.style.display = 'none';
+  userInfo.style.display = 'none';
+  recycleBin.style.display='block'
+  categoryList.style.display = 'none';
+  categoryBtn.classList.remove('active')
+  anaylseBtn.classList.remove('active');
+  userBtn.classList.remove('active');
+  recycleBin.className = 'category-sidebar active'
+})
+
+
 
 // User-list Toggle
 const userList=document.querySelector('.user-list');
@@ -198,4 +222,67 @@ function submitCategoryOfInsertedRow(button) {
     const error = JSON.parse(result);
     alert(error.message);
   });
+}
+
+function deletePost(button) {
+  const id=button.getAttribute("data-id");
+
+  if (confirm('정말 삭제하시겠습니까?')) {
+    $.ajax({
+      url: "/admin/setting/recycleBin/delete/" + id,
+      type: "POST",
+      headers: {
+        'X-CSRF-TOKEN': _token
+      },
+    }).done(function () {
+      document.location.reload();
+    });
+  } else {
+    return false;
+  }
+}
+
+function restorePost(button) {
+  const id = button.getAttribute('data-id');
+  const title=button.getAttribute('data-title');
+  const content = button.getAttribute('data-content');
+  const tag = button.getAttribute('data-tag');
+  const category = button.getAttribute('data-category');
+  const thumbnail = button.getAttribute('data-thumbnail');
+  if (confirm('복원하시겠습니까?')) {
+    const data = {
+      "title": title,
+      "content": content,
+      "tags": isNull(tag) ? '없음' : tag,
+      "category": isNull(category) ? '카테고리 없음' : category,
+      "thumbnail": thumbnail,
+      "views":0
+    };
+
+    $.ajax({
+      url:"/recycleBin/restore",
+      data:JSON.stringify(data),
+      type:'POST',
+      contentType: "application/json; charset=utf-8",
+      headers: {
+        'X-CSRF-TOKEN': _token
+      },
+    }).done(function () {
+      $.ajax({
+        url: "/admin/setting/recycleBin/delete/" + id,
+        type: "POST",
+        headers: {
+          'X-CSRF-TOKEN': _token
+        },
+      }).done(function () {
+        document.location.reload();
+      });
+    });
+  } else {
+    return false;
+  }
+}
+
+function isNull(value) {
+  return value === null ? 1 : 0;
 }
