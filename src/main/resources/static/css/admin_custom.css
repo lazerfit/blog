@@ -410,6 +410,57 @@ main .category-btn-list {
   flex-direction: row;
 }
 
+main .recycle-bin {
+  margin-top: 1.3rem;
+  display: none;
+}
+
+main .deletedPost-table .recycle-btn {
+  display: flex;
+}
+
+main .deletedPost-list .deletedPost-table .recycle-bin-title {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 350px;
+  white-space: nowrap;
+  text-align: left;
+}
+
+main .deletedPost-list {
+  margin-top: 1.3rem;
+}
+
+main .deletedPost-list h2{
+  margin-bottom: 0.8rem;
+}
+
+main .deletedPost-list table{
+  background-color: var(--color-white);
+  width: 100%;
+  padding: var(--card-padding);
+  text-align: center;
+  box-shadow: var(--box-shadow);
+  border-radius: var(--card-border-radius);
+  transition: all 0.3s ease;
+}
+
+main .deletedPost-list table:hover{
+  box-shadow: none;
+}
+
+main .deletedPost-list a{
+  text-align: center;
+  display: block;
+  margin: 1rem auto;
+  color: var(--color-primary);
+}
+
+main .deletedPost-list select {
+  cursor: pointer;
+}
+
 main .user-info {
   margin-top: 1.3rem;
 }

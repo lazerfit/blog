@@ -2,7 +2,9 @@ package com.blog.web.controller;
 
 import com.blog.service.AuthService;
 import com.blog.service.CategoryService;
+import com.blog.service.RecycleBinService;
 import com.blog.service.UserService;
+import com.blog.web.dto.RecycleBinResponse;
 import com.blog.web.dto.category.CategoryResponse;
 import com.blog.web.dto.user.SiteUserDto;
 import com.blog.web.dto.user.UserResponse;
@@ -25,6 +27,7 @@ public class AuthController {
     private final AuthService authService;
     private final UserService userService;
     private final CategoryService categoryService;
+    private final RecycleBinService recycleBinService;
     @PreAuthorize("permitAll()")
     @GetMapping("/login")
     public String login() {
@@ -43,6 +46,9 @@ public class AuthController {
     public String adminManagePage(Model model) {
         List<UserResponse> allUsers = userService.findAllUser();
         model.addAttribute("allUsers", allUsers);
+
+        List<RecycleBinResponse> recycleBinResponseList = recycleBinService.findAll();
+        model.addAttribute("recycleBinList", recycleBinResponseList);
 
         List<CategoryResponse> allCategory = categoryService.findAllCategory();
         model.addAttribute("allCategory", allCategory);

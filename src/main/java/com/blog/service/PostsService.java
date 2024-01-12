@@ -2,6 +2,8 @@ package com.blog.service;
 
 import com.blog.domain.posts.Post;
 import com.blog.domain.posts.PostsRepository;
+import com.blog.domain.recyclebin.RecycleBin;
+import com.blog.domain.recyclebin.RecycleBinRepository;
 import com.blog.exception.PostNotFound;
 import com.blog.web.dto.posts.PostSaveRequest;
 import com.blog.web.dto.posts.PostsResponse;
@@ -27,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PostsService {
 
     private final PostsRepository postsRepository;
+    private final RecycleBinRepository recycleBinRepository;
 
     @Transactional
     @CacheEvict(value = {"pagePost","postCached","categoryList"},allEntries = true)
@@ -51,6 +54,16 @@ public class PostsService {
     @CacheEvict(value = {"pagePost","pagePost","categoryList"},allEntries = true)
     public void delete(Long postId) {
         PostsResponse post = postsRepository.getPostById(postId).orElseThrow(PostNotFound::new);
+
+        recycleBinRepository.save(RecycleBin.builder()
+            .title(post.getTitle())
+            .content(post.getContent())
+            .tag(post.getTag())
+            .category(post.getCategoryTitle())
+            .views(post.getViews())
+            .thumbnail(post.getThumbnail())
+            .build());
+
         postsRepository.deleteById(post.getId());
     }
 
